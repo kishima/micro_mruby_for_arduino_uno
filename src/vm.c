@@ -4,9 +4,15 @@
 #include <assert.h>
 #include "vm.h"
 #include "opcode.h"
+#include "debug.h"
+
+
+static mrb_vm vm_body;
 
 void init_vm(void){
-	
+  //initialize VM
+
+  //load byte code
 }
 
 
@@ -122,8 +128,8 @@ inline static int op_stop( mrb_vm *vm, uint32_t code, mrb_value *regs )
 	return -1;
 }
 
-mrb_vm vm_body;
 void run_vm(void){
+  DEBUG_PRINTLN("start run_vm");
   mrb_vm *vm = &vm_body;
   int ret = 0;
   
