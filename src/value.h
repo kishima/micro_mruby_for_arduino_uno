@@ -77,25 +77,6 @@ typedef enum {
 /*!@brief
   define the error code. (BETA TEST)
 */
-typedef enum {
-  E_NOMEMORY_ERROR = 1,
-  E_RUNTIME_ERROR,
-  E_TYPE_ERROR,
-  E_ARGUMENT_ERROR,
-  E_INDEX_ERROR,
-  E_RANGE_ERROR,
-  E_NAME_ERROR,
-  E_NOMETHOD_ERROR,
-  E_SCRIPT_ERROR,
-  E_SYNTAX_ERROR,
-  E_LOCALJUMP_ERROR,
-  E_REGEXP_ERROR,
-  E_NOTIMP_ERROR,
-  E_FLOATDOMAIN_ERROR,
-  E_KEY_ERROR,
-} mrb_error_code;
-
-
 
 //================================================================
 /*!@brief
@@ -105,9 +86,6 @@ typedef struct RObject {
   mrb_vtype tt : 8;
   union {
     int32_t i;			// MRB_TT_FIXNUM, SYMBOL
-#if MRBC_USE_FLOAT
-    double d;			// MRB_TT_FLOAT
-#endif
     struct RClass *cls;		// MRB_TT_CLASS
     struct RObject *handle;	// handle to objects
     struct RInstance *instance;	// MRB_TT_OBJECT
@@ -128,9 +106,6 @@ typedef struct RObject mrb_value;
 */
 typedef struct RClass {
   mrb_sym sym_id;	// class name
-#ifdef MRBC_DEBUG
-  const char *names;	// for debug. delete soon.
-#endif
   struct RClass *super;	// mrbc_class[super]
   struct RProc *procs;	// mrbc_proc[rprocs], linked list
 } mrb_class;
@@ -158,9 +133,6 @@ typedef struct RProc {
 
   unsigned int c_func : 1;	// 0:IREP, 1:C Func
   mrb_sym sym_id;
-#ifdef MRBC_DEBUG
-  const char *names;		// for debug; delete soon
-#endif
   struct RProc *next;
   union {
     struct IREP *irep;
@@ -203,7 +175,6 @@ void mrbc_instance_setiv(mrb_object *obj, mrb_sym sym_id, mrb_value *v);
 mrb_value mrbc_instance_getiv(mrb_object *obj, mrb_sym sym_id);
 
 
-
 //================================================================
 /*!@brief
   Returns a fixnum in mruby/c.
@@ -218,22 +189,6 @@ static inline mrb_value mrb_fixnum_value( int32_t n )
   return value;
 }
 
-
-#if MRBC_USE_FLOAT
-//================================================================
-/*!@brief
-  Returns a float in mruby/c.
-
-  @param  n	dluble value
-  @return	mrb_value of type float.
-*/
-static inline mrb_value mrb_float_value( double n )
-{
-  mrb_value value = {.tt = MRB_TT_FLOAT};
-  value.d = n;
-  return value;
-}
-#endif
 
 
 //================================================================

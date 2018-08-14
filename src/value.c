@@ -12,13 +12,14 @@
   </pre>
 */
 
-#include "vm_config.h"
+//#include "vm_config.h"
 #include <stdint.h>
 #include <string.h>
-#include <assert.h>
 
 #include "value.h"
 #include "alloc.h"
+#include "vm.h"
+/*
 #include "keyvalue.h"
 #include "class.h"
 #include "static.h"
@@ -27,7 +28,7 @@
 #include "c_range.h"
 #include "c_array.h"
 #include "c_hash.h"
-
+*/
 
 
 mrb_object *mrbc_obj_alloc(struct VM *vm, mrb_vtype tt)
