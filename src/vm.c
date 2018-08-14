@@ -1,4 +1,9 @@
+#include <stdint.h>
+#include <stddef.h>
+#include <string.h>
+#include <assert.h>
 #include "vm.h"
+#include "opcode.h"
 
 void init_vm(void){
 	
@@ -12,17 +17,19 @@ inline static int op_nop( mrb_vm *vm, uint32_t code, mrb_value *regs )
 
 inline static int op_loadself( mrb_vm *vm, uint32_t code, mrb_value *regs )
 {
+#if 0
 	int ra = GETARG_A(code);
 	
 	mrbc_release(&regs[ra]);
 	mrbc_dup(&regs[0]);       // TODO: Need?
 	regs[ra] = regs[0];
-	
+#endif	
 	return 0;
 }
 
 inline static int op_send( mrb_vm *vm, uint32_t code, mrb_value *regs )
 {
+#if 0
 	int ra = GETARG_A(code);
 	int rb = GETARG_B(code);  // index of method sym
 	int rc = GETARG_C(code);  // number of params
@@ -78,11 +85,13 @@ inline static int op_send( mrb_vm *vm, uint32_t code, mrb_value *regs )
 	
 	// new regs
 	vm->current_regs += ra;
-	
+#endif	
 	return 0;
 }
+
 inline static int op_string( mrb_vm *vm, uint32_t code, mrb_value *regs )
 {
+#if 0
 	int ra = GETARG_A(code);
 	int rb = GETARG_Bx(code);
 	mrb_object *pool_obj = vm->pc_irep->pools[rb];
@@ -94,10 +103,13 @@ inline static int op_string( mrb_vm *vm, uint32_t code, mrb_value *regs )
 	
 	mrbc_release(&regs[ra]);
 	regs[ra] = value;
+#endif
 	return 0;
 }
+
 inline static int op_stop( mrb_vm *vm, uint32_t code, mrb_value *regs )
 {
+#if 0
 	if( GET_OPCODE(code) == OP_STOP ) {
 		int i;
 		for( i = 0; i < MAX_REGS_SIZE; i++ ) {
@@ -106,25 +118,27 @@ inline static int op_stop( mrb_vm *vm, uint32_t code, mrb_value *regs )
 	}
 	
 	vm->flag_preemption = 1;
-	
+#endif	
 	return -1;
 }
 
+mrb_vm vm_body;
 void run_vm(void){
-	int ret = 0;
-	
-	do {
-		// get one bytecode
-		uint32_t code = bin_to_uint32(vm->pc_irep->code + vm->pc * 4);
-		vm->pc++;
-		
-		// regs
-		mrb_value *regs = vm->current_regs;
-		
-		// Dispatch
-		int opcode = GET_OPCODE(code);
-		switch( opcode ) {
-		  case OP_NOP:        ret = op_nop       (vm, code, regs); break;
+  mrb_vm *vm = &vm_body;
+  int ret = 0;
+  
+  do {
+    // get one bytecode
+    uint32_t code = bin_to_uint32(vm->pc_irep->code + vm->pc * 4);
+    vm->pc++;
+    
+    // regs
+    mrb_value *regs = vm->current_regs;
+    
+    // Dispatch
+    int opcode = GET_OPCODE(code);
+    switch( opcode ) {
+    case OP_NOP:        ret = op_nop       (vm, code, regs); break;
 //		  case OP_MOVE:       ret = op_move      (vm, code, regs); break;
 //		  case OP_LOADL:      ret = op_loadl     (vm, code, regs); break;
 //		  case OP_LOADI:      ret = op_loadi     (vm, code, regs); break;
@@ -144,7 +158,7 @@ void run_vm(void){
 //		  case OP_JMP:        ret = op_jmp       (vm, code, regs); break;
 //		  case OP_JMPIF:      ret = op_jmpif     (vm, code, regs); break;
 //		  case OP_JMPNOT:     ret = op_jmpnot    (vm, code, regs); break;
-		  case OP_SEND:       ret = op_send      (vm, code, regs); break;
+    case OP_SEND:       ret = op_send      (vm, code, regs); break;
 //		  case OP_SENDB:      ret = op_send      (vm, code, regs); break;  // reuse
 //		  case OP_CALL:       ret = op_call      (vm, code, regs); break;
 //		  case OP_ENTER:      ret = op_enter     (vm, code, regs); break;
@@ -171,16 +185,16 @@ void run_vm(void){
 //		  case OP_EXEC:       ret = op_exec      (vm, code, regs); break;
 //		  case OP_METHOD:     ret = op_method    (vm, code, regs); break;
 //		  case OP_TCLASS:     ret = op_tclass    (vm, code, regs); break;
-		  case OP_STOP:       ret = op_stop      (vm, code, regs); break;
-		  case OP_ABORT:      ret = op_stop      (vm, code, regs); break;  // reuse
-		  default:
-			DEBUG_PRINT("Skip OP\n");
-			break;
-		}
-	} while( !vm->flag_preemption );
-	
-	vm->flag_preemption = 0;
-	
-	return ret;
+    case OP_STOP:       ret = op_stop      (vm, code, regs); break;
+    case OP_ABORT:      ret = op_stop      (vm, code, regs); break;  // reuse
+    default:
+      //DEBUG_PRINT("Skip OP\n");
+      break;
+    }
+  } while( !vm->flag_preemption );
+  
+  vm->flag_preemption = 0;
+  
+  return ret;
 }
 

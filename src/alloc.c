@@ -13,13 +13,13 @@
   </pre>
 */
 
-#include "vm_config.h"
+//#include "vm_config.h"
 #include <stddef.h>
 #include <string.h>
 #include <assert.h>
 #include "alloc.h"
-#include "console.h"
-#include "state.h"
+//#include "console.h"
+//#include "state.h"
 
 
 // Layer 1st(f) and 2nd(s) model
@@ -59,7 +59,7 @@
 #define FLAG_FREE_BLOCK     1
 #define FLAG_USED_BLOCK     0
 
-/*
+
 // memory block header
 typedef struct USED_BLOCK {
   unsigned int         t : 1;       //!< FLAG_TAIL_BLOCK or FLAG_NOT_TAIL_BLOCK
@@ -81,7 +81,7 @@ typedef struct FREE_BLOCK {
   struct FREE_BLOCK *next_free;
   struct FREE_BLOCK *prev_free;
 } FREE_BLOCK;
-*/
+
 
 #define PHYS_NEXT(p) ((uint8_t *)(p) + (p)->size)
 #define PHYS_PREV(p) ((uint8_t *)(p) - (p)->prev_offset)
