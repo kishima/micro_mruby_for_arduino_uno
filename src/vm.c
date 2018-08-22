@@ -8,13 +8,22 @@
 
 #include <avr/pgmspace.h>
 
+//Only one VM is available
 static mrb_vm vm_body;
+
+static 
 
 void init_vm(void){
   //initialize VM
 }
 
+inline uint32_t get_bytecode(mrb_irep_ds* irep, uint16_t pc){
+  if(irep )
+}
 
+//--------------------------------
+//  OPCODE
+//--------------------------------
 inline static int op_nop( mrb_vm *vm, uint32_t code, mrb_value *regs )
 {
 	return 0;
@@ -134,7 +143,8 @@ void run_vm(void){
   
   do {
     // get one bytecode
-    uint32_t code = bin_to_uint32(vm->pc_irep->code + vm->pc * 4);
+    //uint32_t code = bin_to_uint32(vm->pc_irep->code + vm->pc * 4);
+    uint32_t code = get_bytecode(vm);
     vm->pc++;
     
     // regs

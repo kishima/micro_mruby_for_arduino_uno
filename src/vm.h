@@ -9,6 +9,14 @@
 extern "C" {
 #endif
 
+#define MIREP_MASK (0x80)
+
+typedef struct MICRO_IREP {
+  uint8_t  id;   //If (id&0x80) this is a dynamic
+  uint8_t* head; //Head pointer of the irep 
+} mrb_mirep; 
+
+
 typedef struct IREP {
   uint16_t nlocals;		//!< # of local variables
   uint16_t nregs;		//!< # of register variables
@@ -19,12 +27,14 @@ typedef struct IREP {
   uint8_t     *code;		//!< ISEQ (code) BLOCK
   mrb_object  **pools;          //!< array of POOL objects pointer.
   uint8_t     *ptr_to_sym;
-  struct IREP **reps;		//!< array of child IREP's pointer.
+  mrb_mirep   *reps;		//!< array of child IREP's pointer.
 
 } mrb_irep;
 
+
+
 typedef struct CALLINFO {
-  mrb_irep *pc_irep;
+  mrb_irep_ds pc_irep;
   uint16_t  pc;
   mrb_value *current_regs;
   mrb_class *target_class;
@@ -33,27 +43,28 @@ typedef struct CALLINFO {
 
 
 typedef struct VM {
-  mrb_irep *irep;
+  mrb_irep_ds irep; //?
 
-  uint8_t        vm_id; // vm_id : 1..n
-  const uint8_t *mrb;   // bytecode
+  //uint8_t        vm_id; // vm_id : 1..n  //REMOVE
+  //const uint8_t *mrb;   // bytecode //REMOVE?
 
-  mrb_irep *pc_irep;    // PC
-  uint16_t  pc;         // PC
+  mrb_irep_ds pc_irep;    // PC  //Dynamic
+  uint16_t    pc;         // PC  //Dynamic
 
-  //  uint16_t     reg_top;
-  mrb_value    regs[MAX_REGS_SIZE];
-  mrb_value   *current_regs;
-  uint16_t     callinfo_top;
-  mrb_callinfo callinfo[MAX_CALLINFO_SIZE];
+  mrb_value    regs[MAX_REGS_SIZE]; //Dynamic
+  mrb_value   *current_regs; //Dynamic
+  uint16_t     callinfo_top; //Dynamic
+  mrb_callinfo callinfo[MAX_CALLINFO_SIZE]; //Dynamic
 
-  mrb_class *target_class;
+  mrb_class *target_class; //Dynamic
 
-  int32_t error_code;
+  //int32_t error_code; //REMOVE
 
-  volatile int8_t flag_preemption;
-  int8_t flag_need_memfree;
+  //volatile int8_t flag_preemption; //REMOVE?
+  //int8_t flag_need_memfree; //REMOVE?
 } mrb_vm;
+
+//---------------------------------------
 
 inline static uint32_t bin_to_uint32( const void *s )
 {
