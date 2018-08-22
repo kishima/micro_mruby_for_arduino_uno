@@ -12,7 +12,6 @@
   </pre>
 */
 
-//#include "vm_config.h"
 #include <stdint.h>
 #include <string.h>
 

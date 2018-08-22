@@ -6,13 +6,12 @@
 #include "opcode.h"
 #include "debug.h"
 
+#include <avr/pgmspace.h>
 
 static mrb_vm vm_body;
 
 void init_vm(void){
   //initialize VM
-
-  //load byte code
 }
 
 

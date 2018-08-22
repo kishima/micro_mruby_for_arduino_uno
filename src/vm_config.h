@@ -16,14 +16,14 @@
 #define MRBC_SRC_VM_CONFIG_H_
 
 #ifndef MAX_REGS_SIZE
-#define MAX_REGS_SIZE 100
+#define MAX_REGS_SIZE 20
 #endif
 
 #ifndef MAX_CALLINFO_SIZE
-#define MAX_CALLINFO_SIZE 100
+#define MAX_CALLINFO_SIZE 10
 #endif
 
-
+//#define MRBC_USE_STRING
 
 #endif
 
