@@ -5,6 +5,12 @@
 extern "C" {
 #endif
 
+enum mmruby_text{
+  MMERROR_UNKNOWN,
+  MMERROR_NOMEM,
+};
+
+
 #define MMRUBY_DEBUG_ENABLE
 
 #ifdef MMRUBY_DEBUG_ENABLE

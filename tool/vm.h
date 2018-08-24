@@ -68,7 +68,7 @@ typedef struct IREP {
   uint16_t nlocals;		//!< # of local variables
   uint16_t nregs;		//!< # of register variables
   uint16_t rlen;		//!< # of child IREP blocks
-  uint16_t ilen;		//!< # of irep
+  uint16_t ilen;		//!< # of iSeq
   uint16_t plen;		//!< # of pool
 
   uint8_t     *code;		//!< ISEQ (code) BLOCK
@@ -76,6 +76,10 @@ typedef struct IREP {
   uint8_t     *ptr_to_sym;
   struct IREP **reps;		//!< array of child IREP's pointer.
 
+  //for output
+  uint16_t pool_total_len;
+  uint16_t sym_total_len;
+  
 } mrb_irep;
 
 //================================================================

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include <vm.h>
+#include "./vm.h"
 
 
 
@@ -120,6 +120,7 @@ static mrb_irep * load_irep_1(mrb_vm *vm, const uint8_t **pos)
   // allocate memory for child irep's pointers
   if( irep->rlen ) {
     irep->reps = (mrb_irep **)malloc(sizeof(mrb_irep *) * irep->rlen);
+    printf("irep->reps[0]=%p\n",irep->reps[0]);
     if( irep->reps == NULL ) {
       vm->error_code = LOAD_FILE_IREP_ERROR_ALLOCATION;
       return NULL;
