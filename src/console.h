@@ -17,7 +17,8 @@
 #include <stdint.h>
 #include <stdarg.h>
 #include <string.h>
-#include "hal/hal.h"
+#include "hal.h"
+#include "debug.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -85,9 +85,14 @@ uint16_t write_mirep_struct(uint8_t* buff, mrb_mirep* mirep){
 
 uint16_t write_mirep_code(uint8_t* buff, mrb_mirep* mirep,mrb_irep* irep){
   int i;
+  printf("code=\n");
   for(i=0;i<mirep->ilen * CODE_LEN;i++){
     buff[i] = irep->code[i];
+    
+    if(i % CODE_LEN == 0 && i>0) printf("\n");
+    printf("%02x",buff[i]);
   }
+  printf("\n");
   return mirep->ilen * CODE_LEN;
 }
 

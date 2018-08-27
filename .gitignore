@@ -3,4 +3,5 @@
 TransCoder
 *.o
 *.exe
+./src/code.h
 code.h

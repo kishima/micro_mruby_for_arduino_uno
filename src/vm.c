@@ -5,6 +5,7 @@
 #include "micro_vm.h"
 #include "opcode.h"
 #include "avr_access.h"
+#include "console.h"
 #include "debug.h"
 
 //Only one VM is available
@@ -12,6 +13,7 @@ static mrb_mvm vm_body;
 
 void init_vm(void){
   //initialize VM
+  memset(&vm_body,0,sizeof(mrb_mvm));
 }
 
 //--------------------------------
@@ -116,17 +118,15 @@ inline static int op_string( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 
 inline static int op_stop( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
-#if 0
-	if( GET_OPCODE(code) == OP_STOP ) {
-		int i;
-		for( i = 0; i < MAX_REGS_SIZE; i++ ) {
-			mrbc_release(&vm->regs[i]);
-		}
-	}
+  if( GET_OPCODE(code) == OP_STOP ) {
+    int i;
+    for( i = 0; i < MAX_REGS_SIZE; i++ ) {
+      //mrbc_release(&vm->regs[i]);
+    }
+  }
   
-	vm->flag_preemption = 1;
-#endif	
-	return -1;
+  vm->flag_preemption = 1;
+  return -1;
 }
 
 void run_vm(void){
@@ -136,7 +136,6 @@ void run_vm(void){
   
   do {
     // get one bytecode
-    //uint32_t code = bin_to_uint32(vm->pc_irep->code + vm->pc * 4);
     uint32_t code = read_bytecode(vm->pc_irep,vm->pc);
     vm->pc++;
     
@@ -144,7 +143,8 @@ void run_vm(void){
     mrb_value *regs = vm->current_regs;
     
     // Dispatch
-    int opcode = GET_OPCODE(code);
+    uint32_t opcode = GET_OPCODE(code);
+    console_printf("code[%u]:0x%02x\n",vm->pc,opcode);
     switch( opcode ) {
     case OP_NOP:        ret = op_nop       (vm, code, regs); break;
 //		  case OP_MOVE:       ret = op_move      (vm, code, regs); break;
@@ -196,13 +196,16 @@ void run_vm(void){
     case OP_STOP:       ret = op_stop      (vm, code, regs); break;
     case OP_ABORT:      ret = op_stop      (vm, code, regs); break;  // reuse
     default:
-      //DEBUG_PRINT("Skip OP\n");
+      DEBUG_PRINT("Unknown code\n");
+      //console_printf("code:%d\n",opcode);
       break;
     }
+    hal_delay(1000);
   } while( !vm->flag_preemption );
+  DEBUG_PRINT("VM END\n");
   
   vm->flag_preemption = 0;
   
-  return ret;
+  return;
 }
 

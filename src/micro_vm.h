@@ -64,14 +64,13 @@ typedef struct MCALLINFO {
   Virtual Machine
 */
 typedef struct VM {
-  mrb_mirep *irep;
+  uint8_t  irep;
+  uint8_t  pc_irep;
+  uint16_t pc;
 
-  mrb_mirep *pc_irep;
-  uint16_t  pc;
-
-  mrb_value    regs[MAX_REGS_SIZE];
-  mrb_value   *current_regs;
-  uint16_t     callinfo_top;
+  mrb_value     regs[MAX_REGS_SIZE];
+  mrb_value    *current_regs;
+  uint16_t      callinfo_top;
   mrb_mcallinfo callinfo[MAX_CALLINFO_SIZE];
 
   mrb_class *target_class;

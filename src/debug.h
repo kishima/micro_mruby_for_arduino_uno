@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+
 enum mmruby_text{
   MMERROR_UNKNOWN,
   MMERROR_NOMEM,
