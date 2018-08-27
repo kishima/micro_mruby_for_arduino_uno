@@ -67,7 +67,7 @@ void dump_array_bytes(FILE* f, char* name, uint8_t* bp, int length){
 }
 
 void dump_trans_irep_bin(FILE* f, uint8_t irep_id, uint8_t* buff, uint16_t length){
-  fprintf(f,"const char %sirep_%03d[] PROGMEM= {\n",CODE_PREFIX,irep_id);
+  fprintf(f,"const unsigned char %sirep_%03d[] PROGMEM= {\n",CODE_PREFIX,irep_id);
   dump_bytes(f,buff,length);
   fprintf(f,"\n};\n");
 }
@@ -209,7 +209,7 @@ void analyze_irep(FILE* f,mrb_irep* irep){
     dump_trans_irep_bin(f,i,irep_output_buff[i],irep_buff_length_list[i]);
   }
 
-  fprintf(f,"char* const %sirep_table[] PROGMEM = {\n",CODE_PREFIX);
+  fprintf(f,"unsigned char* const %sirep_table[] PROGMEM = {\n",CODE_PREFIX);
   for(i=0;i<irep_count+1;i++){
     char irep_name[256];
     sprintf(irep_name,"%sirep_%03d",CODE_PREFIX,i);
@@ -223,7 +223,7 @@ void output_symbol_tbl(FILE* f){
   
   fprintf(f,"const unsigned char %ssymbol_table_size PROGMEM = %d;\n",CODE_PREFIX,sym_tbl_cnt);
   
-  fprintf(f,"char* const %ssymbol_table[] PROGMEM = {\n",CODE_PREFIX);
+  fprintf(f,"unsigned char* const %ssymbol_table[] PROGMEM = {\n",CODE_PREFIX);
   int i;
   for(i=0;i<sym_tbl_cnt;i++){
     fprintf(f,"  \"%s\",\n",sym_tbl[i]);
