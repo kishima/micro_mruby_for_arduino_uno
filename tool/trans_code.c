@@ -209,7 +209,7 @@ void analyze_irep(FILE* f,mrb_irep* irep){
     dump_trans_irep_bin(f,i,irep_output_buff[i],irep_buff_length_list[i]);
   }
 
-  fprintf(f,"unsigned char* const %sirep_table[] PROGMEM = {\n",CODE_PREFIX);
+  fprintf(f,"const unsigned char* const %sirep_table[] PROGMEM = {\n",CODE_PREFIX);
   for(i=0;i<irep_count+1;i++){
     char irep_name[256];
     sprintf(irep_name,"%sirep_%03d",CODE_PREFIX,i);
@@ -223,7 +223,7 @@ void output_symbol_tbl(FILE* f){
   
   fprintf(f,"const unsigned char %ssymbol_table_size PROGMEM = %d;\n",CODE_PREFIX,sym_tbl_cnt);
   
-  fprintf(f,"unsigned char* const %ssymbol_table[] PROGMEM = {\n",CODE_PREFIX);
+  fprintf(f,"const char* const %ssymbol_table[] PROGMEM = {\n",CODE_PREFIX);
   int i;
   for(i=0;i<sym_tbl_cnt;i++){
     fprintf(f,"  \"%s\",\n",sym_tbl[i]);
@@ -231,17 +231,23 @@ void output_symbol_tbl(FILE* f){
   fprintf(f,"};\n");
 }
 
+#define OUTPUT_FNAME "../src/code.h"
 void trans_code_mrb(mrb_vm* vm){
   //open file
   FILE* f = stdout;
-  
+  if ((f = fopen(OUTPUT_FNAME, "w")) == NULL) {
+    printf("connot open code.h\n");
+    exit(0);
+  }
+  printf("Open %s\n",OUTPUT_FNAME);
   //analyze and output
   analyze_irep(f,vm->irep);
   
   output_symbol_tbl(f);
 
-
   //close
+  fclose(f);
+  printf("Close %s\n",OUTPUT_FNAME);
 }
 
 
