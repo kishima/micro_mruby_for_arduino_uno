@@ -1,6 +1,7 @@
 def m00
 	def m10
 		def m20
+			puts "Hello"
 		end
 		
 		def m21
@@ -16,5 +17,10 @@ end
 
 def m02
 end
+
+
+m00
+m10
+m20
 
 

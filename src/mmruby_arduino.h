@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "vm.h"
+#include "micro_vm.h"
 #include "mmruby.h"
 
 

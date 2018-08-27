@@ -2,34 +2,27 @@
 #include <stddef.h>
 #include <string.h>
 #include <assert.h>
-#include "vm.h"
+#include "micro_vm.h"
 #include "opcode.h"
+#include "avr_access.h"
 #include "debug.h"
 
-#include <avr/pgmspace.h>
-
 //Only one VM is available
-static mrb_vm vm_body;
-
-static 
+static mrb_mvm vm_body;
 
 void init_vm(void){
   //initialize VM
 }
 
-inline uint32_t get_bytecode(mrb_irep_ds* irep, uint16_t pc){
-  if(irep )
-}
-
 //--------------------------------
 //  OPCODE
 //--------------------------------
-inline static int op_nop( mrb_vm *vm, uint32_t code, mrb_value *regs )
+inline static int op_nop( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
 	return 0;
 }
 
-inline static int op_loadself( mrb_vm *vm, uint32_t code, mrb_value *regs )
+inline static int op_loadself( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
 #if 0
 	int ra = GETARG_A(code);
@@ -41,7 +34,7 @@ inline static int op_loadself( mrb_vm *vm, uint32_t code, mrb_value *regs )
 	return 0;
 }
 
-inline static int op_send( mrb_vm *vm, uint32_t code, mrb_value *regs )
+inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
 #if 0
 	int ra = GETARG_A(code);
@@ -103,7 +96,7 @@ inline static int op_send( mrb_vm *vm, uint32_t code, mrb_value *regs )
 	return 0;
 }
 
-inline static int op_string( mrb_vm *vm, uint32_t code, mrb_value *regs )
+inline static int op_string( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
 #if 0
 	int ra = GETARG_A(code);
@@ -121,7 +114,7 @@ inline static int op_string( mrb_vm *vm, uint32_t code, mrb_value *regs )
 	return 0;
 }
 
-inline static int op_stop( mrb_vm *vm, uint32_t code, mrb_value *regs )
+inline static int op_stop( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
 #if 0
 	if( GET_OPCODE(code) == OP_STOP ) {
@@ -130,7 +123,7 @@ inline static int op_stop( mrb_vm *vm, uint32_t code, mrb_value *regs )
 			mrbc_release(&vm->regs[i]);
 		}
 	}
-	
+  
 	vm->flag_preemption = 1;
 #endif	
 	return -1;
@@ -138,13 +131,13 @@ inline static int op_stop( mrb_vm *vm, uint32_t code, mrb_value *regs )
 
 void run_vm(void){
   DEBUG_PRINTLN("start run_vm");
-  mrb_vm *vm = &vm_body;
+  mrb_mvm *vm = &vm_body;
   int ret = 0;
   
   do {
     // get one bytecode
     //uint32_t code = bin_to_uint32(vm->pc_irep->code + vm->pc * 4);
-    uint32_t code = get_bytecode(vm);
+    uint32_t code = read_bytecode(vm->pc_irep,vm->pc);
     vm->pc++;
     
     // regs

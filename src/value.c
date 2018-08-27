@@ -15,9 +15,9 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "micro_vm.h"
 #include "value.h"
 #include "alloc.h"
-#include "vm.h"
 /*
 #include "keyvalue.h"
 #include "class.h"
@@ -305,41 +305,27 @@ int32_t mrbc_atoi( const char *s, int base )
 
 //================================================================
 /*!@brief
-  mrb_irep allocator
+  mrb_mirep allocator
 
   @param  vm	Pointer of VM.
-  @return	Pointer of allocated mrb_irep
+  @return	Pointer of allocated mrb_mirep
 */
-mrb_irep *mrbc_irep_alloc(struct VM *vm)
+mrb_mirep *mrbc_irep_alloc(struct VM *vm)
 {
-  mrb_irep *p = (mrb_irep *)mrbc_alloc(vm, sizeof(mrb_irep));
+  mrb_mirep *p = (mrb_mirep *)mrbc_alloc(vm, sizeof(mrb_mirep));
   if( p )
-    memset(p, 0, sizeof(mrb_irep));	// caution: assume NULL is zero.
+    memset(p, 0, sizeof(mrb_mirep));	// caution: assume NULL is zero.
   return p;
 }
 
 
 //================================================================
 /*!@brief
-  release mrb_irep holds memory
+  release mrb_mirep holds memory
 */
-void mrbc_irep_free(mrb_irep *irep)
+void mrbc_irep_free(mrb_mirep *irep)
 {
-  int i;
-
-  // release pools.
-  for( i = 0; i < irep->plen; i++ ) {
-    mrbc_raw_free( irep->pools[i] );
-  }
-  if( irep->plen ) mrbc_raw_free( irep->pools );
-
-  // release child ireps.
-  for( i = 0; i < irep->rlen; i++ ) {
-    mrbc_irep_free( irep->reps[i] );
-  }
-  if( irep->rlen ) mrbc_raw_free( irep->reps );
-
-  mrbc_raw_free( irep );
+  //do nothing
 }
 
 

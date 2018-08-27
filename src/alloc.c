@@ -16,17 +16,17 @@
 #include <stddef.h>
 #include "alloc.h"
 
-inline void * mrbc_alloc(const mrb_vm *vm, unsigned int size)
+inline void * mrbc_alloc(const mrb_mvm *vm, unsigned int size)
 {
   return malloc(size);
 }
 
-inline void * mrbc_realloc(const mrb_vm *vm, void *ptr, unsigned int size)
+inline void * mrbc_realloc(const mrb_mvm *vm, void *ptr, unsigned int size)
 {
   return realloc(ptr, size);
 }
 
-inline void mrbc_free(const mrb_vm *vm, void *ptr)
+inline void mrbc_free(const mrb_mvm *vm, void *ptr)
 {
   free(ptr);
 }

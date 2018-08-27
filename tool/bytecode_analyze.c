@@ -147,6 +147,7 @@ static mrb_irep * load_irep_1(mrb_vm *vm, const uint8_t **pos)
   }
 
   int i;
+  uint8_t *pool_head_p = p;
   for( i = 0; i < irep->plen; i++ ) {
     int tt = *p++;
     int obj_size = bin_to_uint16(p);	p += 2;
@@ -174,10 +175,13 @@ static mrb_irep * load_irep_1(mrb_vm *vm, const uint8_t **pos)
     irep->pools[i] = obj;
     p += obj_size;
   }
+  irep->pool_total_len = (uint16_t)(p - pool_head_p);
 
   // SYMS BLOCK
   irep->ptr_to_sym = (uint8_t*)p;
   int slen = bin_to_uint32(p);		p += 4;
+  irep->slen = slen;
+  printf("slen=%d\n",slen);
   while( --slen >= 0 ) {
     int s = bin_to_uint16(p);		p += 2;
     p += s+1;

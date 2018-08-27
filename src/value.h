@@ -39,7 +39,7 @@ typedef int16_t mrb_sym;
 
 
 struct VM;
-struct IREP;
+struct MIREP;
 struct RObject;
 typedef void (*mrb_func_t)(struct VM *vm, struct RObject *v, int argc);
 
@@ -167,8 +167,8 @@ void mrbc_release(mrb_value *v);
 void mrbc_dec_ref_counter(mrb_value *v);
 void mrbc_clear_vm_id(mrb_value *v);
 int32_t mrbc_atoi(const char *s, int base);
-struct IREP *mrbc_irep_alloc(struct VM *vm);
-void mrbc_irep_free(struct IREP *irep);
+struct MIREP *mrbc_irep_alloc(struct VM *vm);
+void mrbc_irep_free(struct MIREP *irep);
 mrb_value mrbc_instance_new(struct VM *vm, mrb_class *cls, int size);
 void mrbc_instance_delete(mrb_value *v);
 void mrbc_instance_setiv(mrb_object *obj, mrb_sym sym_id, mrb_value *v);

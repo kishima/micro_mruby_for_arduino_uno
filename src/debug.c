@@ -1,7 +1,8 @@
 #include <stdint.h>
 #include "debug.h"
-#include <avr/pgmspace.h>
+//#include <avr/pgmspace.h>
 
+#if 0
 const char string01[] PROGMEM = { "UNKNOWN ERROR" };
 const char string02[] PROGMEM = { "NOMEM ERROR" };
 
@@ -9,8 +10,10 @@ const char* string_list[] PROGMEM = {
   string01,
   string02
 };
+#endif
 
-void output_string(byte no){
+void output_string(uint8_t no){
+#if 0
   char* string = (char*)pgm_read_word(&(string_list[no]));
   int i = 0;
   char ch[2];
@@ -21,4 +24,5 @@ void output_string(byte no){
     debug_print(ch);
     i++;
   };
+#endif
 }

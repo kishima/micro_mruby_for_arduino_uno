@@ -1,6 +1,8 @@
 #ifndef __MMRUBY_VM_H_
 #define __MMRUBY_VM_H_
 
+#if 0
+
 #include <stdint.h>
 #include "vm_config.h"
 #include "value.h"
@@ -96,4 +98,8 @@ void run_vm(void);
 #ifdef __cplusplus
 }
 #endif
+
+
+#endif // comment out
+
 #endif

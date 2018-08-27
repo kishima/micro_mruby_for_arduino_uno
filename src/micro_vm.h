@@ -14,20 +14,19 @@ extern "C" {
 
 //Micro Irep
 typedef struct MIREP {
-  //Can be shorten
-  uint8_t nlocals;// # of local variables
-  uint8_t nregs;  // # of register variables
+  //uint8_t nlocals;// # of local variables
+  //uint8_t nregs;  // # of register variables
   uint8_t rlen;   // # of child IREP blocks
   uint8_t ilen;   // # of iSeq
   uint8_t plen;   // # of pool
+  uint8_t slen;   // # of symbols
 
   //uint8_t irep_list[]; // irep_id list
   //uint8_t     *code; // ISEQ (code) BLOCK
                        // NOT Needed. Can be define by offset using sizeof(mrb_mirep)
   //mrb_object  **pools; // array of POOL objects pointer.
                          // NOT Needed. Can be define by offset using ilen
-  uint16_t sym_pos; //
-
+  
 } mrb_mirep;
 
 
@@ -38,6 +37,7 @@ typedef struct MIREP {
 uint8_t* get_irep_p(uint8_t irep_id);
      
 //irep_id : irep ID
+/*
 #define code_ptr(irep_id) (get_irep_p(irep_id) + mrb_mirep_size)
 #define pools_ptr(irep_id) (get_irep_p(irep_id) + mrb_mirep_size \
                                 + progmem_read_byte(get_irep_p(irep_id)+2) \ //rlen
@@ -45,7 +45,7 @@ uint8_t* get_irep_p(uint8_t irep_id);
 #define sym_ptr(irep_id) (get_irep_p(irep_id) + mrb_mirep_size \
                                 + progmem_read_byte(get_irep_p(irep_id)+2) \ //rlen
                                 + progmem_read_word(get_irep_p(irep_id)+5) ) //sym_pos
-
+*/
 //================================================================
 /*!@brief
   Call information
@@ -63,7 +63,7 @@ typedef struct MCALLINFO {
 /*!@brief
   Virtual Machine
 */
-typedef struct MVM {
+typedef struct VM {
   mrb_mirep *irep;
 
   mrb_mirep *pc_irep;
@@ -90,15 +90,15 @@ inline static void uint16_to_bin( uint16_t x, uint8_t *bin )
 #ifndef MRBC_SRC_VM_H_
 
 const char *mrbc_get_irep_symbol(const uint8_t *p, int n);
-const char *mrbc_get_callee_name(mrb_vm *vm);
+const char *mrbc_get_callee_name(mrb_mvm *vm);
 //mrb_vm *mrbc_vm_open(mrb_vm *vm_arg);
 //void mrbc_vm_close(mrb_vm *vm);
 //void mrbc_vm_begin(mrb_vm *vm);
 //void mrbc_vm_end(mrb_vm *vm);
-int mrbc_vm_run(mrb_vm *vm);
+int mrbc_vm_run(mrb_mvm *vm);
 
-void mrbc_push_callinfo(mrb_vm *vm, int n_args);
-void mrbc_pop_callinfo(mrb_vm *vm);
+void mrbc_push_callinfo(mrb_mvm *vm, int n_args);
+void mrbc_pop_callinfo(mrb_mvm *vm);
 
 //================================================================
 /*!@brief

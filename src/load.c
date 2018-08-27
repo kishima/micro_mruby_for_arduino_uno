@@ -1,3 +1,5 @@
+#if 0
+
 #include <stdint.h>
 #include <string.h>
 #include "vm.h"
@@ -123,3 +125,4 @@ mrb_irep* load_mirep(mrb_mirep mirep){
   return load_irep(id);
 }
 
+#endif

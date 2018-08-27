@@ -34,21 +34,12 @@ typedef enum {
 typedef int16_t mrb_sym;
 typedef struct RObject {
   uint8_t tt : 8;
-#if 0
   union {
     int32_t i;			// MRB_TT_FIXNUM, SYMBOL
-    struct RClass *cls;		// MRB_TT_CLASS
-    struct RObject *handle;	// handle to objects
-    struct RInstance *instance;	// MRB_TT_OBJECT
-    struct RProc *proc;		// MRB_TT_PROC
-    struct RArray *array;	// MRB_TT_ARRAY
-    struct RString *string;	// MRB_TT_STRING
     const char *str;		// C-string (only loader use.)
-    struct RRange *range;	// MRB_TT_RANGE
-    struct RHash *hash;		// MRB_TT_HASH
   };
-#endif
 } mrb_object;
+
 typedef struct RObject mrb_value;
 
 
@@ -78,7 +69,7 @@ typedef struct IREP {
 
   //for output
   uint16_t pool_total_len;
-  uint16_t sym_total_len;
+  uint16_t slen;
   
 } mrb_irep;
 
@@ -86,7 +77,7 @@ typedef struct IREP {
 /*!@brief
   Virtual Machine
 */
-typedef struct VM {
+typedef struct OVM {
   mrb_irep *irep;
   const uint8_t *mrb;   // bytecode
   mrb_irep *pc_irep;    // PC
