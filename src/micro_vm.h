@@ -8,6 +8,9 @@
 #include "value.h"
 #endif
 
+#define CODE_PREFIX "mmruby_code_"
+#define CODE_LEN 4
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -31,7 +34,7 @@ typedef struct MIREP {
 
 
 //size of mrb_mirep in Arduino
-#define mrb_mirep_size  7
+#define mrb_mirep_size  4
 
 // get irep 
 uint8_t* get_irep_p(uint8_t irep_id);

@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
@@ -137,6 +139,7 @@ void run_vm(void){
   do {
     // get one bytecode
     uint32_t code = read_bytecode(vm->pc_irep,vm->pc);
+    code = bin_to_uint32(&code);
     vm->pc++;
     
     // regs
@@ -144,7 +147,12 @@ void run_vm(void){
     
     // Dispatch
     uint32_t opcode = GET_OPCODE(code);
-    console_printf("code[%u]:0x%02x\n",vm->pc,opcode);
+
+    //char bb[10];
+    //sprintf(bb,"> %d\n",opcode);
+    //DEBUG_PRINT(bb);
+    console_printf("OPCODE >> %02X\n",opcode);
+
     switch( opcode ) {
     case OP_NOP:        ret = op_nop       (vm, code, regs); break;
 //		  case OP_MOVE:       ret = op_move      (vm, code, regs); break;

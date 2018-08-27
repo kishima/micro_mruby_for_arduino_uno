@@ -16,7 +16,7 @@
 #define MRBC_SRC_VM_CONFIG_H_
 
 #ifndef MAX_REGS_SIZE
-#define MAX_REGS_SIZE 20
+#define MAX_REGS_SIZE 16
 #endif
 
 #ifndef MAX_CALLINFO_SIZE

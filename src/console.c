@@ -12,12 +12,10 @@
 */
 
 #include "vm_config.h"
+#include <stdio.h>
 #include <stdint.h>
 #include <stdarg.h>
 #include <string.h>
-#if MRBC_USE_FLOAT
-#include <stdio.h>
-#endif
 #include "console.h"
 
 
@@ -32,65 +30,11 @@ void console_printf(const char *fstr, ...)
   va_list ap;
   va_start(ap, fstr);
 
-  mrb_printf pf;
-  char buf[82];
-  mrbc_printf_init( &pf, buf, sizeof(buf), fstr );
-
-  int ret;
-  while( 1 ) {
-    ret = mrbc_printf_main( &pf );
-    if( mrbc_printf_len( &pf ) ) {
-      hal_write(1, buf, mrbc_printf_len( &pf ));
-      mrbc_printf_clear( &pf );
-    }
-    if( ret == 0 ) break;
-    if( ret < 0 ) continue;
-    if( ret > 0 ) {
-      switch(pf.fmt.type) {
-      case 'c':
-	ret = mrbc_printf_char( &pf, va_arg(ap, int) );
-	break;
-
-      case 's':
-	ret = mrbc_printf_str( &pf, va_arg(ap, char *), ' ');
-	break;
-
-      case 'd':
-      case 'i':
-      case 'u':
-	ret = mrbc_printf_int( &pf, va_arg(ap, uint32_t), 10);
-	break;
-
-      case 'b':
-      case 'B':
-	ret = mrbc_printf_int( &pf, va_arg(ap, uint32_t), 2);
-	break;
-
-      case 'x':
-      case 'X':
-	ret = mrbc_printf_int( &pf, va_arg(ap, uint32_t), 16);
-	break;
-
-#if MRBC_USE_FLOAT
-      case 'f':
-      case 'e':
-      case 'E':
-      case 'g':
-      case 'G':
-	ret = mrbc_printf_float( &pf, va_arg(ap, double) );
-	break;
-#endif
-
-      default:
-	break;
-      }
-
-      hal_write(1, buf, mrbc_printf_len( &pf ));
-      mrbc_printf_clear( &pf );
-    }
-  }
-
+  char buf[40];
+  vsprintf(buf,fstr,ap);
+  hal_write_string(buf);
   va_end(ap);
+  
 }
 
 
@@ -106,6 +50,7 @@ void console_printf(const char *fstr, ...)
 */
 int mrbc_printf_main( mrb_printf *pf )
 {
+#if 0
   int ch = -1;
   pf->fmt = (struct RPrintfFormat){0};
 
@@ -152,6 +97,8 @@ int mrbc_printf_main( mrb_printf *pf )
   if( *pf->fstr ) pf->fmt.type = *pf->fstr++;
 
   return 1;
+#endif
+  return 1;
 }
 
 
@@ -167,6 +114,7 @@ int mrbc_printf_main( mrb_printf *pf )
 */
 int mrbc_printf_char( mrb_printf *pf, int ch )
 {
+#if 0
   if( pf->fmt.flag_minus ) {
     if( pf->p == pf->buf_end ) return -1;
     *pf->p++ = ch;
@@ -184,6 +132,8 @@ int mrbc_printf_char( mrb_printf *pf, int ch )
   }
 
   return 0;
+#endif
+  return 0;
 }
 
 
@@ -200,6 +150,7 @@ int mrbc_printf_char( mrb_printf *pf, int ch )
 */
 int mrbc_printf_str( mrb_printf *pf, const char *str, int pad )
 {
+#if 0
   int ret = 0;
 
   if( str == NULL ) str = "(null)";
@@ -234,6 +185,8 @@ int mrbc_printf_str( mrb_printf *pf, const char *str, int pad )
   }
 
   return ret;
+#endif
+  return 1;
 }
 
 
@@ -250,6 +203,7 @@ int mrbc_printf_str( mrb_printf *pf, const char *str, int pad )
 */
 int mrbc_printf_int( mrb_printf *pf, int32_t value, int base )
 {
+#if 0
   int sign = 0;
   uint32_t v = (uint32_t)value;
 
@@ -295,37 +249,10 @@ int mrbc_printf_int( mrb_printf *pf, int32_t value, int base )
     if( sign ) *--p = sign;
   }
   return mrbc_printf_str( pf, p, pad );
-}
-
-
-
-#if MRBC_USE_FLOAT
-//================================================================
-/*! sprintf subcontract function for float(double) '%f'
-
-  @param  pf	pointer to mrb_printf.
-  @param  value	output value.
-  @retval 0	done.
-  @retval -1	buffer full.
-*/
-int mrbc_printf_float( mrb_printf *pf, double value )
-{
-  char fstr[16];
-  const char *p1 = pf->fstr;
-  char *p2 = fstr + sizeof(fstr) - 1;
-
-  *p2 = '\0';
-  while( (*--p2 = *--p1) != '%' )
-    ;
-
-  snprintf( pf->p, (pf->buf_end - pf->p + 1), p2, value );
-
-  while( *pf->p != '\0' )
-    pf->p++;
-
-  return -(pf->p == pf->buf_end);
-}
 #endif
+  return 1;
+}
+
 
 
 

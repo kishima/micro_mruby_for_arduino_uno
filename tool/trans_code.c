@@ -5,10 +5,6 @@
 #include "./vm.h"
 #include "../src/micro_vm.h"
 
-#define CODE_PREFIX "mmruby_code_"
-
-#define CODE_LEN 4
-
 #define MAX_IREP 256
 #define MAX_OUTPUT_BUFF (1024*32)
 static uint8_t  irep_output_buff[MAX_IREP][MAX_OUTPUT_BUFF];

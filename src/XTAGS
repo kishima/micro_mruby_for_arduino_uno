@@ -1,0 +1,125 @@
+mrbc_allocalloc.c330(const mrb_mvm *vm, unsigned int size)
+mrbc_reallocalloc.c421(const mrb_mvm *vm, void *ptr, unsigned int size)
+mrbc_freealloc.c531(const mrb_mvm *vm, void *ptr)
+read_bytecodeavr_access.cpp223(uint8_t irep_id, uint8_t pc)
+console_printfconsole.c540(const char *fstr, ...)
+mrbc_printf_mainconsole.c2044( mrb_printf *pf )
+mrbc_printf_charconsole.c3441( mrb_printf *pf, int ch )
+mrbc_printf_strconsole.c4122( mrb_printf *pf, const char *str, int pad )
+mrbc_printf_intconsole.c5102( mrb_printf *pf, int32_t value, int base )
+mrbc_printf_floatconsole.c6505( mrb_printf *pf, double value )
+mrbc_printf_replace_bufferconsole.c7047(mrb_printf *pf, char *buf, int size)
+RPrintfconsole.h573
+mrb_printfconsole.h573
+RPrintfRPrintfFormatconsole.h787
+console_putcharconsole.h1632(char c)
+console_printconsole.h1810(const char *str)
+mrbc_printf_initconsole.h2135( mrb_printf *pf, char *buf, int size, const char *fstr )
+mrbc_printf_clearconsole.h2544( mrb_printf *pf )
+mrbc_printf_endconsole.h2766( mrb_printf *pf )
+mrbc_printf_lenconsole.h3000( mrb_printf *pf )
+output_stringdebug.c251(uint8_t no)
+pgm_read_bytedebug.c451(&(string + i))
+DEBUG_PRINTdebug.h297(x)
+DEBUG_PRINTLNdebug.h335(x)
+DEBUG_PRINTBdebug.h377(x)
+DEBUG_PRINTdebug.h423(x)
+DEBUG_PRINTLNdebug.h447(x)
+DEBUG_PRINTBdebug.h473(x)
+init_halhal.cpp64()
+hal_delayhal.cpp178(int msec)
+hal_write_stringhal.cpp237(char* text)
+hal_writehal.cpp312(int fd, const void *buf, int nbytes)
+debug_printhal.cpp655(char* text)
+debug_printlnhal.cpp725(char* text)
+debug_printbhal.cpp799(unsigned char byte)
+hal_flushhal.h238(int fd)
+MIREPmicro_vm.h208
+mrb_mirepmicro_vm.h208
+MCALLINFOmicro_vm.h1562
+mrb_mcallinfomicro_vm.h1562
+VMmicro_vm.h1837
+mrb_mvmmicro_vm.h1837
+uint16_to_binmicro_vm.h2121( uint16_t x, uint8_t *bin )
+bin_to_uint32micro_vm.h2817( const void *s )
+bin_to_uint16micro_vm.h3171( const void *s )
+mmruby_setupmmruby.c56()
+mmruby_runmmruby.c108(void)
+GET_OPCODEopcode.h305(code)
+GETARG_Aopcode.h357(code)
+GETARG_Bopcode.h418(code)
+GETARG_Copcode.h479(code)
+GETARG_Axopcode.h539(code)
+GETARG_Bzopcode.h605(code)
+GETARG_UNPACK_bopcode.h670(i,n1,n2)
+MKOPCODEopcode.h750(op)
+MKARG_Aopcode.h804(c)
+MKARG_Bopcode.h872(c)
+MKARG_Copcode.h942(c)
+GETARG_Bxopcode.h1110(code)
+GETARG_sBxopcode.h1172(code)
+GETARG_Copcode.h1237(code)
+mrbc_obj_allocvalue.c520(struct VM *vm, mrb_vtype tt)
+mrbc_rproc_allocvalue.c701(struct VM *vm, const char *name)
+mrbc_comparevalue.c1264(const mrb_value *v1, const mrb_value *v2)
+mrbc_dupvalue.c2882(mrb_value *v)
+mrbc_releasevalue.c3410(mrb_value *v)
+mrbc_dec_ref_countervalue.c3655(mrb_value *v)
+mrbc_clear_vm_idvalue.c4580(mrb_value *v)
+mrbc_atoivalue.c5131( const char *s, int base )
+mrbc_irep_allocvalue.c5889(struct VM *vm)
+mrbc_irep_freevalue.c6207(mrb_mirep *irep)
+mrbc_instance_newvalue.c6517(struct VM *vm, mrb_class *cls, int size)
+mrbc_instance_deletevalue.c7170(mrb_value *v)
+mrbc_instance_setivvalue.c7484(mrb_object *obj, mrb_sym sym_id, mrb_value *v)
+mrbc_instance_getivvalue.c7810(mrb_object *obj, mrb_sym sym_id)
+RObjectvalue.h1634
+mrb_objectvalue.h1634
+mrb_symvalue.h428
+mrb_func_tvalue.h839
+MRB_ASPEC_REQvalue.h475(a)
+MRB_ASPEC_OPTvalue.h530(a)
+MRB_ASPEC_RESTvalue.h585(a)
+MRB_ASPEC_POSTvalue.h639(a)
+RClassvalue.h2291
+mrb_classvalue.h2291
+mrb_valuevalue.h2151
+RInstancevalue.h2571
+mrb_instancevalue.h2571
+RProcvalue.h2814
+mrb_procvalue.h2814
+mrb_fixnum_valuevalue.h4529( int32_t n )
+mrb_nil_valuevalue.h4806(void)
+mrb_true_valuevalue.h5056(void)
+mrb_false_valuevalue.h5310(void)
+SET_INT_RETURNvalue.h3035(n)
+SET_NIL_RETURNvalue.h3114()
+SET_FLOAT_RETURNvalue.h3177(n)
+SET_FALSE_RETURNvalue.h3257()
+SET_TRUE_RETURNvalue.h3324()
+SET_RETURNvalue.h3389(n)
+GET_TT_ARGvalue.h3441(n)
+GET_INT_ARGvalue.h3476(n)
+GET_ARY_ARGvalue.h3511(n)
+GET_ARGvalue.h3544(n)
+GET_FLOAT_ARGvalue.h3573(n)
+GET_STRING_ARGvalue.h3609(n)
+init_vmvm.c239(void)
+op_nopvm.c399( mrb_mvm *vm, uint32_t code, mrb_value *regs )
+op_loadselfvm.c487( mrb_mvm *vm, uint32_t code, mrb_value *regs )
+op_sendvm.c711( mrb_mvm *vm, uint32_t code, mrb_value *regs )
+op_stringvm.c1922( mrb_mvm *vm, uint32_t code, mrb_value *regs )
+op_stopvm.c2391( mrb_mvm *vm, uint32_t code, mrb_value *regs )
+run_vmvm.c2650(void)
+MICRO_IREPvm.h184
+mrb_mirepvm.h184
+IREPvm.h323
+mrb_irepvm.h323
+CALLINFOvm.h767
+mrb_callinfovm.h767
+VMvm.h943
+mrb_vmvm.h943
+bin_to_uint32vm.h1568( const void *s )
+bin_to_uint16vm.h1736( const void *s )
+uint16_to_binvm.h1857(uint16_t s, uint8_t *bin)
+uint32_to_binvm.h1969(uint32_t l, uint8_t *bin)

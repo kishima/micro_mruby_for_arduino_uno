@@ -18,6 +18,7 @@ extern "C" void hal_write_string(char* text){
 }
 
 extern "C" int hal_write(int fd, const void *buf, int nbytes){
+  /*
   char* t = (char*)buf;
   char tbuf[2];
   if(nbytes==1){
@@ -29,6 +30,8 @@ extern "C" int hal_write(int fd, const void *buf, int nbytes){
   if(nbytes<82)t[nbytes]='\0';//TODO: double check
   hal_write_string(t);
   return nbytes;
+    */
+  return 0;
 }
 
 #ifdef MMRUBY_DEBUG_ENABLE
