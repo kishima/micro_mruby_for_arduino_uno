@@ -13,20 +13,20 @@
   </pre>
 */
 
-#include <stddef.h>
+#include <stdlib.h>
 #include "alloc.h"
 
-inline void * mrbc_alloc(const mrb_mvm *vm, unsigned int size)
+void * mrbc_alloc(const mrb_mvm *vm, unsigned int size)
 {
   return malloc(size);
 }
 
-inline void * mrbc_realloc(const mrb_mvm *vm, void *ptr, unsigned int size)
+void * mrbc_realloc(const mrb_mvm *vm, void *ptr, unsigned int size)
 {
   return realloc(ptr, size);
 }
 
-inline void mrbc_free(const mrb_mvm *vm, void *ptr)
+void mrbc_free(const mrb_mvm *vm, void *ptr)
 {
   free(ptr);
 }

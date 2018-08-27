@@ -1,5 +1,6 @@
 #include "mmruby.h"
-#include "vm.h"
+#include "micro_vm.h"
+#include "hal.h"
 #include "debug.h"
 
 void mmruby_setup(){

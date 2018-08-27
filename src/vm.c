@@ -148,9 +148,6 @@ void run_vm(void){
     // Dispatch
     uint32_t opcode = GET_OPCODE(code);
 
-    //char bb[10];
-    //sprintf(bb,"> %d\n",opcode);
-    //DEBUG_PRINT(bb);
     console_printf("OPCODE >> %02X\n",opcode);
 
     switch( opcode ) {

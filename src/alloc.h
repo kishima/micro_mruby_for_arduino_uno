@@ -22,9 +22,9 @@
 extern "C" {
 #endif
 
-inline void *mrbc_alloc(const mrb_mvm *vm, unsigned int size);
-inline void *mrbc_realloc(const mrb_mvm *vm, void *ptr, unsigned int size);
-inline void mrbc_free(const mrb_mvm *vm, void *ptr);
+void *mrbc_alloc(const mrb_mvm *vm, unsigned int size);
+void *mrbc_realloc(const mrb_mvm *vm, void *ptr, unsigned int size);
+void mrbc_free(const mrb_mvm *vm, void *ptr);
 
 
 #ifdef __cplusplus

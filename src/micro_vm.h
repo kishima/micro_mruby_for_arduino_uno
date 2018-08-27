@@ -91,13 +91,11 @@ inline static void uint16_to_bin( uint16_t x, uint8_t *bin )
 
 #ifndef MRBC_SRC_VM_H_
 
-const char *mrbc_get_irep_symbol(const uint8_t *p, int n);
-const char *mrbc_get_callee_name(mrb_mvm *vm);
-//mrb_vm *mrbc_vm_open(mrb_vm *vm_arg);
-//void mrbc_vm_close(mrb_vm *vm);
-//void mrbc_vm_begin(mrb_vm *vm);
-//void mrbc_vm_end(mrb_vm *vm);
-int mrbc_vm_run(mrb_mvm *vm);
+void init_vm(void);
+void run_vm(void);
+
+//const char *mrbc_get_irep_symbol(const uint8_t *p, int n);
+//const char *mrbc_get_callee_name(mrb_mvm *vm);
 
 void mrbc_push_callinfo(mrb_mvm *vm, int n_args);
 void mrbc_pop_callinfo(mrb_mvm *vm);
