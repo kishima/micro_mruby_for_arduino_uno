@@ -9,7 +9,7 @@ extern "C" {
 
 uint32_t read_bytecode(uint8_t irep_id, uint8_t pc);
 
-  
+
 #ifdef __cplusplus
 }
 #endif

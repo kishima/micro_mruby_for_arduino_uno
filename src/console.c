@@ -30,7 +30,7 @@ void console_printf(const char *fstr, ...)
   va_list ap;
   va_start(ap, fstr);
 
-  char buf[40];
+  char buf[CONSOLE_BUFF_SIZE];
   vsprintf(buf,fstr,ap);
   hal_write_string(buf);
   va_end(ap);

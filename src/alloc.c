@@ -31,4 +31,3 @@ void mrbc_free(const mrb_mvm *vm, void *ptr)
   free(ptr);
 }
 
-

@@ -24,6 +24,7 @@
 extern "C" {
 #endif
 
+#define CONSOLE_BUFF_SIZE 40
 
 //================================================================
 /*! printf tiny (mruby/c) version data container.

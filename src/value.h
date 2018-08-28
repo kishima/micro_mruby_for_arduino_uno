@@ -23,9 +23,8 @@ extern "C" {
 
 
 // mrb types
-//typedef float mrb_float;
-//typedef int32_t mrb_int;
-typedef int16_t mrb_sym;
+//typedef int16_t mrb_sym;
+typedef uint8_t mrb_sym;
 
 /* aspec access ? */
 #define MRB_ASPEC_REQ(a)          (((a) >> 18) & 0x1f)
@@ -36,7 +35,6 @@ typedef int16_t mrb_sym;
 #define MRBC_OBJECT_HEADER \
   uint16_t ref_count; \
   mrb_vtype tt : 8  // TODO: for debug use only.
-
 
 struct VM;
 struct MIREP;

@@ -14,20 +14,19 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <assert.h>
 
 #include "micro_vm.h"
 #include "value.h"
 #include "alloc.h"
-/*
-#include "keyvalue.h"
+//#include "keyvalue.h"
 #include "class.h"
-#include "static.h"
+//#include "static.h"
 #include "symbol.h"
 #include "c_string.h"
-#include "c_range.h"
-#include "c_array.h"
-#include "c_hash.h"
-*/
+//#include "c_range.h"
+//#include "c_array.h"
+//#include "c_hash.h"
 
 
 mrb_object *mrbc_obj_alloc(struct VM *vm, mrb_vtype tt)
@@ -189,6 +188,7 @@ void mrbc_release(mrb_value *v)
 */
 void mrbc_dec_ref_counter(mrb_value *v)
 {
+#if 0
   switch( v->tt ){
   case MRB_TT_OBJECT:
   case MRB_TT_PROC:
@@ -222,29 +222,7 @@ void mrbc_dec_ref_counter(mrb_value *v)
     // Nothing
     break;
   }
-}
-
-
-//================================================================
-/*!@brief
-  clear vm id
-
-  @param   v     Pointer to target mrb_value
-*/
-void mrbc_clear_vm_id(mrb_value *v)
-{
-  switch( v->tt ) {
-  case MRB_TT_ARRAY:	mrbc_array_clear_vm_id(v);	break;
-#if MRBC_USE_STRING
-  case MRB_TT_STRING:	mrbc_string_clear_vm_id(v);	break;
 #endif
-  case MRB_TT_RANGE:	mrbc_range_clear_vm_id(v);	break;
-  case MRB_TT_HASH:	mrbc_hash_clear_vm_id(v);	break;
-
-  default:
-    // Nothing
-    break;
-  }
 }
 
 
@@ -351,7 +329,7 @@ mrb_value mrbc_instance_new(struct VM *vm, mrb_class *cls, int size)
   }
 
   v.instance->ref_count = 1;
-  v.instance->tt = MRB_TT_OBJECT;	// for debug only.
+  //v.instance->tt = MRB_TT_OBJECT;	// for debug only.
   v.instance->cls = cls;
 
   return v;

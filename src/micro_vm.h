@@ -94,6 +94,8 @@ inline static void uint16_to_bin( uint16_t x, uint8_t *bin )
 void init_vm(void);
 void run_vm(void);
 
+mrb_mvm* get_vm(void);
+
 //const char *mrbc_get_irep_symbol(const uint8_t *p, int n);
 //const char *mrbc_get_callee_name(mrb_mvm *vm);
 
