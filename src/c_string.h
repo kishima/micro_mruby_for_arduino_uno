@@ -19,7 +19,7 @@
 #include "value.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 //================================================================
@@ -83,7 +83,7 @@ static inline char * mrbc_string_cstr(const mrb_value *v)
 
 
 #ifdef __cplusplus
-}
+//}
 #endif
 #endif
 

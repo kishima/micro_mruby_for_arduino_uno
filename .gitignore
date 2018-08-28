@@ -5,3 +5,5 @@ TransCoder
 *.exe
 ./src/code.h
 code.h
+XTAGS
+src/XTAGS

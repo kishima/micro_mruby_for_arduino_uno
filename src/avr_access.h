@@ -4,13 +4,13 @@
 #include <stdint.h>
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 uint32_t read_bytecode(uint8_t irep_id, uint8_t pc);
 
 
 #ifdef __cplusplus
-}
+//}
 #endif
 #endif

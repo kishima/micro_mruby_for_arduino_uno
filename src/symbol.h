@@ -17,7 +17,7 @@
 #include "value.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 struct VM;
@@ -29,7 +29,7 @@ const char *symid_to_str(mrb_sym sym_id);
 void mrbc_init_class_symbol(struct VM *vm);
 
 #ifdef __cplusplus
-}
+//}
 #endif
 #endif
 

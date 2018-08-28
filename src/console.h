@@ -21,7 +21,7 @@
 #include "debug.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 #define CONSOLE_BUFF_SIZE 40
@@ -134,6 +134,6 @@ static inline int mrbc_printf_len( mrb_printf *pf )
 }
 
 #ifdef __cplusplus
-}
+//}
 #endif
 #endif

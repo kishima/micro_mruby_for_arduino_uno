@@ -19,7 +19,7 @@
 #include "micro_vm.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 void *mrbc_alloc(const mrb_mvm *vm, unsigned int size);
@@ -33,6 +33,6 @@ void mrbc_free(const mrb_mvm *vm, void *ptr);
 #endif
 
 #ifdef __cplusplus
-}
+//}
 #endif
 #endif

@@ -17,7 +17,7 @@
 #include "value.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 void global_object_add(mrb_sym sym_id, mrb_value v);
@@ -27,7 +27,7 @@ void const_object_add(mrb_sym sym_id, mrb_object *obj);
 mrb_object const_object_get(mrb_sym sym_id);
 
 #ifdef __cplusplus
-}
+//}
 #endif
 #endif
 

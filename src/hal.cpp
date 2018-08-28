@@ -4,21 +4,21 @@
 #include "debug.h"
 
 
-extern "C" void init_hal(){
+void init_hal(){
 #ifdef MMRUBY_DEBUG_ENABLE
   Serial.begin(SERIAL_FOR_STDIO_BAUDRATE);
 #endif
 }
 
-extern "C" void hal_delay(int msec){
+void hal_delay(int msec){
   delay(msec);
 }
 
-extern "C" void hal_write_string(char* text){
+void hal_write_string(char* text){
   Serial.print(text);
 }
 
-extern "C" int hal_write(int fd, const void *buf, int nbytes){
+int hal_write(int fd, const void *buf, int nbytes){
   char* t = (char*)buf;
   char tbuf[2];
   if(nbytes==1){ //for console_putchar()
@@ -34,15 +34,15 @@ extern "C" int hal_write(int fd, const void *buf, int nbytes){
 
 #ifdef MMRUBY_DEBUG_ENABLE
 
-extern "C" void debug_print(char* text){
+void debug_print(char* text){
   Serial.print(text);
 }
 
-extern "C" void debug_println(char* text){
+void debug_println(char* text){
   Serial.println(text);
 }
 
-extern "C" void debug_printb(unsigned char byte){
+void debug_printb(unsigned char byte){
   Serial.print(byte);
 }
 

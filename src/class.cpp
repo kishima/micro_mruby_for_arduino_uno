@@ -227,12 +227,13 @@ void mrbc_define_method(mrb_mvm *vm, mrb_class *cls, const char *name, mrb_func_
 }
 
 
-void mrbc_init_class_object(){
+void mrbc_init_class_object(int z){
   mrb_mvm* vm = get_vm();
   // Class
   mrbc_class_object = mrbc_define_class(vm,"Object", 0);
   // Methods
   mrbc_define_method(vm, mrbc_class_object, "puts", c_puts);
+  //TODO
 #if 0
   mrbc_define_method(vm, mrbc_class_object, "!", c_object_not);
   mrbc_define_method(vm, mrbc_class_object, "!=", c_object_neq);
@@ -250,7 +251,7 @@ void mrbc_init_class(void)
 {
   mrbc_init_class_object(0);
   mrbc_init_class_string(0);
-
+  //TODO
 #if 0
   mrbc_init_class_nil(0);
   mrbc_init_class_proc(0);

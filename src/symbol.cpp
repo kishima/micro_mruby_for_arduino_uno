@@ -20,6 +20,7 @@
 mrb_value mrbc_symbol_new(struct VM *vm, const char *str)
 {
   mrb_value ret = {.tt = MRB_TT_SYMBOL};
+  //TODO
 #if 0
   uint16_t h = calc_hash(str);
   mrb_sym sym_id = search_index(h, str);
@@ -43,6 +44,7 @@ mrb_value mrbc_symbol_new(struct VM *vm, const char *str)
 
 mrb_sym str_to_symid(const char *str)
 {
+  //TODO
 #if 0
   uint16_t h = calc_hash(str);
   mrb_sym sym_id = search_index(h, str);

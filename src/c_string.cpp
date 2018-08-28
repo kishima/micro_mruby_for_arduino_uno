@@ -131,8 +131,8 @@ void mrbc_string_delete(mrb_value *str)
 */
 void mrbc_string_clear_vm_id(mrb_value *str)
 {
-  mrbc_set_vm_id( str->string, 0 );
-  mrbc_set_vm_id( str->string->data, 0 );
+  //mrbc_set_vm_id( str->string, 0 );
+  //mrbc_set_vm_id( str->string->data, 0 );
 }
 
 
@@ -334,10 +334,11 @@ static void c_string_add(mrb_mvm *vm, mrb_value v[], int argc)
 static void c_string_eql(mrb_mvm *vm, mrb_value v[], int argc)
 {
   int result = 0;
-  if( v[1].tt != MRB_TT_STRING ) goto DONE;
-
   mrb_string *h1 = v[0].string;
   mrb_string *h2 = v[1].string;
+
+  if( v[1].tt != MRB_TT_STRING ) goto DONE;
+
 
   if( h1->size != h2->size ) goto DONE;	// false
   result = !memcmp(h1->data, h2->data, h1->size);
@@ -381,19 +382,6 @@ static void c_string_to_i(mrb_mvm *vm, mrb_value v[], int argc)
 
   SET_INT_RETURN( i );
 }
-
-
-#if MRBC_USE_FLOAT
-//================================================================
-/*! (method) to_f
-*/
-static void c_string_to_f(mrb_mvm *vm, mrb_value v[], int argc)
-{
-  double d = atof(mrbc_string_cstr(v));
-
-  SET_FLOAT_RETURN( d );
-}
-#endif
 
 
 //================================================================
@@ -453,7 +441,7 @@ static void c_string_slice(mrb_mvm *vm, mrb_value v[], int argc)
     if( idx < 0 ) goto RETURN_NIL;
 
     int rlen = (v2->i < (len - idx)) ? v2->i : (len - idx);
-						// min( v2->i, (len-idx) )
+    // min( v2->i, (len-idx) )
     if( rlen < 0 ) goto RETURN_NIL;
 
     mrb_value value = mrbc_string_new(vm, v->string->data + idx, rlen);
@@ -498,9 +486,9 @@ static void c_string_insert(mrb_mvm *vm, mrb_value v[], int argc)
     in case of self[nth, len] = val
   */
   else if( argc == 3 &&
-	   v[1].tt == MRB_TT_FIXNUM &&
-	   v[2].tt == MRB_TT_FIXNUM &&
-	   v[3].tt == MRB_TT_STRING ) {
+           v[1].tt == MRB_TT_FIXNUM &&
+           v[2].tt == MRB_TT_FIXNUM &&
+           v[3].tt == MRB_TT_STRING ) {
     nth = v[1].i;
     len = v[2].i;
     val = &v[3];
@@ -647,61 +635,45 @@ static void c_object_sprintf(mrb_mvm *vm, mrb_value v[], int argc)
     switch(pf.fmt.type) {
     case 'c':
       if( v[i].tt == MRB_TT_FIXNUM ) {
-	ret = mrbc_printf_char( &pf, v[i].i );
+        ret = mrbc_printf_char( &pf, v[i].i );
       }
       break;
 
     case 's':
+      //TODO
+#if 0
       if( v[i].tt == MRB_TT_STRING ) {
-	ret = mrbc_printf_str( &pf, mrbc_string_cstr( &v[i] ), ' ');
+        ret = mrbc_printf_str( &pf, mrbc_string_cstr( &v[i] ), ' ');
       } else if( v[i].tt == MRB_TT_SYMBOL ) {
-	ret = mrbc_printf_str( &pf, mrbc_symbol_cstr( &v[i] ), ' ');
+        ret = mrbc_printf_str( &pf, mrbc_symbol_cstr( &v[i] ), ' ');
       }
+#endif
       break;
 
     case 'd':
     case 'i':
     case 'u':
       if( v[i].tt == MRB_TT_FIXNUM ) {
-	ret = mrbc_printf_int( &pf, v[i].i, 10);
-#if MRBC_USE_FLOAT
-      } else if( v[i].tt == MRB_TT_FLOAT ) {
-	ret = mrbc_printf_int( &pf, (int32_t)v[i].d, 10);
-#endif
+        ret = mrbc_printf_int( &pf, v[i].i, 10);
       } else if( v[i].tt == MRB_TT_STRING ) {
-	int32_t ival = atol(mrbc_string_cstr(&v[i]));
-	ret = mrbc_printf_int( &pf, ival, 10 );
+        int32_t ival = atol(mrbc_string_cstr(&v[i]));
+        ret = mrbc_printf_int( &pf, ival, 10 );
       }
       break;
 
     case 'b':
     case 'B':
       if( v[i].tt == MRB_TT_FIXNUM ) {
-	ret = mrbc_printf_int( &pf, v[i].i, 2);
+        ret = mrbc_printf_int( &pf, v[i].i, 2);
       }
       break;
 
     case 'x':
     case 'X':
       if( v[i].tt == MRB_TT_FIXNUM ) {
-	ret = mrbc_printf_int( &pf, v[i].i, 16);
+        ret = mrbc_printf_int( &pf, v[i].i, 16);
       }
       break;
-
-#if MRBC_USE_FLOAT
-    case 'f':
-    case 'e':
-    case 'E':
-    case 'g':
-    case 'G':
-      if( v[i].tt == MRB_TT_FLOAT ) {
-	ret = mrbc_printf_float( &pf, v[i].d );
-      } else
-	if( v[i].tt == MRB_TT_FIXNUM ) {
-	  ret = mrbc_printf_float( &pf, (double)v[i].i );
-	}
-      break;
-#endif
 
     default:
       break;

@@ -11,6 +11,7 @@
 #include "console.h"
 #include "debug.h"
 
+#include <Arduino.h>
 #include <avr/pgmspace.h>
 
 //Only one VM is available
@@ -35,6 +36,7 @@ inline static int op_nop( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 
 inline static int op_loadself( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
+  //TODO
 #if 0
 	int ra = GETARG_A(code);
 	
@@ -156,9 +158,6 @@ void run_vm(void){
     uint32_t opcode = GET_OPCODE(code);
 
     console_printf("OPCODE >> %02X\n",opcode);
-    
-
-    console_printf(F("TEST=================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================="));
 
     switch( opcode ) {
     case OP_NOP:        ret = op_nop       (vm, code, regs); break;
@@ -211,8 +210,7 @@ void run_vm(void){
     case OP_STOP:       ret = op_stop      (vm, code, regs); break;
     case OP_ABORT:      ret = op_stop      (vm, code, regs); break;  // reuse
     default:
-      DEBUG_PRINT("Unknown code\n");
-      //console_printf("code:%d\n",opcode);
+      DEBUG_PRINT(F("Unknown code\n"));
       break;
     }
     hal_delay(1000);

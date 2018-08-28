@@ -16,7 +16,7 @@
 #define MRBC_SRC_OPCODE_H_
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 
@@ -113,6 +113,6 @@ enum OPCODE {
 };
 
 #ifdef __cplusplus
-}
+//}
 #endif
 #endif

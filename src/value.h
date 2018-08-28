@@ -18,7 +18,7 @@
 #include <stdint.h>
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 
@@ -229,6 +229,6 @@ static inline mrb_value mrb_false_value(void)
 
 
 #ifdef __cplusplus
-}
+//}
 #endif
 #endif

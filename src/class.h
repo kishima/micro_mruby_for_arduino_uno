@@ -19,7 +19,7 @@
 #include "value.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 extern mrb_class *mrbc_class_object;
@@ -47,6 +47,6 @@ void mrbc_funcall(mrb_mvm *vm, const char *name, mrb_value *v, int argc);
 void c_ineffect(mrb_mvm *vm, mrb_value v[], int argc);
 
 #ifdef __cplusplus
-}
+//}
 #endif
 #endif

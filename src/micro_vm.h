@@ -12,7 +12,7 @@
 #define CODE_LEN 4
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 //Micro Irep
@@ -134,6 +134,6 @@ inline static uint16_t bin_to_uint16( const void *s )
 #endif //MRBC_SRC_VM_H_
 
 #ifdef __cplusplus
-}
+//}
 #endif
 #endif

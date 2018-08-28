@@ -70,20 +70,6 @@ int mrbc_compare(const mrb_value *v1, const mrb_value *v2)
 
   // if TT_XXX is different
   if( v1->tt != v2->tt ) {
-#if MRBC_USE_FLOAT
-    // but Numeric?
-    if( v1->tt == MRB_TT_FIXNUM && v2->tt == MRB_TT_FLOAT ) {
-      d1 = v1->i;
-      d2 = v2->d;
-      goto CMP_FLOAT;
-    }
-    if( v1->tt == MRB_TT_FLOAT && v2->tt == MRB_TT_FIXNUM ) {
-      d1 = v1->d;
-      d2 = v2->i;
-      goto CMP_FLOAT;
-    }
-#endif
-
     // leak Empty?
     if((v1->tt == MRB_TT_EMPTY && v2->tt == MRB_TT_NIL) ||
        (v1->tt == MRB_TT_NIL   && v2->tt == MRB_TT_EMPTY)) return 0;
@@ -103,40 +89,34 @@ int mrbc_compare(const mrb_value *v1, const mrb_value *v2)
   case MRB_TT_SYMBOL:
     return v1->i - v2->i;
 
-#if MRBC_USE_FLOAT
-  case MRB_TT_FLOAT:
-    d1 = v1->d;
-    d2 = v2->d;
-    goto CMP_FLOAT;
-#endif
-
   case MRB_TT_CLASS:
   case MRB_TT_OBJECT:
   case MRB_TT_PROC:
     return -1 + (v1->handle == v2->handle) + (v1->handle > v2->handle)*2;
 
   case MRB_TT_ARRAY:
-    return mrbc_array_compare( v1, v2 );
+    return 1;
+    //TODO
+    //return mrbc_array_compare( v1, v2 );
 
-#if MRBC_USE_STRING
   case MRB_TT_STRING:
-    return mrbc_string_compare( v1, v2 );
-#endif
+    return 1;
+    //TODO
+    //return mrbc_string_compare( v1, v2 );
 
   case MRB_TT_RANGE:
-    return mrbc_range_compare( v1, v2 );
+    return 1;
+    //TODO
+    //return mrbc_range_compare( v1, v2 );
 
   case MRB_TT_HASH:
-    return mrbc_hash_compare( v1, v2 );
+    return 1;
+    //TODO
+    //return mrbc_hash_compare( v1, v2 );
 
   default:
     return 1;
   }
-
-#if MRBC_USE_FLOAT
- CMP_FLOAT:
-  return -1 + (d1 == d2) + (d1 > d2)*2;	// caution: NaN == NaN is false
-#endif
 }
 
 
@@ -188,6 +168,7 @@ void mrbc_release(mrb_value *v)
 */
 void mrbc_dec_ref_counter(mrb_value *v)
 {
+  //TODO
 #if 0
   switch( v->tt ){
   case MRB_TT_OBJECT:
@@ -321,15 +302,18 @@ mrb_value mrbc_instance_new(struct VM *vm, mrb_class *cls, int size)
   v.instance = (mrb_instance *)mrbc_alloc(vm, sizeof(mrb_instance) + size);
   if( v.instance == NULL ) return v;	// ENOMEM
 
+  //TODO
+#if 0
   v.instance->ivar = mrbc_kv_new(vm, 0);
   if( v.instance->ivar == NULL ) {	// ENOMEM
     mrbc_raw_free(v.instance);
     v.instance = NULL;
     return v;
   }
-
+#endif
+  
   v.instance->ref_count = 1;
-  //v.instance->tt = MRB_TT_OBJECT;	// for debug only.
+  v.instance->tt = MRB_TT_OBJECT;	// for debug only.
   v.instance->cls = cls;
 
   return v;
@@ -344,7 +328,10 @@ mrb_value mrbc_instance_new(struct VM *vm, mrb_class *cls, int size)
 */
 void mrbc_instance_delete(mrb_value *v)
 {
+  //TODO
+#if 0
   mrbc_kv_delete( v->instance->ivar );
+#endif
   mrbc_raw_free( v->instance );
 }
 
@@ -358,8 +345,11 @@ void mrbc_instance_delete(mrb_value *v)
 */
 void mrbc_instance_setiv(mrb_object *obj, mrb_sym sym_id, mrb_value *v)
 {
+  //TODO
+#if 0
   mrbc_dup(v);
   mrbc_kv_set( obj->instance->ivar, sym_id, v );
+#endif
 }
 
 
@@ -372,9 +362,15 @@ void mrbc_instance_setiv(mrb_object *obj, mrb_sym sym_id, mrb_value *v)
 */
 mrb_value mrbc_instance_getiv(mrb_object *obj, mrb_sym sym_id)
 {
+  //TODO
+#if 0
   mrb_value *v = mrbc_kv_get( obj->instance->ivar, sym_id );
   if( !v ) return mrb_nil_value();
 
   mrbc_dup(v);
   return *v;
+#else
+  mrb_value v;
+  return v;
+#endif
 }

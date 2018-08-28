@@ -17,6 +17,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include "console.h"
+#include "hal.h"
 
 
 
@@ -50,6 +51,7 @@ void console_printf(const char *fstr, ...)
 */
 int mrbc_printf_main( mrb_printf *pf )
 {
+  //TODO?
 #if 0
   int ch = -1;
   pf->fmt = (struct RPrintfFormat){0};
@@ -114,6 +116,7 @@ int mrbc_printf_main( mrb_printf *pf )
 */
 int mrbc_printf_char( mrb_printf *pf, int ch )
 {
+  //TODO?
 #if 0
   if( pf->fmt.flag_minus ) {
     if( pf->p == pf->buf_end ) return -1;
@@ -150,6 +153,7 @@ int mrbc_printf_char( mrb_printf *pf, int ch )
 */
 int mrbc_printf_str( mrb_printf *pf, const char *str, int pad )
 {
+  //TODO?
 #if 0
   int ret = 0;
 

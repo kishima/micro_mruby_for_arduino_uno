@@ -2,7 +2,7 @@
 #define __MMRUBY_ARDUINO_H_
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 #include "micro_vm.h"
@@ -10,7 +10,7 @@ extern "C" {
 
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif

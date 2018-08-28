@@ -4,14 +4,14 @@
 #include <avr/pgmspace.h>
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 void mmruby_setup();
 void mmruby_run(void);
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif
