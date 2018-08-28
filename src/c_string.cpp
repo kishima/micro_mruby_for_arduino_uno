@@ -45,7 +45,7 @@ mrb_value mrbc_string_new(struct VM *vm, const void *src, int len)
   h = (mrb_string *)mrbc_alloc(vm, sizeof(mrb_string));
   if( !h ) return value;		// ENOMEM
 
-  uint8_t *str = mrbc_alloc(vm, len+1);
+  uint8_t *str = (uint8_t*)mrbc_alloc(vm, len+1);
   if( !str ) {				// ENOMEM
     mrbc_raw_free( h );
     return value;
@@ -106,7 +106,7 @@ mrb_value mrbc_string_new_alloc(struct VM *vm, void *buf, int len)
   h->ref_count = 1;
   h->tt = MRB_TT_STRING;	// TODO: for DEBUG
   h->size = len;
-  h->data = buf;
+  h->data = (uint8_t*)buf;
 
   value.string = h;
   return value;
@@ -192,7 +192,7 @@ int mrbc_string_append(mrb_value *s1, mrb_value *s2)
   int len1 = s1->string->size;
   int len2 = (s2->tt == MRB_TT_STRING) ? s2->string->size : 1;
 
-  uint8_t *str = mrbc_raw_realloc(s1->string->data, len1+len2+1);
+  uint8_t *str = (uint8_t*)mrbc_raw_realloc(s1->string->data, len1+len2+1);
   if( !str ) return -1;
 
   if( s2->tt == MRB_TT_STRING ) {
@@ -510,7 +510,7 @@ static void c_string_insert(mrb_mvm *vm, mrb_value v[], int argc)
     return;
   }
 
-  uint8_t *str = mrbc_realloc(vm, mrbc_string_cstr(v), len1 + len2 - len + 1);
+  uint8_t *str = (uint8_t*)mrbc_realloc(vm, mrbc_string_cstr(v), len1 + len2 - len + 1);
   if( !str ) return;
 
   memmove( str + nth + len2, str + nth + len, len1 - nth - len + 1 );
@@ -612,7 +612,7 @@ static void c_object_sprintf(mrb_mvm *vm, mrb_value v[], int argc)
   }
 
   int buflen = BUF_INC_STEP;
-  char *buf = mrbc_alloc(vm, buflen);
+  char *buf = (char*)mrbc_alloc(vm, buflen);
   if( !buf ) { return; }	// ENOMEM raise?
 
   mrb_printf pf;
@@ -689,7 +689,7 @@ static void c_object_sprintf(mrb_mvm *vm, mrb_value v[], int argc)
 
   INCREASE_BUFFER:
     buflen += BUF_INC_STEP;
-    buf = mrbc_realloc(vm, pf.buf, buflen);
+    buf = (char*)mrbc_realloc(vm, pf.buf, buflen);
     if( !buf ) { return; }	// ENOMEM raise? TODO: leak memory.
     mrbc_printf_replace_buffer(&pf, buf, buflen);
   }

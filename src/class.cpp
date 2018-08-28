@@ -195,7 +195,7 @@ mrb_class * mrbc_define_class(mrb_mvm* vm, const char *name, mrb_class *super)
 
   // create a new class?
   if( obj.tt == MRB_TT_NIL ) {
-    cls = mrbc_alloc( 0, sizeof(mrb_class) );
+    cls = (mrb_class*)mrbc_alloc( 0, sizeof(mrb_class) );
     if( !cls ) return cls;	// ENOMEM
 
     cls->sym_id = sym_id;
