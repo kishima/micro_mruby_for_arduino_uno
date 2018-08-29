@@ -152,7 +152,7 @@ static mrb_irep * load_irep_1(mrb_vm *vm, const uint8_t **pos)
   for( i = 0; i < irep->plen; i++ ) {
     int tt = *p++;
     int obj_size = bin_to_uint16(p);	p += 2;
-    assert(obj_size < MAX_LITERAL_LEN);
+    assert(obj_size <= MAX_LITERAL_LEN);
     
     mrb_object *obj = malloc(sizeof(mrb_object));
     if( obj == NULL ) {
@@ -188,6 +188,7 @@ static mrb_irep * load_irep_1(mrb_vm *vm, const uint8_t **pos)
   printf("slen=%d\n",slen);
   while( --slen >= 0 ) {
     int s = bin_to_uint16(p);		p += 2;
+    assert(s <= MAX_SYMBOL_LEN);
     p += s+1;
   }
 

@@ -8,17 +8,13 @@
 #include "value.h"
 #endif
 
-#define CODE_PREFIX "mmruby_code_"
-#define CODE_LEN 4
-#define MAX_LITERAL_LEN 16
-#define mrb_mirep_size  4 //size of mrb_mirep in Arduino
-
 //Micro Irep
 #define MIREP_OFFSET_RLEN 0
 #define MIREP_OFFSET_ILEN 1
 #define MIREP_OFFSET_PLEN 2
 #define MIREP_OFFSET_SLEN 3
-#define MIREP_HEADER_SIZE 4
+#define MIREP_HEADER_SIZE 4 //size of mrb_mirep in Arduino
+#define mrb_mirep_size MIREP_HEADER_SIZE 
 typedef struct MIREP {
   uint8_t rlen;   // Number of child IREP blocks
   uint8_t ilen;   // Number of bytecode

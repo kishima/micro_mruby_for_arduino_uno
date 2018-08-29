@@ -68,63 +68,64 @@ inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
   DEBUG_FPRINTLN("[OP_SEND]");
 #if 0
-	int ra = GETARG_A(code);
-	int rb = GETARG_B(code);  // index of method sym
-	int rc = GETARG_C(code);  // number of params
-	mrb_value recv = regs[ra];
-	
-	// Block param
-	int bidx = ra + rc + 1;
-	switch( GET_OPCODE(code) ) {
+  int ra = GETARG_A(code);
+  int rb = GETARG_B(code);  // index of method sym
+  int rc = GETARG_C(code);  // number of params
+  mrb_value recv = regs[ra];
+  
+  // Block param
+  int bidx = ra + rc + 1;
+  switch( GET_OPCODE(code) ) {
   case OP_SEND:
-		// set nil
-		mrbc_release( &regs[bidx] );
-		regs[bidx].tt = MRB_TT_NIL;
-		break;
-		
-	  case OP_SENDB:
-		if( regs[bidx].tt != MRB_TT_NIL && regs[bidx].tt != MRB_TT_PROC ){
-			return 0;
-		}
-		break;
-		
-	  default:
-		break;
-	}
-	
-	const char *sym_name = mrbc_get_irep_symbol(vm->pc_irep->ptr_to_sym, rb);
-	mrb_sym sym_id = str_to_symid(sym_name);
-	mrb_proc *m = find_method(vm, recv, sym_id);
-	
-	if( m == 0 ) {
-		console_printf("No method. vtype=%d method='%s'\n", recv.tt, sym_name);
-		return 0;
-	}
-	
-	// m is C func
-	if( m->c_func ) {
-		m->func(vm, regs + ra, rc);
-		
-		int release_reg = ra+rc+1;
-		while( release_reg <= bidx ) {
-			// mrbc_release(&regs[release_reg]);
-			release_reg++;
-		}
-		return 0;
-	}
-	
-	// m is Ruby method.
-	// callinfo
-	mrbc_push_callinfo(vm, rc);
-	
-	// target irep
-	vm->pc = 0;
-	vm->pc_irep = m->irep;
-	
-	// new regs
-	vm->current_regs += ra;
-#endif	
-	return 0;
+    // set nil
+    mrbc_release( &regs[bidx] );
+    regs[bidx].tt = MRB_TT_NIL;
+    break;
+    
+  case OP_SENDB:
+    if( regs[bidx].tt != MRB_TT_NIL && regs[bidx].tt != MRB_TT_PROC ){
+      return 0;
+    }
+    break;
+    
+  default:
+    break;
+  }
+
+  mrb_sym sym_id = get_irep_symbol_id(vm->pc_irep,rb);
+  //const char *sym_name = mrbc_get_irep_symbol(vm->pc_irep->ptr_to_sym, rb);
+  //mrb_sym sym_id = str_to_symid(sym_name);
+  mrb_proc *m = find_method(vm, recv, sym_id);
+  
+  if( m == 0 ) {
+    cprintf("MethodNotFound %d\n", sym_id);
+    return 0;
+  }
+  
+  // m is C func
+  if( m->c_func ) {
+    m->func(vm, regs + ra, rc);
+    
+    int release_reg = ra+rc+1;
+    while( release_reg <= bidx ) {
+      // mrbc_release(&regs[release_reg]);
+      release_reg++;
+    }
+    return 0;
+  }
+  
+  // m is Ruby method.
+  // callinfo
+  mrbc_push_callinfo(vm, rc);
+  
+  // target irep
+  vm->pc = 0;
+  vm->pc_irep = m->irep;
+  
+  // new regs
+  vm->current_regs += ra;
+#endif
+  return 0;
 }
 
 inline static int op_string( mrb_mvm *vm, uint32_t code, mrb_value *regs )
@@ -136,7 +137,8 @@ inline static int op_string( mrb_mvm *vm, uint32_t code, mrb_value *regs )
   //mrb_object *pool_obj = vm->pc_irep->pools[rb]; 
   uint8_t str[MAX_LITERAL_LEN];
   uint16_t obj_size=0;
-  read_pool(str,&obj_size,vm->pc_irep,rb);
+  get_irep_pool(str,&obj_size,vm->pc_irep,rb);
+  cprintf("Len=%u Str=%s\n",obj_size,str);
   
   mrb_value value = mrbc_string_new(vm, str, obj_size);
   if( value.string == NULL ) return -1;

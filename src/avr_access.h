@@ -5,7 +5,7 @@
 
 //access irep
 uint32_t read_bytecode(uint8_t irep_id, uint8_t pc);
-void read_pool(uint8_t* buff, uint16_t* obj_size, uint8_t irep_id, uint8_t no);
-void read_symbol(uint8_t* buff, uint16_t* sym_size, uint8_t irep_id, uint8_t no);
+void get_irep_pool(uint8_t* buff, uint16_t* obj_size, uint8_t irep_id, uint8_t no);
+uint8_t get_irep_symbol_id(uint8_t* buff, uint16_t* sym_size, uint8_t irep_id, uint8_t no);
 
 #endif
