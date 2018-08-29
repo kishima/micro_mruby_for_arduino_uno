@@ -33,7 +33,8 @@ extern mrb_class *mrbc_class_hash;
 
 struct VM;
 
-mrb_proc *find_method(struct VM *vm, mrb_value recv, mrb_sym sym_id);
+mrb_proc *find_method(mrb_mvm *vm, mrb_value recv, mrb_sym sym_id);
+mrb_class *find_class_by_object(struct VM *vm, mrb_object *obj);
 
 void mrbc_init_class(void);
 mrb_class * mrbc_define_class(mrb_mvm* vm, const char *name, mrb_class *super);

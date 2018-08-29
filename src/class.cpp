@@ -187,6 +187,50 @@ static void c_puts(mrb_mvm *vm, mrb_value v[], int argc)
 
 
 /* Util Function */
+mrb_class *find_class_by_object(struct VM *vm, mrb_object *obj)
+{
+  mrb_class *cls;
+
+  switch( obj->tt ) {
+  case MRB_TT_TRUE:	cls = mrbc_class_true;		break;
+  case MRB_TT_FALSE:	cls = mrbc_class_false; 	break;
+  case MRB_TT_NIL:	cls = mrbc_class_nil;		break;
+  case MRB_TT_FIXNUM:	cls = mrbc_class_fixnum;	break;
+  //case MRB_TT_FLOAT:	cls = mrbc_class_float; 	break;
+  case MRB_TT_SYMBOL:	cls = mrbc_class_symbol;	break;
+
+  case MRB_TT_OBJECT:	cls = obj->instance->cls;       break;
+  case MRB_TT_CLASS:    cls = obj->cls;                 break;
+  case MRB_TT_PROC:	cls = mrbc_class_proc;		break;
+  case MRB_TT_ARRAY:	cls = mrbc_class_array; 	break;
+  case MRB_TT_STRING:	cls = mrbc_class_string;	break;
+  case MRB_TT_RANGE:	cls = mrbc_class_range; 	break;
+  //TODO
+  //case MRB_TT_HASH:	cls = mrbc_class_hash;		break;
+
+  default:		cls = mrbc_class_object;	break;
+  }
+
+  return cls;
+}
+
+mrb_proc *find_method(mrb_mvm *vm, mrb_value recv, mrb_sym sym_id)
+{
+  mrb_class *cls = find_class_by_object(vm, &recv);
+
+  while( cls != 0 ) {
+    mrb_proc *proc = cls->procs;
+    while( proc != 0 ) {
+      if( proc->sym_id == sym_id ) {
+        return proc;
+      }
+      proc = proc->next;
+    }
+    cls = cls->super;
+  }
+  return 0;
+}
+
 mrb_class * mrbc_define_class(mrb_mvm* vm, const char *name, mrb_class *super)
 {
   mrb_class *cls;

@@ -23,9 +23,9 @@ void *mrbc_realloc(const mrb_mvm *vm, void *ptr, unsigned int size);
 void mrbc_free(const mrb_mvm *vm, void *ptr);
 
 #ifndef mrbc_raw_alloc
- #define mrbc_raw_alloc(size)       malloc(size)
- #define mrbc_raw_realloc(ptr,size) realloc(ptr,size)
- #define mrbc_raw_free(ptr)         free(ptr)
+ #define mrbc_raw_alloc(size)       mrbc_alloc(NULL,size)
+ #define mrbc_raw_realloc(ptr,size) mrbc_realloc(NULL,ptr,size)
+ #define mrbc_raw_free(ptr)         mrbc_free(NULL,ptr)
 #endif
 
 #endif

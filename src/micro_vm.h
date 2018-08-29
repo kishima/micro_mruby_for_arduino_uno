@@ -28,20 +28,17 @@ typedef struct MIREP {
   // 4. ireps          : legnth is rlen [byte]
 } mrb_mirep;
 
-// get irep 
-uint8_t* get_irep_p(uint8_t irep_id);
-
 //================================================================
 /*!@brief
   Call information
 */
 typedef struct MCALLINFO {
-  mrb_mirep *pc_irep;
+  mrb_irep_id pc_irep;
   uint16_t  pc;
   mrb_value *current_regs;
   mrb_class *target_class;
   uint8_t   n_args;     // num of args
-} mrb_mcallinfo;
+} mrb_callinfo;
 
 
 //================================================================
@@ -49,14 +46,14 @@ typedef struct MCALLINFO {
   Virtual Machine
 */
 typedef struct VM {
-  uint8_t  irep;
-  uint8_t  pc_irep;
+  mrb_irep_id  irep;
+  mrb_irep_id  pc_irep;
   uint16_t pc;
 
   mrb_value     regs[MAX_REGS_SIZE];
   mrb_value    *current_regs;
   uint16_t      callinfo_top;
-  mrb_mcallinfo callinfo[MAX_CALLINFO_SIZE];
+  mrb_callinfo callinfo[MAX_CALLINFO_SIZE];
 
   mrb_class *target_class;
 

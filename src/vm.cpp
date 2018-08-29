@@ -43,6 +43,37 @@ void init_vm(void){
 mrb_mvm* get_vm(void){
   return &vm_body;
 }
+//================================================================
+/*!@brief
+  Push current status to callinfo stack
+*/
+void mrbc_push_callinfo(mrb_mvm *vm, int n_args)
+{
+  mrb_callinfo *callinfo = vm->callinfo + vm->callinfo_top;
+  callinfo->current_regs = vm->current_regs;
+  callinfo->pc_irep = vm->pc_irep;
+  callinfo->pc = vm->pc;
+  callinfo->n_args = n_args;
+  callinfo->target_class = vm->target_class;
+  vm->callinfo_top++;
+}
+
+
+
+//================================================================
+/*!@brief
+  Push current status to callinfo stack
+*/
+void mrbc_pop_callinfo(mrb_mvm *vm)
+{
+  vm->callinfo_top--;
+  mrb_callinfo *callinfo = vm->callinfo + vm->callinfo_top;
+  vm->current_regs = callinfo->current_regs;
+  vm->pc_irep = callinfo->pc_irep;
+  vm->pc = callinfo->pc;
+  vm->target_class = callinfo->target_class;
+}
+
 
 //--------------------------------
 //  OPCODE
@@ -67,7 +98,7 @@ inline static int op_loadself( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
   DEBUG_FPRINTLN("[OP_SEND]");
-#if 0
+#if 1
   int ra = GETARG_A(code);
   int rb = GETARG_B(code);  // index of method sym
   int rc = GETARG_C(code);  // number of params

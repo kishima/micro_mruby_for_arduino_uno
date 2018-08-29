@@ -20,6 +20,7 @@
 // mrb types
 //typedef int16_t mrb_sym;
 typedef uint8_t mrb_sym;
+typedef uint8_t mrb_irep_id;
 
 /* aspec access ? */
 #define MRB_ASPEC_REQ(a)          (((a) >> 18) & 0x1f)
@@ -128,7 +129,7 @@ typedef struct RProc {
   mrb_sym sym_id;
   struct RProc *next;
   union {
-    struct IREP *irep;
+    mrb_irep_id irep;
     mrb_func_t func;
   };
 } mrb_proc;
