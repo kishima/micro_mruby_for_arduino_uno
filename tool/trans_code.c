@@ -95,7 +95,7 @@ uint16_t write_mirep_code(uint8_t* buff, mrb_mirep* mirep,mrb_irep* irep){
 uint16_t write_mirep_pools(uint8_t* buff, mrb_mirep* mirep,mrb_irep* irep){
   int i;
   for(i=0;i<mirep->plen;i++){
-    buff[i] = ((uint8_t*)irep->pools)[i];
+    buff[i] = irep->pool_head[i];
   }
   return mirep->plen;
 }
@@ -116,12 +116,10 @@ int make_mrb_obj(uint8_t* p, mrb_object *obj){
     return 0;
   }
   switch( tt ) {
-#if MRBC_USE_STRING
   case 0: { // IREP_TT_STRING
     obj->tt = MRB_TT_STRING;
     obj->str = (char*)p;
   } break;
-#endif
   case 1: { // IREP_TT_FIXNUM
     char buf[obj_size+1];
     memcpy(buf, p, obj_size);
@@ -156,7 +154,7 @@ uint8_t analyze_irep_r(uint8_t* irep_count, mrb_irep* irep){
   int slen = mirep_header.slen;
   irep_buff_length_list[irep_id] = sizeof(mrb_mirep)+ ilen*CODE_LEN + plen + rlen +slen;
   
-  printf("irep length:header=%d,i=%d,p=%d,r=%d,s=%d,total=%d\n",(int)sizeof(mrb_mirep),ilen,plen,rlen,slen,irep_buff_length_list[irep_id]);
+  printf("irep length:header=%d,i(code)=%d,p(pool)=%d,r(ireps)=%d,s(symbol)=%d,total=%d\n",(int)sizeof(mrb_mirep),ilen,plen,rlen,slen,irep_buff_length_list[irep_id]);
   
   //output mirep header to buff
   p += write_mirep_struct(&buff[p],&mirep_header);
@@ -240,7 +238,7 @@ void trans_code_mrb(mrb_vm* vm){
     printf("connot open code.h\n");
     exit(0);
   }
-  printf("Open %s\n",OUTPUT_FNAME);
+  printf("** Open %s **\n",OUTPUT_FNAME);
   //analyze and output
   analyze_irep(f,vm->irep);
   
@@ -248,7 +246,7 @@ void trans_code_mrb(mrb_vm* vm){
 
   //close
   fclose(f);
-  printf("Close %s\n",OUTPUT_FNAME);
+  printf("** Close %s **\n",OUTPUT_FNAME);
 }
 
 

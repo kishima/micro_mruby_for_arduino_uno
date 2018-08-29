@@ -35,8 +35,8 @@ typedef int16_t mrb_sym;
 typedef struct RObject {
   uint8_t tt : 8;
   union {
-    int32_t i;			// MRB_TT_FIXNUM, SYMBOL
-    const char *str;		// C-string (only loader use.)
+    int32_t i;
+    const char *str;
   };
 } mrb_object;
 
@@ -68,6 +68,7 @@ typedef struct IREP {
   struct IREP **reps;		//!< array of child IREP's pointer.
 
   //for output
+  uint8_t  *pool_head;
   uint16_t pool_total_len;
   uint16_t slen;
   

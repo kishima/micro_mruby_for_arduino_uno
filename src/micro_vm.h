@@ -10,45 +10,31 @@
 
 #define CODE_PREFIX "mmruby_code_"
 #define CODE_LEN 4
-
-#ifdef __cplusplus
-//extern "C" {
-#endif
+#define MAX_LITERAL_LEN 16
+#define mrb_mirep_size  4 //size of mrb_mirep in Arduino
 
 //Micro Irep
+#define MIREP_OFFSET_RLEN 0
+#define MIREP_OFFSET_ILEN 1
+#define MIREP_OFFSET_PLEN 2
+#define MIREP_OFFSET_SLEN 3
+#define MIREP_HEADER_SIZE 4
 typedef struct MIREP {
-  //uint8_t nlocals;// # of local variables
-  //uint8_t nregs;  // # of register variables
-  uint8_t rlen;   // # of child IREP blocks
-  uint8_t ilen;   // # of iSeq
-  uint8_t plen;   // # of pool
-  uint8_t slen;   // # of symbols
+  uint8_t rlen;   // Number of child IREP blocks
+  uint8_t ilen;   // Number of bytecode
+  uint8_t plen;   // Size of pools field
+  uint8_t slen;   // Size of symbols field
 
-  //uint8_t irep_list[]; // irep_id list
-  //uint8_t     *code; // ISEQ (code) BLOCK
-                       // NOT Needed. Can be define by offset using sizeof(mrb_mirep)
-  //mrb_object  **pools; // array of POOL objects pointer.
-                         // NOT Needed. Can be define by offset using ilen
-  
+  //data order after mirep header
+  // 1. code           : length is ilen * CODE_LEN [byte]
+  // 2. literal(pools) : length is plen [byte]
+  // 3. symbols        : length is slen [byte]
+  // 4. ireps          : legnth is rlen [byte]
 } mrb_mirep;
-
-
-//size of mrb_mirep in Arduino
-#define mrb_mirep_size  4
 
 // get irep 
 uint8_t* get_irep_p(uint8_t irep_id);
-     
-//irep_id : irep ID
-/*
-#define code_ptr(irep_id) (get_irep_p(irep_id) + mrb_mirep_size)
-#define pools_ptr(irep_id) (get_irep_p(irep_id) + mrb_mirep_size \
-                                + progmem_read_byte(get_irep_p(irep_id)+2) \ //rlen
-                                + progmem_read_byte(get_irep_p(irep_id)+3) ) //ilen
-#define sym_ptr(irep_id) (get_irep_p(irep_id) + mrb_mirep_size \
-                                + progmem_read_byte(get_irep_p(irep_id)+2) \ //rlen
-                                + progmem_read_word(get_irep_p(irep_id)+5) ) //sym_pos
-*/
+
 //================================================================
 /*!@brief
   Call information
@@ -128,12 +114,6 @@ inline static uint16_t bin_to_uint16( const void *s )
   return (x << 8) | (x >> 8);
 }
 
-
-
-
 #endif //MRBC_SRC_VM_H_
 
-#ifdef __cplusplus
-//}
-#endif
-#endif
+#endif //MRBC_SRC_MICRO_VM_H_

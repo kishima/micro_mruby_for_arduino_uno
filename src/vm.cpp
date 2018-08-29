@@ -5,11 +5,14 @@
 #include <string.h>
 #include <assert.h>
 #include "micro_vm.h"
+#include "class.h"
 #include "symbol.h"
 #include "opcode.h"
 #include "avr_access.h"
 #include "console.h"
 #include "debug.h"
+
+#include "c_string.h"
 
 #include <Arduino.h>
 #include <avr/pgmspace.h>
@@ -18,8 +21,23 @@
 static mrb_mvm vm_body;
 
 void init_vm(void){
+  mrb_mvm* vm = &vm_body;
   //initialize VM
-  memset(&vm_body,0,sizeof(mrb_mvm));
+  memset(vm,0,sizeof(mrb_mvm));
+
+  //set self
+  vm->pc_irep = vm->irep;
+  vm->pc = 0;
+  vm->current_regs = vm->regs;
+
+  // set self to reg[0]
+  vm->regs[0].tt = MRB_TT_CLASS;
+  vm->regs[0].cls = mrbc_class_object;
+
+  memset(vm->callinfo, 0, sizeof(vm->callinfo));
+
+  // target_class
+  vm->target_class = mrbc_class_object;
 }
 
 mrb_mvm* get_vm(void){
@@ -31,24 +49,24 @@ mrb_mvm* get_vm(void){
 //--------------------------------
 inline static int op_nop( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
+  DEBUG_FPRINTLN("[OP_NOP]");
 	return 0;
 }
 
 inline static int op_loadself( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
-  //TODO
-#if 0
-	int ra = GETARG_A(code);
-	
-	mrbc_release(&regs[ra]);
-	mrbc_dup(&regs[0]);       // TODO: Need?
-	regs[ra] = regs[0];
-#endif	
-	return 0;
+  DEBUG_FPRINTLN("[OP_LOADSELF]");
+  int ra = GETARG_A(code);
+  
+  mrbc_release(&regs[ra]);
+  mrbc_dup(&regs[0]);       // TODO: Need?
+  regs[ra] = regs[0];
+  return 0;
 }
 
 inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
+  DEBUG_FPRINTLN("[OP_SEND]");
 #if 0
 	int ra = GETARG_A(code);
 	int rb = GETARG_B(code);  // index of method sym
@@ -111,24 +129,26 @@ inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 
 inline static int op_string( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
-#if 0
-	int ra = GETARG_A(code);
-	int rb = GETARG_Bx(code);
-	mrb_object *pool_obj = vm->pc_irep->pools[rb];
-	
-	/* CAUTION: pool_obj->str - 2. see IREP POOL structure. */
-	int len = bin_to_uint16(pool_obj->str - 2);
-	mrb_value value = mrbc_string_new(vm, pool_obj->str, len);
-	if( value.string == NULL ) return -1;		// ENOMEM
-	
-	mrbc_release(&regs[ra]);
-	regs[ra] = value;
-#endif
-	return 0;
+  DEBUG_FPRINTLN("[OP_STRING]");
+  int ra = GETARG_A(code);
+  int rb = GETARG_Bx(code);
+
+  //mrb_object *pool_obj = vm->pc_irep->pools[rb]; 
+  uint8_t str[MAX_LITERAL_LEN];
+  uint16_t obj_size=0;
+  read_pool(str,&obj_size,vm->pc_irep,rb);
+  
+  mrb_value value = mrbc_string_new(vm, str, obj_size);
+  if( value.string == NULL ) return -1;
+  
+  mrbc_release(&regs[ra]);
+  regs[ra] = value;
+  return 0;
 }
 
 inline static int op_stop( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
+  DEBUG_FPRINTLN("[OP_STOP]");
   if( GET_OPCODE(code) == OP_STOP ) {
     int i;
     for( i = 0; i < MAX_REGS_SIZE; i++ ) {
@@ -141,7 +161,7 @@ inline static int op_stop( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 }
 
 void run_vm(void){
-  DEBUG_PRINTLN("start run_vm");
+  DEBUG_FPRINTLN("start run_vm");
   mrb_mvm *vm = &vm_body;
   int ret = 0;
   
@@ -156,8 +176,6 @@ void run_vm(void){
     
     // Dispatch
     uint32_t opcode = GET_OPCODE(code);
-
-    console_printf("OPCODE >> %02X\n",opcode);
 
     switch( opcode ) {
     case OP_NOP:        ret = op_nop       (vm, code, regs); break;
@@ -210,12 +228,12 @@ void run_vm(void){
     case OP_STOP:       ret = op_stop      (vm, code, regs); break;
     case OP_ABORT:      ret = op_stop      (vm, code, regs); break;  // reuse
     default:
-      DEBUG_PRINT(F("Unknown code\n"));
+      console_printf("UNKNOWN OPCODE >> %02X\n",opcode);
       break;
     }
     hal_delay(1000);
   } while( !vm->flag_preemption );
-  DEBUG_PRINT("VM END\n");
+  DEBUG_FPRINT("VM END\n");
   
   vm->flag_preemption = 0;
   
