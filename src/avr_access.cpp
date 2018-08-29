@@ -12,6 +12,15 @@
 
 #include "avr_access.h"
 
+const char* const test_val1[] PROGMEM = { "aaa","bbb" };
+const char* const test_val2[]         = { "aaa","bbb" };
+char** read_testmem(int i){
+  if(i==0){
+    return test_val1;
+  }
+  return test_val2;
+}
+
 inline static void memcpy_pgm2ram(uint8_t* buff, short pgm_p, uint16_t len){
   int i=0;
   for(i=0;i<len;i++){

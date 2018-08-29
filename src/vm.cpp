@@ -124,8 +124,6 @@ inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
   }
 
   mrb_sym sym_id = get_irep_symbol_id(vm->pc_irep,rb);
-  //const char *sym_name = mrbc_get_irep_symbol(vm->pc_irep->ptr_to_sym, rb);
-  //mrb_sym sym_id = str_to_symid(sym_name);
   mrb_proc *m = find_method(vm, recv, sym_id);
   
   if( m == 0 ) {

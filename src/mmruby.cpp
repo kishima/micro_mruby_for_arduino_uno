@@ -3,7 +3,9 @@
 #include "class.h"
 #include "hal.h"
 #include "debug.h"
+#include "console.h"
 
+extern char** read_testmem(int i);
 void mmruby_setup(){
   init_hal();
   init_vm();

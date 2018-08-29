@@ -1,7 +1,7 @@
 #ifndef __DEBUG_H_
 #define __DEBUG_H_
 
-
+#include <Arduino.h>
 
 enum mmruby_text{
   MMERROR_UNKNOWN,

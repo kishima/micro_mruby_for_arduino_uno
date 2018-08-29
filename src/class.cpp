@@ -9,6 +9,7 @@
 #include "global.h"
 #include "symbol.h"
 #include "console.h"
+#include "debug.h"
 
 /* Class Tree */
 mrb_class *mrbc_class_object;
@@ -233,6 +234,7 @@ mrb_proc *find_method(mrb_mvm *vm, mrb_value recv, mrb_sym sym_id)
 
 mrb_class * mrbc_define_class(mrb_mvm* vm, const char *name, mrb_class *super)
 {
+  DEBUG_FPRINTLN("define class");
   mrb_class *cls;
   mrb_sym sym_id = str_to_symid(name);
   mrb_object obj = const_object_get(sym_id);
@@ -263,6 +265,7 @@ mrb_class * mrbc_define_class(mrb_mvm* vm, const char *name, mrb_class *super)
 
 void mrbc_define_method(mrb_mvm *vm, mrb_class *cls, const char *name, mrb_func_t cfunc)
 {
+  DEBUG_FPRINTLN("define method");
   mrb_proc *rproc = mrbc_rproc_alloc(vm, name);
   rproc->c_func = 1;  // c-func
   rproc->next = cls->procs;
@@ -272,6 +275,7 @@ void mrbc_define_method(mrb_mvm *vm, mrb_class *cls, const char *name, mrb_func_
 
 
 void mrbc_init_class_object(int z){
+  DEBUG_FPRINTLN("define Object class");
   mrb_mvm* vm = get_vm();
   // Class
   mrbc_class_object = mrbc_define_class(vm,"Object", 0);
@@ -282,11 +286,11 @@ void mrbc_init_class_object(int z){
   mrbc_define_method(vm, mrbc_class_object, "!", c_object_not);
   mrbc_define_method(vm, mrbc_class_object, "!=", c_object_neq);
   mrbc_define_method(vm, mrbc_class_object, "<=>", c_object_compare);
-  mrbc_define_method(vm, mrbc_class_object, "class", c_object_class);
+  mrbc_define_method(vm, mrbc_class_object, "to_s", c_object_to_s);
   mrbc_define_method(vm, mrbc_class_object, "new", c_object_new);
+  mrbc_define_method(vm, mrbc_class_object, "class", c_object_class);
   mrbc_define_method(vm, mrbc_class_object, "attr_reader", c_object_attr_reader);
   mrbc_define_method(vm, mrbc_class_object, "attr_accessor", c_object_attr_accessor);
-  mrbc_define_method(vm, mrbc_class_object, "to_s", c_object_to_s);
 #endif
   
 }
