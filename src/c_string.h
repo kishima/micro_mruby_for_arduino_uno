@@ -18,10 +18,6 @@
 #include <string.h>
 #include "value.h"
 
-#ifdef __cplusplus
-//extern "C" {
-#endif
-
 //================================================================
 /*!@brief
   Define String handle.
@@ -82,8 +78,5 @@ static inline char * mrbc_string_cstr(const mrb_value *v)
 }
 
 
-#ifdef __cplusplus
-//}
-#endif
 #endif
 

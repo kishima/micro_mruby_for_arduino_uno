@@ -18,10 +18,6 @@
 #include "micro_vm.h"
 #include "value.h"
 
-#ifdef __cplusplus
-//extern "C" {
-#endif
-
 extern mrb_class *mrbc_class_object;
 
 extern mrb_class *mrbc_class_proc;
@@ -46,7 +42,4 @@ void mrbc_define_method(struct VM *vm, mrb_class *cls, const char *name, mrb_fun
 void mrbc_funcall(mrb_mvm *vm, const char *name, mrb_value *v, int argc);
 void c_ineffect(mrb_mvm *vm, mrb_value v[], int argc);
 
-#ifdef __cplusplus
-//}
-#endif
 #endif

@@ -17,11 +17,6 @@
 
 #include <stdint.h>
 
-#ifdef __cplusplus
-//extern "C" {
-#endif
-
-
 // mrb types
 //typedef int16_t mrb_sym;
 typedef uint8_t mrb_sym;
@@ -228,7 +223,4 @@ static inline mrb_value mrb_false_value(void)
 }
 
 
-#ifdef __cplusplus
-//}
-#endif
 #endif

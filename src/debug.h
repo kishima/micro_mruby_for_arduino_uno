@@ -1,16 +1,12 @@
 #ifndef __DEBUG_H_
 #define __DEBUG_H_
 
-#ifdef __cplusplus
-//extern "C" {
-#endif
 
 
 enum mmruby_text{
   MMERROR_UNKNOWN,
   MMERROR_NOMEM,
 };
-
 
 #define MMRUBY_DEBUG_ENABLE
 
@@ -31,8 +27,5 @@ void debug_printb(unsigned char byte);
 #define DEBUG_PRINTLN(x) 
 #endif
 
-#ifdef __cplusplus
-//}
-#endif
 
 #endif

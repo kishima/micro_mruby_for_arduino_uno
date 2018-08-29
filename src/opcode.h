@@ -15,11 +15,6 @@
 #ifndef MRBC_SRC_OPCODE_H_
 #define MRBC_SRC_OPCODE_H_
 
-#ifdef __cplusplus
-//extern "C" {
-#endif
-
-
 #define GET_OPCODE(code)            ((code) & 0x7f)
 #define GETARG_A(code)              (((code) >> 23) & 0x1ff)
 #define GETARG_B(code)              (((code) >> 14) & 0x1ff)
@@ -112,7 +107,4 @@ enum OPCODE {
   OP_ABORT     = 0x50,  // using OP_ABORT inside mruby/c only
 };
 
-#ifdef __cplusplus
-//}
-#endif
 #endif

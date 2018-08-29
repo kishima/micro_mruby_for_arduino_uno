@@ -20,11 +20,8 @@
 #include "hal.h"
 #include "debug.h"
 
-#ifdef __cplusplus
-//extern "C" {
-#endif
-
 #define CONSOLE_BUFF_SIZE 40
+#define cprintf console_printf
 
 //================================================================
 /*! printf tiny (mruby/c) version data container.
@@ -133,7 +130,4 @@ static inline int mrbc_printf_len( mrb_printf *pf )
   return pf->p - pf->buf;
 }
 
-#ifdef __cplusplus
-//}
-#endif
 #endif
