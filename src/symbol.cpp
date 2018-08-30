@@ -36,7 +36,7 @@ mrb_sym add_index(const char* str ){
   if(sym_tbl_cnt+static_sym_tbl_size>=MAX_SYMBOL-1){ //Total table size must be less than MAX_SYMBOL
     return INVALID_SYMBOL;
   }
-  DEBUG_FPRINTLN("Add New Sym");
+  DEBUG_FPRINTLN("! Add New Sym");
   if(sym_tbl_cnt>=sym_tbl_size){
     //extend table
     sym_tbl_size++;
@@ -62,9 +62,11 @@ mrb_sym search_index_dynamic(const char* str){
 inline mrb_sym search_index(const char* str){
   mrb_sym sym_id = search_index_static(str);
   if(INVALID_SYMBOL!=sym_id) return sym_id;
+  DEBUG_FPRINTLN("(1)");
   
   sym_id = search_index_dynamic(str);
   if(INVALID_SYMBOL!=sym_id) return sym_id + static_sym_tbl_size;
+  DEBUG_FPRINTLN("(2)");
 
   return INVALID_SYMBOL;
 }

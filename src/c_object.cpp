@@ -18,8 +18,8 @@
 void mrbc_p_sub(mrb_value *v)
 {
   switch( v->tt ){
-  case MRB_TT_EMPTY:	console_print("(empty)");	break;
-  case MRB_TT_NIL:	console_print("nil");		break;
+  case MRB_TT_EMPTY:	DEBUG_FPRINTLN("(empty)");	break;
+  case MRB_TT_NIL:	DEBUG_FPRINTLN("nil");		break;
 
   case MRB_TT_FALSE:
   case MRB_TT_TRUE:
@@ -168,7 +168,7 @@ void c_puts(mrb_mvm *vm, mrb_value v[], int argc)
 
 
 void mrbc_init_class_object(){
-  DEBUG_FPRINTLN("define Object class");
+  DEBUG_FPRINTLN("-- define Object class");
   // Class
   mrbc_class_object = mrbc_define_class("Object", 0);
   // Methods

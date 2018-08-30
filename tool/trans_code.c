@@ -234,11 +234,17 @@ void output_symbol_tbl(FILE* f){
   fprintf(f,"\n/* Symbol table */\n");
   fprintf(f,"const unsigned char %ssymbol_table_size PROGMEM = %d;\n",CODE_PREFIX,sym_tbl_cnt);
   
-  fprintf(f,"const char* const %ssymbol_table[] PROGMEM = {\n",CODE_PREFIX);
   int i;
+  for(i=0;i<sym_tbl_cnt;i++){
+    fprintf(f,"const char %ssymbol_ref%02x[] PROGMEM =\"%s\";\n",CODE_PREFIX,i,sym_tbl[i]);
+  }
+
+  fprintf(f,"\n");
+  fprintf(f,"const char* const %ssymbol_table[] PROGMEM = {\n",CODE_PREFIX);
   //for symbols in ireps
   for(i=0;i<sym_tbl_cnt;i++){
-    fprintf(f,"  \"%s\",\n",sym_tbl[i]);
+    //fprintf(f,"  \"%s\",\n",sym_tbl[i]);
+    fprintf(f,"  %ssymbol_ref%02x,\n",CODE_PREFIX,i);
   }
   fprintf(f,"};\n");
   fprintf(f,"\n");

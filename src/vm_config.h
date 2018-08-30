@@ -18,9 +18,9 @@
 
 #define CODE_PREFIX "mmruby_code_"
 #define CODE_LEN 4
-#define MAX_LITERAL_LEN 16
+#define MAX_LITERAL_LEN 24
 #define MAX_SYMBOL_LEN 16
-#define INIT_SYMBOL_TABLE_LEN 10
+#define INIT_SYMBOL_TABLE_LEN 20
 
 #define MAX_GLOBAL_OBJECT_SIZE 20
 #define MAX_REGS_SIZE 16

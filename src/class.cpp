@@ -114,7 +114,7 @@ mrb_class * mrbc_define_class(const char *name, mrb_class *super)
 
 void mrbc_define_method(mrb_class *cls, const char *name, mrb_func_t cfunc)
 {
-  DEBUG_FPRINTLN("define method");
+  DEBUG_FPRINTLN("--- define method");
   mrb_proc *rproc = mrbc_rproc_alloc(name);
   rproc->c_func = 1;  // c-func
   rproc->next = cls->procs;

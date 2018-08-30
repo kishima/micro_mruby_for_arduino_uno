@@ -24,6 +24,7 @@ inline static void memcpy_pgm2ram(uint8_t* buff, short pgm_p, uint16_t len){
   for(i=0;i<len;i++){
     buff[i] = pgm_read_byte_near( pgm_p+i );
   }
+  buff[i]='\0';
 }
 
 inline static void strcpy_pgm2ram(char* buff, short pgm_p){
@@ -51,11 +52,11 @@ void get_irep_pool(uint8_t* buff, uint16_t* obj_size, mrb_irep_id irep_id, uint8
   uint8_t p = 0;
   uint8_t tt = 0;
   short obj_p = 0;
-  for(i=0;i<=no;i++){ //no begins from 0
+  for(i=0;i<=no;i++){ //Num begins from 0
     tt = pgm_read_byte_near( irep_addr + MIREP_HEADER_SIZE + code_len + p);
     p++;
     uint16_t bin = pgm_read_word_near( irep_addr + MIREP_HEADER_SIZE + code_len + p);
-    *obj_size = bin_to_uint16( &bin ) + 1;
+    *obj_size = bin_to_uint16( &bin );
     p += 2;
     obj_p = p;
     p += *obj_size;
@@ -87,10 +88,12 @@ uint8_t get_max_static_symbol_id(){
 mrb_sym search_index_static(const char *str){
   char buff[MAX_SYMBOL_LEN];
   uint8_t max = pgm_read_byte_near(&mmruby_code_symbol_table_size);
+  cprintf("  m=%d\n",max);
   int i;
   for(i=0;i<max;i++){
     short addr = pgm_read_word_near(&mmruby_code_symbol_table[i]);
     strcpy_pgm2ram(buff, addr);
+    cprintf("  %s,%s\n",str,buff);
     if(0 == strcmp(str, buff)){
       if(i==0)return INVALID_SYMBOL; //str is null char
       return i;

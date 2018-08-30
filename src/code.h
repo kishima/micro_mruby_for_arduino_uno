@@ -131,38 +131,70 @@ mrb_func_t find_c_funcs(mrb_vtype tt,mrb_sym sym_id){
 
 /* Symbol table */
 const unsigned char mmruby_code_symbol_table_size PROGMEM = 31;
+const char mmruby_code_symbol_ref00[] PROGMEM ="";
+const char mmruby_code_symbol_ref01[] PROGMEM ="Object";
+const char mmruby_code_symbol_ref02[] PROGMEM ="String";
+const char mmruby_code_symbol_ref03[] PROGMEM ="Nil";
+const char mmruby_code_symbol_ref04[] PROGMEM ="Proc";
+const char mmruby_code_symbol_ref05[] PROGMEM ="False";
+const char mmruby_code_symbol_ref06[] PROGMEM ="True";
+const char mmruby_code_symbol_ref07[] PROGMEM ="Fixnum";
+const char mmruby_code_symbol_ref08[] PROGMEM ="Symbol";
+const char mmruby_code_symbol_ref09[] PROGMEM ="Array";
+const char mmruby_code_symbol_ref0a[] PROGMEM ="Range";
+const char mmruby_code_symbol_ref0b[] PROGMEM ="Hash";
+const char mmruby_code_symbol_ref0c[] PROGMEM ="puts";
+const char mmruby_code_symbol_ref0d[] PROGMEM ="+";
+const char mmruby_code_symbol_ref0e[] PROGMEM ="===";
+const char mmruby_code_symbol_ref0f[] PROGMEM ="size";
+const char mmruby_code_symbol_ref10[] PROGMEM ="length";
+const char mmruby_code_symbol_ref11[] PROGMEM ="to_i";
+const char mmruby_code_symbol_ref12[] PROGMEM ="to_s";
+const char mmruby_code_symbol_ref13[] PROGMEM ="<<";
+const char mmruby_code_symbol_ref14[] PROGMEM ="[]";
+const char mmruby_code_symbol_ref15[] PROGMEM ="[]=";
+const char mmruby_code_symbol_ref16[] PROGMEM ="chomp";
+const char mmruby_code_symbol_ref17[] PROGMEM ="chomp!";
+const char mmruby_code_symbol_ref18[] PROGMEM ="dup";
+const char mmruby_code_symbol_ref19[] PROGMEM ="index";
+const char mmruby_code_symbol_ref1a[] PROGMEM ="ord";
+const char mmruby_code_symbol_ref1b[] PROGMEM ="to_sym";
+const char mmruby_code_symbol_ref1c[] PROGMEM ="intern";
+const char mmruby_code_symbol_ref1d[] PROGMEM ="sprintf";
+const char mmruby_code_symbol_ref1e[] PROGMEM ="test";
+
 const char* const mmruby_code_symbol_table[] PROGMEM = {
-  "",
-  "Object",
-  "String",
-  "Nil",
-  "Proc",
-  "False",
-  "True",
-  "Fixnum",
-  "Symbol",
-  "Array",
-  "Range",
-  "Hash",
-  "puts",
-  "+",
-  "===",
-  "size",
-  "length",
-  "to_i",
-  "to_s",
-  "<<",
-  "[]",
-  "[]=",
-  "chomp",
-  "chomp!",
-  "dup",
-  "index",
-  "ord",
-  "to_sym",
-  "intern",
-  "sprintf",
-  "test",
+  mmruby_code_symbol_ref00,
+  mmruby_code_symbol_ref01,
+  mmruby_code_symbol_ref02,
+  mmruby_code_symbol_ref03,
+  mmruby_code_symbol_ref04,
+  mmruby_code_symbol_ref05,
+  mmruby_code_symbol_ref06,
+  mmruby_code_symbol_ref07,
+  mmruby_code_symbol_ref08,
+  mmruby_code_symbol_ref09,
+  mmruby_code_symbol_ref0a,
+  mmruby_code_symbol_ref0b,
+  mmruby_code_symbol_ref0c,
+  mmruby_code_symbol_ref0d,
+  mmruby_code_symbol_ref0e,
+  mmruby_code_symbol_ref0f,
+  mmruby_code_symbol_ref10,
+  mmruby_code_symbol_ref11,
+  mmruby_code_symbol_ref12,
+  mmruby_code_symbol_ref13,
+  mmruby_code_symbol_ref14,
+  mmruby_code_symbol_ref15,
+  mmruby_code_symbol_ref16,
+  mmruby_code_symbol_ref17,
+  mmruby_code_symbol_ref18,
+  mmruby_code_symbol_ref19,
+  mmruby_code_symbol_ref1a,
+  mmruby_code_symbol_ref1b,
+  mmruby_code_symbol_ref1c,
+  mmruby_code_symbol_ref1d,
+  mmruby_code_symbol_ref1e,
 };
 
 /* Symbol IDs */
