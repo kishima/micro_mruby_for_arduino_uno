@@ -64,13 +64,14 @@ mrb_proc *find_method(mrb_value recv, mrb_sym sym_id)
 
   //For basic class
   //search static procs from FROM.
-  mrb_proc *proc;
-  //proc = find_static_procs(recv.tt,sym_id);
+
+  //mrb_proc* proc = find_static_procs(recv.tt,sym_id);
   //if(0!=proc)return proc; //proc is static
 
   //dynaic procs
   while( cls != 0 ) {
     cls->procs;
+    mrb_proc *proc = cls->procs;
     while( proc != 0 ) {
       if( proc->sym_id == sym_id ) {
         return proc;
@@ -84,7 +85,7 @@ mrb_proc *find_method(mrb_value recv, mrb_sym sym_id)
 
 mrb_class * mrbc_define_class(const char *name, mrb_class *super)
 {
-  DEBUG_FPRINTLN("define class");
+  //DEBUG_FPRINTLN("define class");
   mrb_class *cls;
   mrb_sym sym_id = str_to_symid(name);
   mrb_object obj = const_object_get(sym_id);
@@ -114,7 +115,7 @@ mrb_class * mrbc_define_class(const char *name, mrb_class *super)
 
 void mrbc_define_method(mrb_class *cls, const char *name, mrb_func_t cfunc)
 {
-  DEBUG_FPRINTLN("--- define method");
+  //DEBUG_FPRINTLN("--- define method");
   mrb_proc *rproc = mrbc_rproc_alloc(name);
   rproc->c_func = 1;  // c-func
   rproc->next = cls->procs;

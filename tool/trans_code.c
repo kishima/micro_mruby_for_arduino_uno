@@ -168,15 +168,12 @@ uint8_t analyze_irep_r(uint8_t* irep_count, mrb_irep* irep){
   
   //output mirep header to buff
   p += write_mirep_struct(&buff[p],&mirep_header);
-  //printf("p=%d\n",p);
 
   //output code
   p += write_mirep_code(&buff[p],&mirep_header,irep);
-  //printf("p=%d\n",p);
 
   //output literal
   p += write_mirep_pools(&buff[p],&mirep_header,irep);
-  //printf("p=%d\n",p);
 
   //make symbol table
   int i=0;
@@ -192,7 +189,6 @@ uint8_t analyze_irep_r(uint8_t* irep_count, mrb_irep* irep){
     buff[p] = sym_id;
     p += 1;
   }
-  //printf("p=%d\n",p);
   
   //output child irep id
   for(i=0;i<irep->rlen;i++){

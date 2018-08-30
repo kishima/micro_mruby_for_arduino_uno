@@ -7,8 +7,8 @@
 
 void mmruby_setup(){
   init_hal();
-  init_vm();
   mrbc_init_class();
+  init_vm();
 }
 
 void mmruby_run(void){

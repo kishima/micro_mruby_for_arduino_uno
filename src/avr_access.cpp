@@ -88,12 +88,12 @@ uint8_t get_max_static_symbol_id(){
 mrb_sym search_index_static(const char *str){
   char buff[MAX_SYMBOL_LEN];
   uint8_t max = pgm_read_byte_near(&mmruby_code_symbol_table_size);
-  cprintf("  m=%d\n",max);
+  //cprintf("  m=%d\n",max);
   int i;
   for(i=0;i<max;i++){
     short addr = pgm_read_word_near(&mmruby_code_symbol_table[i]);
     strcpy_pgm2ram(buff, addr);
-    cprintf("  %s,%s\n",str,buff);
+    //cprintf("  %s,%s\n",str,buff);
     if(0 == strcmp(str, buff)){
       if(i==0)return INVALID_SYMBOL; //str is null char
       return i;

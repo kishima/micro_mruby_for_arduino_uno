@@ -36,7 +36,7 @@ void init_vm(void){
   // set self to reg[0]
   vm->regs[0].tt = MRB_TT_CLASS;
   vm->regs[0].cls = mrbc_class_object;
-
+ 
   memset(vm->callinfo, 0, sizeof(vm->callinfo));
 
   // target_class
@@ -104,7 +104,7 @@ inline static int op_loadself( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
   DEBUG_FPRINTLN("[OP_LOADSELF]");
   int ra = GETARG_A(code);
-  
+
   mrbc_release(&regs[ra]);
   mrbc_dup(&regs[0]);       // TODO: Need?
   regs[ra] = regs[0];
@@ -379,7 +379,7 @@ void run_vm(void){
     case OP_STOP:       ret = op_stop      (vm, code, regs); break;
     case OP_ABORT:      ret = op_stop      (vm, code, regs); break;  // reuse
     default:
-      console_printf("UNKNOWN >> %02X\n",opcode);
+      cprintf("UNKNOWN >> %02X\n",opcode);
       break;
     }
     hal_delay(1000);

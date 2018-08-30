@@ -30,8 +30,8 @@ void * mrbc_raw_alloc(unsigned int size)
   void *p = malloc(size);
 #ifdef MMRUBY_DEBUG_ENABLE
  alloc_mem_size += size;
- cprintf(">>ALLOC %p:%d\n",p,size);
- cprintf("alloc total=%d\n",alloc_mem_size);
+ //cprintf(">>ALLOC %p:%d\n",p,size);
+ //cprintf("alloc total=%d\n",alloc_mem_size);
 #endif
   return p;
 }
