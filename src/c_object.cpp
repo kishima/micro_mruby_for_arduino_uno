@@ -172,9 +172,9 @@ void mrbc_init_class_object(){
   // Class
   mrbc_class_object = mrbc_define_class("Object", 0);
   // Methods
-  mrbc_define_method(mrbc_class_object, "puts", c_puts);
-  //TODO
+  // These are defined statically
 #if 0
+  mrbc_define_method(mrbc_class_object, "puts", c_puts);
   mrbc_define_method(mrbc_class_object, "!", c_object_not);
   mrbc_define_method(mrbc_class_object, "!=", c_object_neq);
   mrbc_define_method(mrbc_class_object, "<=>", c_object_compare);

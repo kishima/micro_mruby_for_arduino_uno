@@ -9,7 +9,7 @@ const unsigned char* const mmruby_code_irep_table[] PROGMEM = {
 };
 
 /* Proc table */
-const unsigned char mmruby_code_proc_table_size PROGMEM = 7;
+const unsigned char mmruby_code_proc_table_size PROGMEM = 6;
 
 
 const uint8_t mmruby_code_proc_table_Object[] PROGMEM = {
@@ -58,76 +58,20 @@ const uint8_t mmruby_code_proc_table_Range[] PROGMEM = {
   0
 };
 
-/* C function for Proc table */
-mrb_func_t find_c_funcs_Object(mrb_sym sym_id){
-  mrb_func_t func = 0;
-  switch(sym_id){
-    case 12: func = c_puts; break;
-    case 30: func = c_puts; break;
+inline mrb_func_t find_c_funcs_by_no(short no){
+  mrb_func_t func=0;
+  switch(no){
+    case 1: func = c_puts;break;
+    case 2: func = c_puts;break;
+    case 3: func = c_string_add;break;
+    case 4: func = c_string_eql;break;
+    case 5: func = c_string_size;break;
+    case 6: func = c_string_size;break;
     default: break;
   }
-  return func;
-}
-mrb_func_t find_c_funcs_Proc(mrb_sym sym_id){
-  mrb_func_t func = 0;
-  return func;
-}
-mrb_func_t find_c_funcs_False(mrb_sym sym_id){
-  mrb_func_t func = 0;
-  return func;
-}
-mrb_func_t find_c_funcs_True(mrb_sym sym_id){
-  mrb_func_t func = 0;
-  return func;
-}
-mrb_func_t find_c_funcs_Nil(mrb_sym sym_id){
-  mrb_func_t func = 0;
-  return func;
-}
-mrb_func_t find_c_funcs_Array(mrb_sym sym_id){
-  mrb_func_t func = 0;
-  return func;
-}
-mrb_func_t find_c_funcs_Fixnum(mrb_sym sym_id){
-  mrb_func_t func = 0;
-  return func;
-}
-mrb_func_t find_c_funcs_String(mrb_sym sym_id){
-  mrb_func_t func = 0;
-  switch(sym_id){
-    case 13: func = c_string_add; break;
-    case 14: func = c_string_eql; break;
-    case 15: func = c_string_size; break;
-    case 30: func = c_string_size; break;
-    default: break;
-  }
-  return func;
-}
-mrb_func_t find_c_funcs_Symbol(mrb_sym sym_id){
-  mrb_func_t func = 0;
-  return func;
-}
-mrb_func_t find_c_funcs_Range(mrb_sym sym_id){
-  mrb_func_t func = 0;
   return func;
 }
 
-mrb_func_t find_c_funcs(mrb_vtype tt,mrb_sym sym_id){
-  mrb_func_t func = 0;
-  switch(tt){
-    case MRB_TT_OBJECT:func = find_c_funcs_Object(sym_id); break;
-    case MRB_TT_PROC:func = find_c_funcs_Proc(sym_id); break;
-    case MRB_TT_FALSE:func = find_c_funcs_False(sym_id); break;
-    case MRB_TT_TRUE:func = find_c_funcs_True(sym_id); break;
-    case MRB_TT_NIL:func = find_c_funcs_Nil(sym_id); break;
-    case MRB_TT_ARRAY:func = find_c_funcs_Array(sym_id); break;
-    case MRB_TT_FIXNUM:func = find_c_funcs_Fixnum(sym_id); break;
-    case MRB_TT_STRING:func = find_c_funcs_String(sym_id); break;
-    case MRB_TT_SYMBOL:func = find_c_funcs_Symbol(sym_id); break;
-    case MRB_TT_RANGE:func = find_c_funcs_Range(sym_id); break;
-    default: break;
-  }
-}
 
 /* Symbol table */
 const unsigned char mmruby_code_symbol_table_size PROGMEM = 31;

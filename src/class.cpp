@@ -61,17 +61,14 @@ mrb_class *find_class_by_object(mrb_object *obj)
 mrb_proc *find_method(mrb_value recv, mrb_sym sym_id)
 {
   mrb_class *cls = find_class_by_object(&recv);
-
-  //For basic class
-  //search static procs from FROM.
-
-  //mrb_proc* proc = find_static_procs(recv.tt,sym_id);
-  //if(0!=proc)return proc; //proc is static
-
-  //dynaic procs
   while( cls != 0 ) {
-    cls->procs;
-    mrb_proc *proc = cls->procs;
+    //For basic class
+    //search static procs from FROM.
+    mrb_proc* proc = find_static_procs(cls->sym_id,sym_id);
+    if(0!=proc) return proc;
+
+    //dynaic procs
+    proc = cls->procs;
     while( proc != 0 ) {
       if( proc->sym_id == sym_id ) {
         return proc;

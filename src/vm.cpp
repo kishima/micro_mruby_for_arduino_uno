@@ -146,6 +146,17 @@ inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
     return 0;
   }
   
+  if(IS_PGM(m)){
+    mrb_func_t func = find_c_funcs(m);
+    func(vm, regs + ra, rc);
+    int release_reg = ra+rc+1;
+    while( release_reg <= bidx ) {
+      // mrbc_release(&regs[release_reg]);
+      release_reg++;
+    }
+    return 0;
+  }
+  
   // m is C func
   if( m->c_func ) {
     m->func(vm, regs + ra, rc);

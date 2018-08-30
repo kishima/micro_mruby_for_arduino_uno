@@ -331,13 +331,32 @@ void output_procs(FILE* f){
   }
 }
 
+void output_procs2(FILE* f){
+  int i;
+  fprintf(f,"inline mrb_func_t find_c_funcs_by_no(short no){\n");
+  fprintf(f,"  mrb_func_t func=0;\n");
+  fprintf(f,"  switch(no){\n");
+  for(i=0;i<sizeof(static_procs)/sizeof(char*)/3 - 1;i++){
+    fprintf(f,"    case %d: func = %s; break;\n",i+1,static_procs[i*3+2]);
+  }
+  fprintf(f,"    default: break;\n");
+  fprintf(f,"  }\n");
+  fprintf(f,"  return func;\n");
+  fprintf(f,"}\n");
+}
+
 void output_proc_tbl(FILE* f){
   int proc_tbl_cnt = sizeof(static_procs)/sizeof(char*)/3;
   fprintf(f,"\n/* Proc table */\n");
-  fprintf(f,"const unsigned char %sproc_table_size PROGMEM = %d;\n",CODE_PREFIX,proc_tbl_cnt);
+  fprintf(f,"const unsigned char %sproc_table_size PROGMEM = %d;\n",CODE_PREFIX,proc_tbl_cnt-1);
   fprintf(f,"\n");
   output_procs(f);
+  fprintf(f,"\n");
+  output_procs2(f);
+  fprintf(f,"\n");
 
+  return;
+#if 0
   fprintf(f,"\n/* C function for Proc table */\n");
   int i=0;
   for(i=0;i<sizeof(basic_class_names)/sizeof(char*);i++){
@@ -389,6 +408,7 @@ void output_proc_tbl(FILE* f){
   fprintf(f,"    default: break;\n");
   fprintf(f,"  }\n");
   fprintf(f,"}\n");
+#endif
 }
 
 #define OUTPUT_FNAME "../src/code.h"

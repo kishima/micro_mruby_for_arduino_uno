@@ -88,12 +88,10 @@ uint8_t get_max_static_symbol_id(){
 mrb_sym search_index_static(const char *str){
   char buff[MAX_SYMBOL_LEN];
   uint8_t max = pgm_read_byte_near(&mmruby_code_symbol_table_size);
-  //cprintf("  m=%d\n",max);
   int i;
   for(i=0;i<max;i++){
     short addr = pgm_read_word_near(&mmruby_code_symbol_table[i]);
     strcpy_pgm2ram(buff, addr);
-    //cprintf("  %s,%s\n",str,buff);
     if(0 == strcmp(str, buff)){
       if(i==0)return INVALID_SYMBOL; //str is null char
       return i;
@@ -101,7 +99,6 @@ mrb_sym search_index_static(const char *str){
   }
   return INVALID_SYMBOL;
 }
-
 
 short find_func_no_by_sym_id(const uint8_t* addr,mrb_sym target_sym_id){
   int i=0;
@@ -115,37 +112,41 @@ short find_func_no_by_sym_id(const uint8_t* addr,mrb_sym target_sym_id){
   return 0;
 }
 
-mrb_proc *find_static_procs(mrb_vtype tt, mrb_sym sym_id){
+mrb_func_t find_c_funcs(mrb_proc* proc){
+  return find_c_funcs_by_no((short)proc);
+}
+
+mrb_proc *find_static_procs(mrb_sym class_sym_id, mrb_sym sym_id){
   short addr=0;
-  switch(tt){
-  case MRB_TT_OBJECT:
+  switch(class_sym_id){
+  case MRBC_SSYM_Object:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_Object , sym_id);
     break;
-  case MRB_TT_PROC:
+  case MRBC_SSYM_Proc:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_Proc , sym_id);
     break;
-  case MRB_TT_FALSE:
+  case MRBC_SSYM_False:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_False , sym_id);
     break;
-  case MRB_TT_TRUE:
+  case MRBC_SSYM_True:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_True , sym_id);
     break;
-  case MRB_TT_NIL:
+  case MRBC_SSYM_Nil:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_Nil , sym_id);
     break;
-  case MRB_TT_ARRAY:
+  case MRBC_SSYM_Array:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_Array , sym_id);
     break;
-  case MRB_TT_FIXNUM:
+  case MRBC_SSYM_Fixnum:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_Fixnum , sym_id);
     break;
-  case MRB_TT_STRING:
+  case MRBC_SSYM_String:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_String , sym_id);
     break;
-  case MRB_TT_SYMBOL:
+  case MRBC_SSYM_Symbol:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_Symbol , sym_id);
     break;
-  case MRB_TT_RANGE:
+  case MRBC_SSYM_Range:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_Range , sym_id);
     break;
   default:
