@@ -21,6 +21,9 @@
 static mrb_mvm vm_body;
 
 void init_vm(void){
+  // init VM env
+  init_symbol_table();
+
   mrb_mvm* vm = &vm_body;
   //initialize VM
   memset(vm,0,sizeof(mrb_mvm));
@@ -38,6 +41,7 @@ void init_vm(void){
 
   // target_class
   vm->target_class = mrbc_class_object;
+
 }
 
 mrb_mvm* get_vm(void){
@@ -259,7 +263,7 @@ void run_vm(void){
     case OP_STOP:       ret = op_stop      (vm, code, regs); break;
     case OP_ABORT:      ret = op_stop      (vm, code, regs); break;  // reuse
     default:
-      console_printf("UNKNOWN OPCODE >> %02X\n",opcode);
+      console_printf("UNKNOWN >> %02X\n",opcode);
       break;
     }
     hal_delay(1000);

@@ -3,6 +3,7 @@
 #include "micro_vm.h"
 #include "opcode.h"
 #include "console.h"
+#include "symbol.h"
 #include "debug.h"
 
 #include <Arduino.h>
@@ -16,6 +17,15 @@ inline static void memcpy_pgm2ram(uint8_t* buff, short pgm_p, uint16_t len){
   int i=0;
   for(i=0;i<len;i++){
     buff[i] = pgm_read_byte_near( pgm_p+i );
+  }
+}
+
+inline static void strcpy_pgm2ram(uint8_t* buff, short pgm_p){
+  int i=0;
+  for(i=0;i<MAX_SYMBOL_LEN;i++){
+    char c = pgm_read_byte_near( pgm_p+i );
+    buff[i] = c;
+    if(c=='\0') break;
   }
 }
 
@@ -59,4 +69,16 @@ uint8_t get_irep_symbol_id(uint8_t irep_id, uint8_t no){
 //
 
 mrb_sym search_index_static(const char *str){
+  char buff[MAX_SYMBOL_LEN];
+  uint8_t max = pgm_read_byte_near(&mmruby_code_symbol_table_size);
+  int i;
+  for(i=0;i<max;i++){
+    short addr = pgm_read_word_near(&mmruby_code_symbol_table[i]);
+    strcpy_pgm2ram(buff, addr);
+    if(0 == strcmp(str, buff)){
+      if(i==0)return INVALID_SYMBOL; //str is null char
+      return i;
+    }
+  }
+  return INVALID_SYMBOL;
 }

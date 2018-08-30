@@ -16,44 +16,74 @@
 #include <string.h>
 #include "avr_access.h"
 #include "symbol.h"
+#include "alloc.h"
+
+static char** symbol_table = NULL;
+static uint8_t sym_tbl_cnt  = 0;
+static uint8_t sym_tbl_size = 0;
+
+void init_symbol_table(void){
+  sym_tbl_size = INIT_SYMBOL_TABLE_LEN;
+  symbol_table = mrbc_raw_alloc(sizeof(char*)*sym_tbl_size);
+}
 
 mrb_sym add_index(const char* str ){
-  return 0;
+  if(sym_tbl_cnt>=MAX_SYMBOL-1){
+    return INVALID_SYMBOL;
+  }
+  if(sym_tbl_cnt>=sym_tbl_size){
+    //extend table
+    sym_tbl_size++;
+    symbol_table = mrbc_raw_realloc(symbol_table, sizeof(char*)*sym_tbl_size);
+  }
+  symbol_table[sym_tbl_cnt] = mrbc_raw_alloc(strlen(str)+1);
+  strcpy(symbol_table[sym_tbl_cnt],str);
+  sym_tbl_cnt++;
 }
 
 mrb_sym search_index_dynamic(const char* str){
-  return 0;
+  int i;
+  for(i=0;i<sym_tbl_cnt;i++){
+    if(0 == strcmp(str, symbol_table[i])){
+      return i;
+    }
+  }
+  return INVALID_SYMBOL;
+}
+
+inline mrb_sym search_index(const char* str){
+  mrb_sym sym_id = search_index_static(str);
+  if(INVALID_SYMBOL!=sym_id) return sym_id;
+  
+  sym_id = search_index_dynamic(str);
+  if(INVALID_SYMBOL!=sym_id) return sym_id;
+
+  return INVALID_SYMBOL;
 }
 
 mrb_value mrbc_symbol_new(struct VM *vm, const char *str)
 {
   mrb_value ret = {.tt = MRB_TT_SYMBOL};
-  //TODO
-#if 0
-  uint16_t h = calc_hash(str);
-  mrb_sym sym_id = search_index(h, str);
-
-  if( sym_id >= 0 ) {
+  mrb_sym sym_id = search_index(str);
+  if(INVALID_SYMBOL!=sym_id){
     ret.i = sym_id;
-    return ret;		// already exist.
+    return ret;
   }
 
   // create symbol object dynamically.
   int size = strlen(str) + 1;
   char *buf = mrbc_raw_alloc(size);
-  if( buf == NULL ) return ret;		// ENOMEM raise?
+  if( buf == NULL ) return ret; 	// ENOMEM raise?
 
   memcpy(buf, str, size);
-  ret.i = add_index( h, buf );
-#endif
+  ret.i = add_index( buf );
   return ret;
 }
 
 mrb_sym str_to_symid(const char *str)
 {
-  //TODO
-  mrb_sym sym_id = search_index_dynamic(str);
-  if( sym_id >= 0 ) return sym_id;
+  mrb_sym sym_id = search_index(str);
+  if(INVALID_SYMBOL!=sym_id) return sym_id;
 
   return add_index( str );
 }

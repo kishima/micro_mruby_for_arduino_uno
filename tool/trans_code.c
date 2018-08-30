@@ -39,6 +39,13 @@ uint8_t add_index(char* str){
   return sym_tbl_cnt-1;
 }
 
+void init_symbol_tbl(){
+  int i;
+  for(i=0;i<sizeof(static_symbols)/sizeof(char*)/2;i++){
+    add_index(static_symbols[i*2]);
+  }
+}
+
 uint8_t str_to_symid(char* str){
   uint8_t sym_id = search_index(str);
   if( sym_id < MAX_SYMBOL-1 ) return (uint8_t)sym_id;
@@ -176,7 +183,7 @@ uint8_t analyze_irep_r(uint8_t* irep_count, mrb_irep* irep){
   for(i=0;i<slen;i++){
     int s = bin_to_uint16(sym_p); sym_p += 2; //symbol length without NULL char
     uint8_t sym_id = str_to_symid(sym_p);
-    printf("new symbol[%d]=%s\n",sym_id,sym_p);
+    printf("refer symbol(%s) id = %d\n",sym_p,sym_id);
     sym_p += s + 1;
     
     //output symbol_id
@@ -197,6 +204,7 @@ uint8_t analyze_irep_r(uint8_t* irep_count, mrb_irep* irep){
 
 
 void analyze_irep(FILE* f,mrb_irep* irep){
+  fprintf(f,"/* Irep table */\n");
   uint8_t irep_count=-1;
 
   analyze_irep_r(&irep_count,irep);
@@ -221,18 +229,31 @@ void analyze_irep(FILE* f,mrb_irep* irep){
 
 void output_symbol_tbl(FILE* f){
   
+  fprintf(f,"\n/* Symbol table */\n");
   fprintf(f,"const unsigned char %ssymbol_table_size PROGMEM = %d;\n",CODE_PREFIX,sym_tbl_cnt);
   
   fprintf(f,"const char* const %ssymbol_table[] PROGMEM = {\n",CODE_PREFIX);
+
+  fprintf(f,"  \"\",\n"); //index:0 => null character
   int i;
+  //for symbols in ireps
   for(i=0;i<sym_tbl_cnt;i++){
     fprintf(f,"  \"%s\",\n",sym_tbl[i]);
   }
   fprintf(f,"};\n");
+  fprintf(f,"\n");
+  fprintf(f,"/* Symbol IDs */\n");
+  //symbol ids for basic classes
+  for(i=0;i<sizeof(static_symbols)/sizeof(char*)/2;i++){
+    char* sname = strcmp(static_symbols[i*2+1],"") ? static_symbols[i*2+1] : static_symbols[i*2];
+    fprintf(f,"#define MRBC_SSYM_%s (%d) // %s\n",sname,i+1,static_symbols[i*2]);
+  }
+  
 }
 
 #define OUTPUT_FNAME "../src/code.h"
 void trans_code_mrb(mrb_vm* vm){
+  init_symbol_tbl();
   //open file
   FILE* f = stdout;
   if ((f = fopen(OUTPUT_FNAME, "w")) == NULL) {
@@ -240,9 +261,9 @@ void trans_code_mrb(mrb_vm* vm){
     exit(0);
   }
   printf("** Open %s **\n",OUTPUT_FNAME);
-  //analyze and output
+  //output Irep table
   analyze_irep(f,vm->irep);
-  
+  //output Symbol table
   output_symbol_tbl(f);
 
   //close

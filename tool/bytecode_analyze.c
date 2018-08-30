@@ -148,7 +148,7 @@ static mrb_irep * load_irep_1(mrb_vm *vm, const uint8_t **pos)
   }
 
   int i;
-  uint8_t *pool_head_p = p;
+  const uint8_t *pool_head_p = p;
   for( i = 0; i < irep->plen; i++ ) {
     int tt = *p++;
     int obj_size = bin_to_uint16(p);	p += 2;
