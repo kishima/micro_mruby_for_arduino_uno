@@ -5,6 +5,7 @@
 #include "./vm.h"
 #include "../src/micro_vm.h"
 #include "./static_symbols.h"
+#include "./static_procs.h"
 
 #define MAX_IREP 256
 #define MAX_OUTPUT_BUFF (1024*32)
@@ -18,7 +19,7 @@ static uint16_t irep_buff_length_list[MAX_IREP];
 static char sym_tbl[MAX_SYMBOL][MAX_SYMBOL_STR_LEN];
 static int sym_tbl_cnt = 0;
 
-uint8_t search_index(char* str){
+mrb_sym search_index(const char* str){
   int i;
   for(i=0;i<sym_tbl_cnt;i++){
     if(0 == strcmp(str, sym_tbl[i])){
@@ -28,7 +29,7 @@ uint8_t search_index(char* str){
   return MAX_SYMBOL-1;
 }
 
-uint8_t add_index(char* str){
+mrb_sym add_index(const char* str){
   if(sym_tbl_cnt>=MAX_SYMBOL-1){
     printf("symbol add_index error\n");
     return MAX_SYMBOL-1;
@@ -41,14 +42,15 @@ uint8_t add_index(char* str){
 
 void init_symbol_tbl(){
   int i;
+  add_index("");
   for(i=0;i<sizeof(static_symbols)/sizeof(char*)/2;i++){
     add_index(static_symbols[i*2]);
   }
 }
 
-uint8_t str_to_symid(char* str){
-  uint8_t sym_id = search_index(str);
-  if( sym_id < MAX_SYMBOL-1 ) return (uint8_t)sym_id;
+mrb_sym str_to_symid(const char* str){
+  const mrb_sym sym_id = search_index(str);
+  if( sym_id < MAX_SYMBOL-1 ) return sym_id;
   return add_index( str );
 }
 
@@ -182,7 +184,7 @@ uint8_t analyze_irep_r(uint8_t* irep_count, mrb_irep* irep){
   sym_p += 4; //slen
   for(i=0;i<slen;i++){
     int s = bin_to_uint16(sym_p); sym_p += 2; //symbol length without NULL char
-    uint8_t sym_id = str_to_symid(sym_p);
+    mrb_sym sym_id = str_to_symid(sym_p);
     printf("refer symbol(%s) id = %d\n",sym_p,sym_id);
     sym_p += s + 1;
     
@@ -233,8 +235,6 @@ void output_symbol_tbl(FILE* f){
   fprintf(f,"const unsigned char %ssymbol_table_size PROGMEM = %d;\n",CODE_PREFIX,sym_tbl_cnt);
   
   fprintf(f,"const char* const %ssymbol_table[] PROGMEM = {\n",CODE_PREFIX);
-
-  fprintf(f,"  \"\",\n"); //index:0 => null character
   int i;
   //for symbols in ireps
   for(i=0;i<sym_tbl_cnt;i++){
@@ -251,6 +251,144 @@ void output_symbol_tbl(FILE* f){
   
 }
 
+int class_name_to_tt(const char* class){
+  if(0==strcmp(class,"Object"))return MRB_TT_OBJECT;
+  if(0==strcmp(class,"String"))return MRB_TT_STRING;
+  if(0==strcmp(class,"Nil"))return MRB_TT_NIL;
+  if(0==strcmp(class,"Proc"))return MRB_TT_PROC;
+  if(0==strcmp(class,"False"))return MRB_TT_FALSE;
+  if(0==strcmp(class,"True"))return MRB_TT_TRUE;
+  if(0==strcmp(class,"Fixnum"))return MRB_TT_FIXNUM;
+  if(0==strcmp(class,"Symbol"))return MRB_TT_SYMBOL;
+  if(0==strcmp(class,"Array"))return MRB_TT_ARRAY;
+  if(0==strcmp(class,"Range"))return MRB_TT_RANGE;
+  if(0==strcmp(class,"Hash"))return MRB_TT_HASH;
+  return MRB_TT_EMPTY;
+}
+
+uint8_t find_class_table_top(const char* class){
+  int proc_tbl_cnt = sizeof(static_procs)/sizeof(char*)/3;
+  int i;
+  for(i=0;i<proc_tbl_cnt;i++){
+    if(0==strcmp(class,static_procs[i*3]))return i*3;
+  }
+  return 255;
+}
+
+void output_proc_switch_func(FILE* f, const char* class){
+  uint8_t top = find_class_table_top(class);
+  
+  char* sym_name;
+  //output c func
+  fprintf(f,"mrb_func_t find_c_funcs_%s(mrb_sym sym_id){\n",class);
+  fprintf(f,"  mrb_func_t func = 0;\n");
+  if(top!=255){
+    fprintf(f,"  switch(sym_id){\n");
+    int i=0;
+    while(0==strcmp(class,static_procs[top + i*3])){
+      mrb_sym sym_id = str_to_symid(static_procs[top + i*3+1]);
+      fprintf(f,"    case %d: func = %s; break;\n",sym_id,static_procs[top + i*3+2]);
+      i++;
+    }
+    fprintf(f,"    default: break;\n");
+    fprintf(f,"  }\n");
+  }
+  fprintf(f,"  return func;\n");
+  fprintf(f,"}\n");
+}
+
+uint8_t find_class_table_top2(const char* class){
+  int proc_tbl_cnt = sizeof(static_procs)/sizeof(char*)/3;
+  int i;
+  for(i=0;i<proc_tbl_cnt;i++){
+    if(0==strcmp(class,static_procs[i*3]))return i;
+  }
+  return 255;
+}
+
+void output_procs_class(FILE* f,const char* class){
+  fprintf(f,"\n");
+  int proc_tbl_cnt = sizeof(static_procs)/sizeof(char*)/3;
+  uint8_t top = find_class_table_top2(class);
+  fprintf(f,"const uint8_t %sproc_table_%s[] PROGMEM = {\n",CODE_PREFIX,class);
+  //{sym_id,method_id}
+  if(top<255){
+    int i=top;
+    while(0==strcmp(class,static_procs[i*3])){
+      fprintf(f,"  %d,%d,\n",str_to_symid(static_procs[i*3+1]), i+1);
+      i++;
+    }
+  }
+  fprintf(f,"  0\n");
+  fprintf(f,"};\n");
+}
+void output_procs(FILE* f){
+  int i;
+  for(i=0;i<sizeof(basic_class_names)/sizeof(char*);i++){
+    output_procs_class(f,basic_class_names[i]);
+  }
+}
+
+void output_proc_tbl(FILE* f){
+  int proc_tbl_cnt = sizeof(static_procs)/sizeof(char*)/3;
+  fprintf(f,"\n/* Proc table */\n");
+  fprintf(f,"const unsigned char %sproc_table_size PROGMEM = %d;\n",CODE_PREFIX,proc_tbl_cnt);
+  fprintf(f,"\n");
+  output_procs(f);
+
+  fprintf(f,"\n/* C function for Proc table */\n");
+  int i=0;
+  for(i=0;i<sizeof(basic_class_names)/sizeof(char*);i++){
+    output_proc_switch_func(f,basic_class_names[i]);
+  }
+  fprintf(f,"\n");
+  fprintf(f,"mrb_func_t find_c_funcs(mrb_vtype tt,mrb_sym sym_id){\n");
+  fprintf(f,"  mrb_func_t func = 0;\n");
+  fprintf(f,"  switch(tt){\n");
+  for(i=0;i<sizeof(basic_class_names)/sizeof(char*);i++){
+    switch(class_name_to_tt(basic_class_names[i])){
+    case MRB_TT_TRUE:
+      fprintf(f,"    case MRB_TT_TRUE:func = find_c_funcs_%s(sym_id); break;\n",basic_class_names[i]);
+      break;
+    case MRB_TT_FALSE:
+      fprintf(f,"    case MRB_TT_FALSE:func = find_c_funcs_%s(sym_id); break;\n",basic_class_names[i]);
+      break;
+    case MRB_TT_NIL:
+      fprintf(f,"    case MRB_TT_NIL:func = find_c_funcs_%s(sym_id); break;\n",basic_class_names[i]);
+      break;
+    case MRB_TT_FIXNUM:
+      fprintf(f,"    case MRB_TT_FIXNUM:func = find_c_funcs_%s(sym_id); break;\n",basic_class_names[i]);
+      break;
+    case MRB_TT_SYMBOL:
+      fprintf(f,"    case MRB_TT_SYMBOL:func = find_c_funcs_%s(sym_id); break;\n",basic_class_names[i]);
+      break;
+    case MRB_TT_OBJECT:
+      fprintf(f,"    case MRB_TT_OBJECT:func = find_c_funcs_%s(sym_id); break;\n",basic_class_names[i]);
+      break;
+    case MRB_TT_PROC:
+      fprintf(f,"    case MRB_TT_PROC:func = find_c_funcs_%s(sym_id); break;\n",basic_class_names[i]);
+      break;
+    case MRB_TT_ARRAY:
+      fprintf(f,"    case MRB_TT_ARRAY:func = find_c_funcs_%s(sym_id); break;\n",basic_class_names[i]);
+      break;
+    case MRB_TT_STRING:
+      fprintf(f,"    case MRB_TT_STRING:func = find_c_funcs_%s(sym_id); break;\n",basic_class_names[i]);
+      break;
+    case MRB_TT_RANGE:
+      fprintf(f,"    case MRB_TT_RANGE:func = find_c_funcs_%s(sym_id); break;\n",basic_class_names[i]);
+      break;
+    case MRB_TT_HASH:
+      //fprintf(f,"    case MRB_TT_HASH:func = find_c_funcs_%s(sym_id); break;\n",basic_class_names[i]);
+      break;
+    default:
+      break;
+    }
+  }
+  fprintf(f,"    default: break;\n");
+  fprintf(f,"  }\n");
+  fprintf(f,"}\n");
+}
+
 #define OUTPUT_FNAME "../src/code.h"
 void trans_code_mrb(mrb_vm* vm){
   init_symbol_tbl();
@@ -263,6 +401,8 @@ void trans_code_mrb(mrb_vm* vm){
   printf("** Open %s **\n",OUTPUT_FNAME);
   //output Irep table
   analyze_irep(f,vm->irep);
+  //output Proc table
+  output_proc_tbl(f);
   //output Symbol table
   output_symbol_tbl(f);
 

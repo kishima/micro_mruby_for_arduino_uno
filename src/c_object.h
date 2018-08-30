@@ -3,7 +3,10 @@
 
 struct VM;
 
-void mrbc_init_class_object(struct VM *vm);
+void mrbc_init_class_object();
+
+//C functions for static proc table
+void c_puts(mrb_mvm *vm, mrb_value v[], int argc);
 
 #endif
 

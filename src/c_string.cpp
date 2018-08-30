@@ -791,38 +791,36 @@ static void c_string_to_sym(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! initialize
 */
-void mrbc_init_class_string(struct VM *vm)
+void mrbc_init_class_string()
 {
-  mrbc_class_string = mrbc_define_class(vm, "String", mrbc_class_object);
+  mrbc_class_string = mrbc_define_class("String", mrbc_class_object);
 
-  mrbc_define_method(vm, mrbc_class_string, "+",	c_string_add);
-  mrbc_define_method(vm, mrbc_class_string, "===",	c_string_eql);
-  mrbc_define_method(vm, mrbc_class_string, "size",	c_string_size);
-  mrbc_define_method(vm, mrbc_class_string, "length",	c_string_size);
-  mrbc_define_method(vm, mrbc_class_string, "to_i",	c_string_to_i);
-  mrbc_define_method(vm, mrbc_class_string, "to_s",	c_ineffect);
-  mrbc_define_method(vm, mrbc_class_string, "<<",	c_string_append);
-  mrbc_define_method(vm, mrbc_class_string, "[]",	c_string_slice);
-  mrbc_define_method(vm, mrbc_class_string, "[]=",	c_string_insert);
-  mrbc_define_method(vm, mrbc_class_string, "chomp",	c_string_chomp);
-  mrbc_define_method(vm, mrbc_class_string, "chomp!",	c_string_chomp_self);
-  mrbc_define_method(vm, mrbc_class_string, "dup",	c_string_dup);
-  mrbc_define_method(vm, mrbc_class_string, "index",	c_string_index);
-  mrbc_define_method(vm, mrbc_class_string, "ord",	c_string_ord);
-  mrbc_define_method(vm, mrbc_class_string, "lstrip",	c_string_lstrip);
-  mrbc_define_method(vm, mrbc_class_string, "lstrip!",	c_string_lstrip_self);
-  mrbc_define_method(vm, mrbc_class_string, "rstrip",	c_string_rstrip);
-  mrbc_define_method(vm, mrbc_class_string, "rstrip!",	c_string_rstrip_self);
-  mrbc_define_method(vm, mrbc_class_string, "strip",	c_string_strip);
-  mrbc_define_method(vm, mrbc_class_string, "strip!",	c_string_strip_self);
-  mrbc_define_method(vm, mrbc_class_string, "to_sym",	c_string_to_sym);
-  mrbc_define_method(vm, mrbc_class_string, "intern",	c_string_to_sym);
-
-#if MRBC_USE_FLOAT
-  mrbc_define_method(vm, mrbc_class_string, "to_f",	c_string_to_f);
-#endif
-
-  mrbc_define_method(vm, mrbc_class_object, "sprintf",	c_object_sprintf);
+  mrbc_define_method(mrbc_class_string, "+",	c_string_add);
+  mrbc_define_method(mrbc_class_string, "===",	c_string_eql);
+  mrbc_define_method(mrbc_class_string, "size",	c_string_size);
+  mrbc_define_method(mrbc_class_string, "length",	c_string_size);
+  mrbc_define_method(mrbc_class_string, "to_i",	c_string_to_i);
+  mrbc_define_method(mrbc_class_string, "to_s",	c_ineffect);
+  mrbc_define_method(mrbc_class_string, "<<",	c_string_append);
+  mrbc_define_method(mrbc_class_string, "[]",	c_string_slice);
+  mrbc_define_method(mrbc_class_string, "[]=",	c_string_insert);
+  mrbc_define_method(mrbc_class_string, "chomp",	c_string_chomp);
+  mrbc_define_method(mrbc_class_string, "chomp!",	c_string_chomp_self);
+  mrbc_define_method(mrbc_class_string, "dup",	c_string_dup);
+  mrbc_define_method(mrbc_class_string, "index",	c_string_index);
+  mrbc_define_method(mrbc_class_string, "ord",	c_string_ord);
+  /*
+  mrbc_define_method(mrbc_class_string, "lstrip",	c_string_lstrip);
+  mrbc_define_method(mrbc_class_string, "lstrip!",	c_string_lstrip_self);
+  mrbc_define_method(mrbc_class_string, "rstrip",	c_string_rstrip);
+  mrbc_define_method(mrbc_class_string, "rstrip!",	c_string_rstrip_self);
+  mrbc_define_method(mrbc_class_string, "strip",	c_string_strip);
+  mrbc_define_method(mrbc_class_string, "strip!",	c_string_strip_self);
+  */
+  mrbc_define_method(mrbc_class_string, "to_sym",	c_string_to_sym);
+  mrbc_define_method(mrbc_class_string, "intern",	c_string_to_sym);
+                     
+  mrbc_define_method(mrbc_class_object, "sprintf",	c_object_sprintf);
 }
 
 

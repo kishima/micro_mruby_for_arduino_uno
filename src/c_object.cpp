@@ -158,7 +158,7 @@ int mrbc_puts_sub(mrb_value *v)
   return ret;
 }
 
-static void c_puts(mrb_mvm *vm, mrb_value v[], int argc)
+void c_puts(mrb_mvm *vm, mrb_value v[], int argc)
 {
   int i;
   for( i = 1; i <= argc; i++ ) {
@@ -167,22 +167,22 @@ static void c_puts(mrb_mvm *vm, mrb_value v[], int argc)
 }
 
 
-void mrbc_init_class_object(struct VM *vm){
+void mrbc_init_class_object(){
   DEBUG_FPRINTLN("define Object class");
   // Class
-  mrbc_class_object = mrbc_define_class(vm,"Object", 0);
+  mrbc_class_object = mrbc_define_class("Object", 0);
   // Methods
-  mrbc_define_method(vm, mrbc_class_object, "puts", c_puts);
+  mrbc_define_method(mrbc_class_object, "puts", c_puts);
   //TODO
 #if 0
-  mrbc_define_method(vm, mrbc_class_object, "!", c_object_not);
-  mrbc_define_method(vm, mrbc_class_object, "!=", c_object_neq);
-  mrbc_define_method(vm, mrbc_class_object, "<=>", c_object_compare);
-  mrbc_define_method(vm, mrbc_class_object, "to_s", c_object_to_s);
-  mrbc_define_method(vm, mrbc_class_object, "new", c_object_new);
-  mrbc_define_method(vm, mrbc_class_object, "class", c_object_class);
-  mrbc_define_method(vm, mrbc_class_object, "attr_reader", c_object_attr_reader);
-  mrbc_define_method(vm, mrbc_class_object, "attr_accessor", c_object_attr_accessor);
+  mrbc_define_method(mrbc_class_object, "!", c_object_not);
+  mrbc_define_method(mrbc_class_object, "!=", c_object_neq);
+  mrbc_define_method(mrbc_class_object, "<=>", c_object_compare);
+  mrbc_define_method(mrbc_class_object, "to_s", c_object_to_s);
+  mrbc_define_method(mrbc_class_object, "new", c_object_new);
+  mrbc_define_method(mrbc_class_object, "class", c_object_class);
+  mrbc_define_method(mrbc_class_object, "attr_reader", c_object_attr_reader);
+  mrbc_define_method(mrbc_class_object, "attr_accessor", c_object_attr_accessor);
 #endif
   
 }

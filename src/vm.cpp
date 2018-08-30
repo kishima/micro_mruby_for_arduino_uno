@@ -85,7 +85,19 @@ void mrbc_pop_callinfo(mrb_mvm *vm)
 inline static int op_nop( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
   DEBUG_FPRINTLN("[OP_NOP]");
-	return 0;
+  return 0;
+}
+
+inline static int op_move( mrb_mvm *vm, uint32_t code, mrb_value *regs )
+{
+  int ra = GETARG_A(code);
+  int rb = GETARG_B(code);
+
+  mrbc_release(&regs[ra]);
+  mrbc_dup(&regs[rb]);
+  regs[ra] = regs[rb];
+
+  return 0;
 }
 
 inline static int op_loadself( mrb_mvm *vm, uint32_t code, mrb_value *regs )
@@ -102,7 +114,6 @@ inline static int op_loadself( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
   DEBUG_FPRINTLN("[OP_SEND]");
-#if 1
   int ra = GETARG_A(code);
   int rb = GETARG_B(code);  // index of method sym
   int rc = GETARG_C(code);  // number of params
@@ -128,7 +139,7 @@ inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
   }
 
   mrb_sym sym_id = get_irep_symbol_id(vm->pc_irep,rb);
-  mrb_proc *m = find_method(vm, recv, sym_id);
+  mrb_proc *m = find_method(recv, sym_id);
   
   if( m == 0 ) {
     cprintf("MethodNotFound %d\n", sym_id);
@@ -157,7 +168,39 @@ inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
   
   // new regs
   vm->current_regs += ra;
-#endif
+  return 0;
+}
+
+inline static int op_enter( mrb_mvm *vm, uint32_t code, mrb_value *regs )
+{
+  mrb_callinfo *callinfo = vm->callinfo + vm->callinfo_top - 1;
+  uint32_t enter_param = GETARG_Ax(code);
+  int def_args = (enter_param >> 13) & 0x1f;  // default args
+  int args = (enter_param >> 18) & 0x1f;      // given args
+  if( def_args > 0 ){
+    vm->pc += callinfo->n_args - args;
+  }
+  return 0;
+}
+
+inline static int op_return( mrb_mvm *vm, uint32_t code, mrb_value *regs )
+{
+  // return value
+  int ra = GETARG_A(code);
+  mrb_value v = regs[ra];
+  mrbc_dup(&v);
+  mrbc_release(&regs[0]);
+  regs[0] = v;
+  //  }
+  // restore irep,pc,regs
+  vm->callinfo_top--;
+  mrb_callinfo *callinfo = vm->callinfo + vm->callinfo_top;
+  mrb_value *regs_ptr = vm->current_regs;
+  vm->current_regs = callinfo->current_regs;
+
+  vm->pc_irep = callinfo->pc_irep;
+  vm->pc = callinfo->pc;
+  vm->target_class = callinfo->target_class;
   return 0;
 }
 
@@ -180,6 +223,79 @@ inline static int op_string( mrb_mvm *vm, uint32_t code, mrb_value *regs )
   regs[ra] = value;
   return 0;
 }
+
+inline static int op_lambda( mrb_mvm *vm, uint32_t code, mrb_value *regs )
+{
+  int ra = GETARG_A(code);
+  int rb = GETARG_Bz(code);      // sequence position in irep list
+  // int c = GETARG_C(code);    // TODO: Add flags support for OP_LAMBDA
+  mrb_proc *proc = mrbc_rproc_alloc("()");
+
+  proc->c_func = 0;
+  //proc->irep = vm->pc_irep->reps[rb];
+  proc->irep = get_irep_irep_id(vm->pc_irep,rb);
+
+  mrbc_release(&regs[ra]);
+  regs[ra].tt = MRB_TT_PROC;
+  regs[ra].proc = proc;
+
+  return 0;
+}
+
+inline static int op_method( mrb_mvm *vm, uint32_t code, mrb_value *regs )
+{
+  int ra = GETARG_A(code);
+  int rb = GETARG_B(code);
+  mrb_proc *proc = regs[ra+1].proc;
+
+  if( regs[ra].tt == MRB_TT_CLASS ) {
+    mrb_class *cls = regs[ra].cls;
+
+    // sym_id : method name
+    mrb_irep_id cur_irep = vm->pc_irep;
+    mrb_sym sym_id = get_irep_symbol_id(cur_irep,rb);
+
+    // check same name method
+    mrb_proc *p = cls->procs;
+    void *pp = &cls->procs;
+    while( p != NULL ) {
+      if( p->sym_id == sym_id ) break;
+      pp = &p->next;
+      p = p->next;
+    }
+    if( p ) {
+      // found it.
+      *((mrb_proc**)pp) = p->next;
+      if( !p->c_func ) {
+        mrb_value v = {.tt = MRB_TT_PROC};
+        v.proc = p;
+        mrbc_release(&v);
+      }
+    }
+
+    // add proc to class
+    proc->c_func = 0;
+    proc->sym_id = sym_id;
+    proc->next = cls->procs;
+    cls->procs = proc;
+
+    regs[ra+1].tt = MRB_TT_EMPTY;
+  }
+
+  return 0;
+}
+
+inline static int op_tclass( mrb_mvm *vm, uint32_t code, mrb_value *regs )
+{
+  int ra = GETARG_A(code);
+
+  mrbc_release(&regs[ra]);
+  regs[ra].tt = MRB_TT_CLASS;
+  regs[ra].cls = vm->target_class;
+
+  return 0;
+}
+
 
 inline static int op_stop( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
@@ -214,7 +330,7 @@ void run_vm(void){
 
     switch( opcode ) {
     case OP_NOP:        ret = op_nop       (vm, code, regs); break;
-//		  case OP_MOVE:       ret = op_move      (vm, code, regs); break;
+		  case OP_MOVE:       ret = op_move      (vm, code, regs); break;
 //		  case OP_LOADL:      ret = op_loadl     (vm, code, regs); break;
 //		  case OP_LOADI:      ret = op_loadi     (vm, code, regs); break;
 //		  case OP_LOADSYM:    ret = op_loadsym   (vm, code, regs); break;
@@ -236,8 +352,8 @@ void run_vm(void){
     case OP_SEND:       ret = op_send      (vm, code, regs); break;
 //		  case OP_SENDB:      ret = op_send      (vm, code, regs); break;  // reuse
 //		  case OP_CALL:       ret = op_call      (vm, code, regs); break;
-//		  case OP_ENTER:      ret = op_enter     (vm, code, regs); break;
-//		  case OP_RETURN:     ret = op_return    (vm, code, regs); break;
+		  case OP_ENTER:      ret = op_enter     (vm, code, regs); break;
+		  case OP_RETURN:     ret = op_return    (vm, code, regs); break;
 //		  case OP_BLKPUSH:    ret = op_blkpush   (vm, code, regs); break;
 //		  case OP_ADD:        ret = op_add       (vm, code, regs); break;
 //		  case OP_ADDI:       ret = op_addi      (vm, code, regs); break;
@@ -254,12 +370,12 @@ void run_vm(void){
 		  case OP_STRING:     ret = op_string    (vm, code, regs); break;
 //		  case OP_STRCAT:     ret = op_strcat    (vm, code, regs); break;
 //		  case OP_HASH:       ret = op_hash      (vm, code, regs); break;
-//		  case OP_LAMBDA:     ret = op_lambda    (vm, code, regs); break;
+		  case OP_LAMBDA:     ret = op_lambda    (vm, code, regs); break;
 //		  case OP_RANGE:      ret = op_range     (vm, code, regs); break;
 //		  case OP_CLASS:      ret = op_class     (vm, code, regs); break;
 //		  case OP_EXEC:       ret = op_exec      (vm, code, regs); break;
-//		  case OP_METHOD:     ret = op_method    (vm, code, regs); break;
-//		  case OP_TCLASS:     ret = op_tclass    (vm, code, regs); break;
+		  case OP_METHOD:     ret = op_method    (vm, code, regs); break;
+		  case OP_TCLASS:     ret = op_tclass    (vm, code, regs); break;
     case OP_STOP:       ret = op_stop      (vm, code, regs); break;
     case OP_ABORT:      ret = op_stop      (vm, code, regs); break;  // reuse
     default:

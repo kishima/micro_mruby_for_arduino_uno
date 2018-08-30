@@ -19,9 +19,7 @@
 #include "micro_vm.h"
 #include "value.h"
 #include "alloc.h"
-//#include "keyvalue.h"
 #include "class.h"
-//#include "static.h"
 #include "symbol.h"
 #include "c_string.h"
 //#include "c_range.h"
@@ -39,15 +37,12 @@ mrb_object *mrbc_obj_alloc(struct VM *vm, mrb_vtype tt)
 }
 
 
-mrb_proc *mrbc_rproc_alloc(struct VM *vm, const char *name)
+mrb_proc *mrbc_rproc_alloc(const char *name)
 {
-  mrb_proc *ptr = (mrb_proc *)mrbc_alloc(vm, sizeof(mrb_proc));
+  mrb_proc *ptr = (mrb_proc *)mrbc_raw_alloc(sizeof(mrb_proc));
   if( ptr ) {
     ptr->ref_count = 1;
     ptr->sym_id = str_to_symid(name);
-#ifdef MRBC_DEBUG
-    ptr->names = name;	// for debug; delete soon.
-#endif
     ptr->next = 0;
   }
   return ptr;

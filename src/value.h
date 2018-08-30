@@ -134,6 +134,11 @@ typedef struct RProc {
   };
 } mrb_proc;
 
+//static proc
+typedef struct StaticRProc {
+  mrb_sym sym_id;   //1byte
+  mrb_func_t func;  //2byte
+} mrb_sproc;
 
 
 // for C call
@@ -154,7 +159,7 @@ typedef struct RProc {
 
 
 mrb_object *mrbc_obj_alloc(struct VM *vm, mrb_vtype tt);
-mrb_proc *mrbc_rproc_alloc(struct VM *vm, const char *name);
+mrb_proc *mrbc_rproc_alloc(const char *name);
 int mrbc_compare(const mrb_value *v1, const mrb_value *v2);
 void mrbc_dup(mrb_value *v);
 void mrbc_release(mrb_value *v);

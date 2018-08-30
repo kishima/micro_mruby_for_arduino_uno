@@ -7,6 +7,8 @@
 void init_hal(){
 #ifdef MMRUBY_DEBUG_ENABLE
   Serial.begin(SERIAL_FOR_STDIO_BAUDRATE);
+  delay(1000);
+  DEBUG_FPRINTLN("Debug Serial enabled");
 #endif
 }
 

@@ -17,28 +17,36 @@
 #include "avr_access.h"
 #include "symbol.h"
 #include "alloc.h"
+#include "debug.h"
 
 static char** symbol_table = NULL;
 static uint8_t sym_tbl_cnt  = 0;
 static uint8_t sym_tbl_size = 0;
+static uint8_t static_sym_tbl_size = 0;
 
 void init_symbol_table(void){
+  //static table
+  static_sym_tbl_size = get_max_static_symbol_id();
+  //dynamic table
   sym_tbl_size = INIT_SYMBOL_TABLE_LEN;
   symbol_table = mrbc_raw_alloc(sizeof(char*)*sym_tbl_size);
 }
 
 mrb_sym add_index(const char* str ){
-  if(sym_tbl_cnt>=MAX_SYMBOL-1){
+  if(sym_tbl_cnt+static_sym_tbl_size>=MAX_SYMBOL-1){ //Total table size must be less than MAX_SYMBOL
     return INVALID_SYMBOL;
   }
+  DEBUG_FPRINTLN("Add New Sym");
   if(sym_tbl_cnt>=sym_tbl_size){
     //extend table
     sym_tbl_size++;
+    DEBUG_FPRINTLN("Extend SymTbl!");
     symbol_table = mrbc_raw_realloc(symbol_table, sizeof(char*)*sym_tbl_size);
   }
   symbol_table[sym_tbl_cnt] = mrbc_raw_alloc(strlen(str)+1);
   strcpy(symbol_table[sym_tbl_cnt],str);
   sym_tbl_cnt++;
+  return sym_tbl_cnt-1;
 }
 
 mrb_sym search_index_dynamic(const char* str){
@@ -56,7 +64,7 @@ inline mrb_sym search_index(const char* str){
   if(INVALID_SYMBOL!=sym_id) return sym_id;
   
   sym_id = search_index_dynamic(str);
-  if(INVALID_SYMBOL!=sym_id) return sym_id;
+  if(INVALID_SYMBOL!=sym_id) return sym_id + static_sym_tbl_size;
 
   return INVALID_SYMBOL;
 }

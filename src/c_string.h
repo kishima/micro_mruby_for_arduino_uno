@@ -44,7 +44,12 @@ int mrbc_string_append(mrb_value *s1, mrb_value *s2);
 int mrbc_string_index(mrb_value *src, mrb_value *pattern, int offset);
 int mrbc_string_strip(mrb_value *src, int mode);
 int mrbc_string_chomp(mrb_value *src);
-void mrbc_init_class_string(struct VM *vm);
+void mrbc_init_class_string();
+
+//C functions for static proc table
+void c_string_add(mrb_mvm *vm, mrb_value v[], int argc);
+void c_string_eql(mrb_mvm *vm, mrb_value v[], int argc);
+void c_string_size(mrb_mvm *vm, mrb_value v[], int argc);
 
 
 //================================================================

@@ -11,6 +11,7 @@
 #include "symbol.h"
 #include "console.h"
 #include "debug.h"
+#include "avr_access.h"
 
 /* Class Tree */
 mrb_class *mrbc_class_object;
@@ -33,39 +34,42 @@ void c_ineffect(mrb_mvm *vm, mrb_value v[], int argc)
 }
 
 /* Util Function */
-mrb_class *find_class_by_object(struct VM *vm, mrb_object *obj)
+mrb_class *find_class_by_object(mrb_object *obj)
 {
   mrb_class *cls;
 
   switch( obj->tt ) {
-  case MRB_TT_TRUE:	cls = mrbc_class_true;		break;
-  case MRB_TT_FALSE:	cls = mrbc_class_false; 	break;
-  case MRB_TT_NIL:	cls = mrbc_class_nil;		break;
-  case MRB_TT_FIXNUM:	cls = mrbc_class_fixnum;	break;
-  //case MRB_TT_FLOAT:	cls = mrbc_class_float; 	break;
-  case MRB_TT_SYMBOL:	cls = mrbc_class_symbol;	break;
-
-  case MRB_TT_OBJECT:	cls = obj->instance->cls;       break;
-  case MRB_TT_CLASS:    cls = obj->cls;                 break;
-  case MRB_TT_PROC:	cls = mrbc_class_proc;		break;
-  case MRB_TT_ARRAY:	cls = mrbc_class_array; 	break;
-  case MRB_TT_STRING:	cls = mrbc_class_string;	break;
-  case MRB_TT_RANGE:	cls = mrbc_class_range; 	break;
-  //TODO
+  case MRB_TT_TRUE:   cls = mrbc_class_true;    break;
+  case MRB_TT_FALSE:  cls = mrbc_class_false;   break;
+  case MRB_TT_NIL:    cls = mrbc_class_nil;     break;
+  case MRB_TT_FIXNUM: cls = mrbc_class_fixnum;  break;
+  case MRB_TT_SYMBOL: cls = mrbc_class_symbol;  break;
+  case MRB_TT_OBJECT: cls = obj->instance->cls; break;
+  case MRB_TT_CLASS:  cls = obj->cls;           break;
+  case MRB_TT_PROC:   cls = mrbc_class_proc;    break;
+  case MRB_TT_ARRAY:  cls = mrbc_class_array;   break;
+  case MRB_TT_STRING: cls = mrbc_class_string;  break;
+  case MRB_TT_RANGE:  cls = mrbc_class_range;   break;
+  //TODO?
   //case MRB_TT_HASH:	cls = mrbc_class_hash;		break;
-
-  default:		cls = mrbc_class_object;	break;
+  default: cls = mrbc_class_object; break;
   }
 
   return cls;
 }
 
-mrb_proc *find_method(mrb_mvm *vm, mrb_value recv, mrb_sym sym_id)
+mrb_proc *find_method(mrb_value recv, mrb_sym sym_id)
 {
-  mrb_class *cls = find_class_by_object(vm, &recv);
+  mrb_class *cls = find_class_by_object(&recv);
 
+  //For basic class
+  //search static procs from FROM.
+  mrb_proc *proc = find_static_procs(recv.tt,sym_id);
+  if(0!=proc)return proc; //proc is static
+
+  //dynaic procs
   while( cls != 0 ) {
-    mrb_proc *proc = cls->procs;
+    cls->procs;
     while( proc != 0 ) {
       if( proc->sym_id == sym_id ) {
         return proc;
@@ -77,7 +81,7 @@ mrb_proc *find_method(mrb_mvm *vm, mrb_value recv, mrb_sym sym_id)
   return 0;
 }
 
-mrb_class * mrbc_define_class(mrb_mvm* vm, const char *name, mrb_class *super)
+mrb_class * mrbc_define_class(const char *name, mrb_class *super)
 {
   DEBUG_FPRINTLN("define class");
   mrb_class *cls;
@@ -107,10 +111,10 @@ mrb_class * mrbc_define_class(mrb_mvm* vm, const char *name, mrb_class *super)
   }
 }
 
-void mrbc_define_method(mrb_mvm *vm, mrb_class *cls, const char *name, mrb_func_t cfunc)
+void mrbc_define_method(mrb_class *cls, const char *name, mrb_func_t cfunc)
 {
   DEBUG_FPRINTLN("define method");
-  mrb_proc *rproc = mrbc_rproc_alloc(vm, name);
+  mrb_proc *rproc = mrbc_rproc_alloc(name);
   rproc->c_func = 1;  // c-func
   rproc->next = cls->procs;
   cls->procs = rproc;
@@ -119,8 +123,8 @@ void mrbc_define_method(mrb_mvm *vm, mrb_class *cls, const char *name, mrb_func_
 
 void mrbc_init_class(void)
 {
-  mrbc_init_class_object(0);
-  mrbc_init_class_string(0);
+  mrbc_init_class_object();
+  mrbc_init_class_string();
   //TODO
 #if 0
   mrbc_init_class_nil(0);
