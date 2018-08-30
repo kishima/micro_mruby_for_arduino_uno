@@ -90,6 +90,7 @@ inline static int op_nop( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 
 inline static int op_move( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
+  DEBUG_FPRINTLN("[OP_MOVE]");
   int ra = GETARG_A(code);
   int rb = GETARG_B(code);
 
@@ -184,6 +185,7 @@ inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 
 inline static int op_enter( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
+  DEBUG_FPRINTLN("[OP_ENTER]");
   mrb_callinfo *callinfo = vm->callinfo + vm->callinfo_top - 1;
   uint32_t enter_param = GETARG_Ax(code);
   int def_args = (enter_param >> 13) & 0x1f;  // default args
@@ -196,6 +198,7 @@ inline static int op_enter( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 
 inline static int op_return( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
+  DEBUG_FPRINTLN("[OP_RETURN]");
   // return value
   int ra = GETARG_A(code);
   mrb_value v = regs[ra];
@@ -237,6 +240,7 @@ inline static int op_string( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 
 inline static int op_lambda( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
+  DEBUG_FPRINTLN("[OP_LAMBDA]");
   int ra = GETARG_A(code);
   int rb = GETARG_Bz(code);      // sequence position in irep list
   // int c = GETARG_C(code);    // TODO: Add flags support for OP_LAMBDA
@@ -255,6 +259,7 @@ inline static int op_lambda( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 
 inline static int op_method( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
+  DEBUG_FPRINTLN("[OP_METHOD]");
   int ra = GETARG_A(code);
   int rb = GETARG_B(code);
   mrb_proc *proc = regs[ra+1].proc;
@@ -298,6 +303,7 @@ inline static int op_method( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 
 inline static int op_tclass( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 {
+  DEBUG_FPRINTLN("[OP_CLASS]");
   int ra = GETARG_A(code);
 
   mrbc_release(&regs[ra]);
