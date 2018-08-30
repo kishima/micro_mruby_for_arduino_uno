@@ -4,6 +4,7 @@
 #include <string.h>
 #include "./vm.h"
 #include "../src/micro_vm.h"
+#include "./static_symbols.h"
 
 #define MAX_IREP 256
 #define MAX_OUTPUT_BUFF (1024*32)

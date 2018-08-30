@@ -14,8 +14,16 @@
 #include "vm_config.h"
 #include <stdint.h>
 #include <string.h>
+#include "avr_access.h"
 #include "symbol.h"
 
+mrb_sym add_index(const char* str ){
+  return 0;
+}
+
+mrb_sym search_index_dynamic(const char* str){
+  return 0;
+}
 
 mrb_value mrbc_symbol_new(struct VM *vm, const char *str)
 {
@@ -41,17 +49,12 @@ mrb_value mrbc_symbol_new(struct VM *vm, const char *str)
   return ret;
 }
 
-
 mrb_sym str_to_symid(const char *str)
 {
   //TODO
-#if 0
-  uint16_t h = calc_hash(str);
-  mrb_sym sym_id = search_index(h, str);
+  mrb_sym sym_id = search_index_dynamic(str);
   if( sym_id >= 0 ) return sym_id;
 
-  return add_index( h, str );
-#endif
-  return 0;
+  return add_index( str );
 }
 

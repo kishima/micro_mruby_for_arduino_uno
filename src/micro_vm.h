@@ -6,6 +6,8 @@
 
 #ifndef MMRUBY_TRANSCODE
 #include "value.h"
+#else
+typedef uint8_t mrb_irep_id;
 #endif
 
 //Micro Irep
