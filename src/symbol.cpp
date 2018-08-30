@@ -29,7 +29,7 @@ void init_symbol_table(void){
   static_sym_tbl_size = get_max_static_symbol_id();
   //dynamic table
   sym_tbl_size = INIT_SYMBOL_TABLE_LEN;
-  symbol_table = mrbc_raw_alloc(sizeof(char*)*sym_tbl_size);
+  symbol_table = (char**)mrbc_raw_alloc( sizeof(char*) * sym_tbl_size );
 }
 
 mrb_sym add_index(const char* str ){
@@ -41,9 +41,9 @@ mrb_sym add_index(const char* str ){
     //extend table
     sym_tbl_size++;
     DEBUG_FPRINTLN("Extend SymTbl!");
-    symbol_table = mrbc_raw_realloc(symbol_table, sizeof(char*)*sym_tbl_size);
+    symbol_table = (char**)mrbc_raw_realloc(symbol_table, sizeof(char*)*sym_tbl_size);
   }
-  symbol_table[sym_tbl_cnt] = mrbc_raw_alloc(strlen(str)+1);
+  symbol_table[sym_tbl_cnt] = (char*)mrbc_raw_alloc(strlen(str)+1);
   strcpy(symbol_table[sym_tbl_cnt],str);
   sym_tbl_cnt++;
   return sym_tbl_cnt-1;
@@ -80,7 +80,7 @@ mrb_value mrbc_symbol_new(struct VM *vm, const char *str)
 
   // create symbol object dynamically.
   int size = strlen(str) + 1;
-  char *buf = mrbc_raw_alloc(size);
+  char *buf = (char*)mrbc_raw_alloc(size);
   if( buf == NULL ) return ret; 	// ENOMEM raise?
 
   memcpy(buf, str, size);

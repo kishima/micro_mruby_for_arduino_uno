@@ -315,7 +315,7 @@ int mrbc_string_chomp(mrb_value *src)
 //================================================================
 /*! (method) +
 */
-static void c_string_add(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_add(mrb_mvm *vm, mrb_value v[], int argc)
 {
   if( v[1].tt != MRB_TT_STRING ) {
     //console_print( "Not support STRING + Other\n" );
@@ -331,7 +331,7 @@ static void c_string_add(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) ===
 */
-static void c_string_eql(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_eql(mrb_mvm *vm, mrb_value v[], int argc)
 {
   int result = 0;
   mrb_string *h1 = v[0].string;
@@ -356,7 +356,7 @@ static void c_string_eql(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) size, length
 */
-static void c_string_size(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_size(mrb_mvm *vm, mrb_value v[], int argc)
 {
   int32_t size = mrbc_string_size(&v[0]);
 
@@ -368,7 +368,7 @@ static void c_string_size(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) to_i
 */
-static void c_string_to_i(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_to_i(mrb_mvm *vm, mrb_value v[], int argc)
 {
   int base = 10;
   if( argc ) {
@@ -387,7 +387,7 @@ static void c_string_to_i(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) <<
 */
-static void c_string_append(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_append(mrb_mvm *vm, mrb_value v[], int argc)
 {
   if( !mrbc_string_append( &v[0], &v[1] ) ) {
     // raise ? ENOMEM
@@ -398,7 +398,7 @@ static void c_string_append(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) []
 */
-static void c_string_slice(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_slice(mrb_mvm *vm, mrb_value v[], int argc)
 {
   mrb_value *v1 = &v[1];
   mrb_value *v2 = &v[2];
@@ -466,7 +466,7 @@ static void c_string_slice(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) []=
 */
-static void c_string_insert(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_insert(mrb_mvm *vm, mrb_value v[], int argc)
 {
   int nth;
   int len;
@@ -524,7 +524,7 @@ static void c_string_insert(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) chomp
 */
-static void c_string_chomp(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_chomp(mrb_mvm *vm, mrb_value v[], int argc)
 {
   mrb_value ret = mrbc_string_dup(vm, &v[0]);
 
@@ -537,7 +537,7 @@ static void c_string_chomp(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) chomp!
 */
-static void c_string_chomp_self(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_chomp_self(mrb_mvm *vm, mrb_value v[], int argc)
 {
   if( mrbc_string_chomp(&v[0]) == 0 ) {
     SET_RETURN( mrb_nil_value() );
@@ -548,7 +548,7 @@ static void c_string_chomp_self(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) dup
 */
-static void c_string_dup(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_dup(mrb_mvm *vm, mrb_value v[], int argc)
 {
   mrb_value ret = mrbc_string_dup(vm, &v[0]);
 
@@ -559,7 +559,7 @@ static void c_string_dup(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) index
 */
-static void c_string_index(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_index(mrb_mvm *vm, mrb_value v[], int argc)
 {
   int index;
   int offset;
@@ -590,7 +590,7 @@ static void c_string_index(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) ord
 */
-static void c_string_ord(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_ord(mrb_mvm *vm, mrb_value v[], int argc)
 {
   int i = mrbc_string_cstr(v)[0];
 
@@ -601,7 +601,7 @@ static void c_string_ord(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) sprintf
 */
-static void c_object_sprintf(mrb_mvm *vm, mrb_value v[], int argc)
+void c_object_sprintf(mrb_mvm *vm, mrb_value v[], int argc)
 {
   static const int BUF_INC_STEP = 32;	// bytes.
 
@@ -707,7 +707,7 @@ static void c_object_sprintf(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) lstrip
 */
-static void c_string_lstrip(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_lstrip(mrb_mvm *vm, mrb_value v[], int argc)
 {
   mrb_value ret = mrbc_string_dup(vm, &v[0]);
 
@@ -720,7 +720,7 @@ static void c_string_lstrip(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) lstrip!
 */
-static void c_string_lstrip_self(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_lstrip_self(mrb_mvm *vm, mrb_value v[], int argc)
 {
   if( mrbc_string_strip(&v[0], 0x01) == 0 ) {	// 1: left side only
     SET_RETURN( mrb_nil_value() );
@@ -731,7 +731,7 @@ static void c_string_lstrip_self(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) rstrip
 */
-static void c_string_rstrip(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_rstrip(mrb_mvm *vm, mrb_value v[], int argc)
 {
   mrb_value ret = mrbc_string_dup(vm, &v[0]);
 
@@ -744,7 +744,7 @@ static void c_string_rstrip(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) rstrip!
 */
-static void c_string_rstrip_self(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_rstrip_self(mrb_mvm *vm, mrb_value v[], int argc)
 {
   if( mrbc_string_strip(&v[0], 0x02) == 0 ) {	// 2: right side only
     SET_RETURN( mrb_nil_value() );
@@ -755,7 +755,7 @@ static void c_string_rstrip_self(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) strip
 */
-static void c_string_strip(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_strip(mrb_mvm *vm, mrb_value v[], int argc)
 {
   mrb_value ret = mrbc_string_dup(vm, &v[0]);
 
@@ -768,7 +768,7 @@ static void c_string_strip(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) strip!
 */
-static void c_string_strip_self(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_strip_self(mrb_mvm *vm, mrb_value v[], int argc)
 {
   if( mrbc_string_strip(&v[0], 0x03) == 0 ) {	// 3: left and right
     SET_RETURN( mrb_nil_value() );
@@ -779,7 +779,7 @@ static void c_string_strip_self(mrb_mvm *vm, mrb_value v[], int argc)
 //================================================================
 /*! (method) to_sym
 */
-static void c_string_to_sym(mrb_mvm *vm, mrb_value v[], int argc)
+void c_string_to_sym(mrb_mvm *vm, mrb_value v[], int argc)
 {
   mrb_value ret = mrbc_symbol_new(vm, mrbc_string_cstr(&v[0]));
 

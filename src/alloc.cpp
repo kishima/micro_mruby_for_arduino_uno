@@ -21,7 +21,11 @@
 static int16_t alloc_mem_size=0;
 #endif
 
-void * mrbc_alloc(const mrb_mvm *vm, unsigned int size)
+void* mrbc_alloc(const mrb_mvm *vm, unsigned int size)
+{
+  return mrbc_raw_alloc(size);
+}
+void * mrbc_raw_alloc(unsigned int size)
 {
   void *p = malloc(size);
 #ifdef MMRUBY_DEBUG_ENABLE
@@ -32,7 +36,12 @@ void * mrbc_alloc(const mrb_mvm *vm, unsigned int size)
   return p;
 }
 
-void * mrbc_realloc(const mrb_mvm *vm, void *ptr, unsigned int size)
+void* mrbc_realloc(const mrb_mvm *vm, void *ptr, unsigned int size)
+{
+  return mrbc_raw_realloc(ptr,size);
+}
+
+void* mrbc_raw_realloc(void *ptr, unsigned int size)
 {
 #ifdef MMRUBY_DEBUG_ENABLE
  alloc_mem_size += size;
@@ -44,9 +53,13 @@ void * mrbc_realloc(const mrb_mvm *vm, void *ptr, unsigned int size)
 
 void mrbc_free(const mrb_mvm *vm, void *ptr)
 {
+  mrbc_raw_free(ptr);
+}
+
+void mrbc_raw_free(void *ptr)
+{
 #ifdef MMRUBY_DEBUG_ENABLE
   cprintf(">>FREE  %p\n",ptr);
 #endif
   free(ptr);
 }
-

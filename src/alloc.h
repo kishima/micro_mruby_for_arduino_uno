@@ -18,14 +18,12 @@
 
 #include "micro_vm.h"
 
-void *mrbc_alloc(const mrb_mvm *vm, unsigned int size);
-void *mrbc_realloc(const mrb_mvm *vm, void *ptr, unsigned int size);
-void mrbc_free(const mrb_mvm *vm, void *ptr);
+void* mrbc_alloc(const mrb_mvm *vm, unsigned int size);
+void* mrbc_realloc(const mrb_mvm *vm, void *ptr, unsigned int size);
+void  mrbc_free(const mrb_mvm *vm, void *ptr);
 
-#ifndef mrbc_raw_alloc
- #define mrbc_raw_alloc(size)       mrbc_alloc(NULL,size)
- #define mrbc_raw_realloc(ptr,size) mrbc_realloc(NULL,ptr,size)
- #define mrbc_raw_free(ptr)         mrbc_free(NULL,ptr)
-#endif
+void* mrbc_raw_alloc(unsigned int size);
+void* mrbc_raw_realloc(void* ptr,unsigned int size);
+void  mrbc_raw_free(void* ptr);
 
 #endif
