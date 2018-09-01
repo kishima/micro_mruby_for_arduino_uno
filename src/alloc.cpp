@@ -17,7 +17,9 @@
 #include "console.h"
 #include "alloc.h"
 
-#ifdef MMRUBY_DEBUG_ENABLE
+//#define CHECK_MEM_USAGE
+
+#ifdef CHECK_MEM_USAGE
 static int16_t alloc_mem_size=0;
 #endif
 
@@ -28,9 +30,9 @@ void* mrbc_alloc(const mrb_mvm *vm, unsigned int size)
 void * mrbc_raw_alloc(unsigned int size)
 {
   void *p = malloc(size);
-#ifdef MMRUBY_DEBUG_ENABLE
+#ifdef CHECK_MEM_USAGE
  alloc_mem_size += size;
- //cprintf(">>ALLOC %p:%d\n",p,size);
+ cprintf(">>ALLOC %p:%d\n",p,size);
  cprintf("alloc total=%d\n",alloc_mem_size);
 #endif
   return p;
@@ -43,7 +45,7 @@ void* mrbc_realloc(const mrb_mvm *vm, void *ptr, unsigned int size)
 
 void* mrbc_raw_realloc(void *ptr, unsigned int size)
 {
-#ifdef MMRUBY_DEBUG_ENABLE
+#ifdef CHECK_MEM_USAGE
  alloc_mem_size += size;
  cprintf(">>REALC %p:%d\n",ptr,size);
  cprintf("alloc total=%d\n",alloc_mem_size);
@@ -58,7 +60,7 @@ void mrbc_free(const mrb_mvm *vm, void *ptr)
 
 void mrbc_raw_free(void *ptr)
 {
-#ifdef MMRUBY_DEBUG_ENABLE
+#ifdef CHECK_MEM_USAGE
   cprintf(">>FREE  %p\n",ptr);
 #endif
   free(ptr);

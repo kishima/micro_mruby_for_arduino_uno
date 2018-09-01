@@ -62,11 +62,9 @@ mrb_sym search_index_dynamic(const char* str){
 inline mrb_sym search_index(const char* str){
   mrb_sym sym_id = search_index_static(str);
   if(INVALID_SYMBOL!=sym_id) return sym_id;
-  DEBUG_FPRINTLN("(1)");
   
   sym_id = search_index_dynamic(str);
   if(INVALID_SYMBOL!=sym_id) return sym_id + static_sym_tbl_size;
-  DEBUG_FPRINTLN("(2)");
 
   return INVALID_SYMBOL;
 }

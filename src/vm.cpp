@@ -157,7 +157,7 @@ inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
     }
     return 0;
   }
-  
+
   // m is C func
   if( m->c_func ) {
     m->func(vm, regs + ra, rc);
@@ -224,11 +224,10 @@ inline static int op_string( mrb_mvm *vm, uint32_t code, mrb_value *regs )
   int ra = GETARG_A(code);
   int rb = GETARG_Bx(code);
 
-  //mrb_object *pool_obj = vm->pc_irep->pools[rb]; 
   uint8_t str[MAX_LITERAL_LEN];
   uint16_t obj_size=0;
   get_irep_pool(str,&obj_size,vm->pc_irep,rb);
-  cprintf("Len=%u Str=%s\n",obj_size,str);
+  //cprintf("Len=%u Str=%s\n",obj_size,str);
   
   mrb_value value = mrbc_string_new(vm, str, obj_size);
   if( value.string == NULL ) return -1;
