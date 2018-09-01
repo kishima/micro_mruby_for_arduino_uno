@@ -168,7 +168,6 @@ void c_puts(mrb_mvm *vm, mrb_value v[], int argc)
 
 
 void mrbc_init_class_object(){
-  DEBUG_FPRINTLN("-- define Object class");
   // Class
   mrbc_class_object = mrbc_define_class("Object", 0);
   // Methods

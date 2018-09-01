@@ -793,7 +793,6 @@ void c_string_to_sym(mrb_mvm *vm, mrb_value v[], int argc)
 */
 void mrbc_init_class_string()
 {
-  DEBUG_FPRINTLN("-- define String class");
   mrbc_class_string = mrbc_define_class("String", mrbc_class_object);
 
 #if 0

@@ -30,4 +30,5 @@ static char* static_symbols[] = {
    "to_sym","",
    "intern","",
    "sprintf","",
+   "()","ESC_LAMBDA",
 };

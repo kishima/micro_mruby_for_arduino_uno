@@ -7,6 +7,7 @@
 #include "alloc.h"
 #include "c_object.h"
 #include "c_string.h"
+#include "ext.h"
 #include "global.h"
 #include "symbol.h"
 #include "console.h"
@@ -124,6 +125,8 @@ void mrbc_init_class(void)
 {
   mrbc_init_class_object();
   mrbc_init_class_string();
+  mrbc_init_class_arduino();
+
   //TODO
 #if 0
   mrbc_init_class_nil(0);

@@ -6,15 +6,17 @@
 #include "value.h"
 #include "micro_vm.h"
 #include "opcode.h"
-
-#include "c_object.h"
-#include "c_string.h"
-
 #include "console.h"
 #include "symbol.h"
 #include "debug.h"
 
+//external functions
+#include "c_object.h"
+#include "c_string.h"
+#include "c_string.h"
+#include "ext_arduino.h"
 
+//dynaic code generation
 #include "code.h"
 
 #include "avr_access.h"
