@@ -11,6 +11,7 @@ static char* static_symbols[] = {
    "Array","",
    "Range","",
    "Hash","",
+   "Arduino","",
  //method
    "puts","",
    "+","ESC_01",

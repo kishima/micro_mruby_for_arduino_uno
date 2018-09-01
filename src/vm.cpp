@@ -21,9 +21,6 @@
 static mrb_mvm vm_body;
 
 void init_vm(void){
-  // init VM env
-  init_symbol_table();
-
   mrb_mvm* vm = &vm_body;
   //initialize VM
   memset(vm,0,sizeof(mrb_mvm));

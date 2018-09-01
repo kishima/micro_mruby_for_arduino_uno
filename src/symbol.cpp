@@ -17,6 +17,7 @@
 #include "avr_access.h"
 #include "symbol.h"
 #include "alloc.h"
+#include "console.h"
 #include "debug.h"
 
 static char** symbol_table = NULL;
@@ -36,7 +37,7 @@ mrb_sym add_index(const char* str ){
   if(sym_tbl_cnt+static_sym_tbl_size>=MAX_SYMBOL-1){ //Total table size must be less than MAX_SYMBOL
     return INVALID_SYMBOL;
   }
-  DEBUG_FPRINTLN("! Add New Sym");
+
   if(sym_tbl_cnt>=sym_tbl_size){
     //extend table
     sym_tbl_size++;
