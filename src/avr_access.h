@@ -15,6 +15,7 @@ uint8_t get_max_static_symbol_id();
 
 //for symbol
 mrb_sym search_index_static(const char* str);
+void copy_symbol_str(char* buff, mrb_sym sym_id);
 
 //for class
 mrb_proc *find_static_procs(mrb_sym class_sym_id, mrb_sym sym_id);

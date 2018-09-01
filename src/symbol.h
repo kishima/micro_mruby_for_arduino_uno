@@ -27,5 +27,10 @@ mrb_sym str_to_symid(const char *str);
 const char *symid_to_str(mrb_sym sym_id);
 void mrbc_init_class_symbol(struct VM *vm);
 
+static inline const char * mrbc_symbol_cstr(const mrb_value *v)
+{
+  return symid_to_str(v->i);
+}
+
 #endif
 

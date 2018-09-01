@@ -25,6 +25,8 @@ static uint8_t sym_tbl_cnt  = 0;
 static uint8_t sym_tbl_size = 0;
 static uint8_t static_sym_tbl_size = 0;
 
+static char global_sym_name_buff[MAX_SYMBOL_LEN];
+
 void init_symbol_table(void){
   //static table
   static_sym_tbl_size = get_max_static_symbol_id();
@@ -95,5 +97,17 @@ mrb_sym str_to_symid(const char *str)
   if(INVALID_SYMBOL!=sym_id) return sym_id;
 
   return add_index( str );
+}
+
+
+const char * symid_to_str(mrb_sym sym_id)
+{
+  const char * str;
+  if( sym_id < 0 ) return NULL;
+  if( sym_id < static_sym_tbl_size){
+     copy_symbol_str(global_sym_name_buff,sym_id);
+     return global_sym_name_buff;
+  }
+  return symbol_table[sym_id-static_sym_tbl_size];
 }
 

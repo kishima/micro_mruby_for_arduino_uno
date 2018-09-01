@@ -1,6 +1,6 @@
 #include "vm_config.h"
 #include "value.h"
-//#include "static.h"
+#include "debug.h"
 #include "global.h"
 
 typedef enum {
@@ -83,6 +83,7 @@ mrb_value global_object_get(mrb_sym sym_id)
     mrbc_dup( &mrbc_global[index].obj );
     return mrbc_global[index].obj;
   } else {
+    DEBUG_FPRINTLN("OBJ NOTFOUND");
     return mrb_nil_value();
   }
 }

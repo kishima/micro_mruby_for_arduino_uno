@@ -34,7 +34,7 @@
   @param  len	source length
   @return 	string object
 */
-mrb_value mrbc_string_new(struct VM *vm, const void *src, int len)
+mrb_value mrbc_string_new(const void *src, int len)
 {
   mrb_value value = {.tt = MRB_TT_STRING};
 
@@ -42,10 +42,10 @@ mrb_value mrbc_string_new(struct VM *vm, const void *src, int len)
     Allocate handle and string buffer.
   */
   mrb_string *h;
-  h = (mrb_string *)mrbc_alloc(vm, sizeof(mrb_string));
+  h = (mrb_string *)mrbc_raw_alloc(sizeof(mrb_string));
   if( !h ) return value;		// ENOMEM
 
-  uint8_t *str = (uint8_t*)mrbc_alloc(vm, len+1);
+  uint8_t *str = (uint8_t*)mrbc_raw_alloc(len+1);
   if( !str ) {				// ENOMEM
     mrbc_raw_free( h );
     return value;
@@ -78,9 +78,9 @@ mrb_value mrbc_string_new(struct VM *vm, const void *src, int len)
   @param  src	source string or NULL
   @return 	string object
 */
-mrb_value mrbc_string_new_cstr(struct VM *vm, const char *src)
+mrb_value mrbc_string_new_cstr(const char *src)
 {
-  return mrbc_string_new(vm, src, (src ? strlen(src) : 0));
+  return mrbc_string_new(src, (src ? strlen(src) : 0));
 }
 
 
@@ -92,7 +92,7 @@ mrb_value mrbc_string_new_cstr(struct VM *vm, const char *src)
   @param  len	length
   @return 	string object
 */
-mrb_value mrbc_string_new_alloc(struct VM *vm, void *buf, int len)
+mrb_value mrbc_string_new_alloc(void *buf, int len)
 {
   mrb_value value = {.tt = MRB_TT_STRING};
 
@@ -100,7 +100,7 @@ mrb_value mrbc_string_new_alloc(struct VM *vm, void *buf, int len)
     Allocate handle
   */
   mrb_string *h;
-  h = (mrb_string *)mrbc_alloc(vm, sizeof(mrb_string));
+  h = (mrb_string *)mrbc_raw_alloc(sizeof(mrb_string));
   if( !h ) return value;		// ENOMEM
 
   h->ref_count = 1;
@@ -144,11 +144,11 @@ void mrbc_string_clear_vm_id(mrb_value *str)
   @param  s2	pointer to target value 2
   @return	new string as s1 + s2
 */
-mrb_value mrbc_string_dup(struct VM *vm, mrb_value *s1)
+mrb_value mrbc_string_dup(mrb_value *s1)
 {
   mrb_string *h1 = s1->string;
 
-  mrb_value value = mrbc_string_new(vm, NULL, h1->size);
+  mrb_value value = mrbc_string_new(NULL, h1->size);
   if( value.string == NULL ) return value;		// ENOMEM
 
   memcpy( value.string->data, h1->data, h1->size + 1 );
@@ -165,12 +165,12 @@ mrb_value mrbc_string_dup(struct VM *vm, mrb_value *s1)
   @param  s2	pointer to target value 2
   @return	new string as s1 + s2
 */
-mrb_value mrbc_string_add(struct VM *vm, mrb_value *s1, mrb_value *s2)
+mrb_value mrbc_string_add(mrb_value *s1, mrb_value *s2)
 {
   mrb_string *h1 = s1->string;
   mrb_string *h2 = s2->string;
 
-  mrb_value value = mrbc_string_new(vm, NULL, h1->size + h2->size);
+  mrb_value value = mrbc_string_new(NULL, h1->size + h2->size);
   if( value.string == NULL ) return value;		// ENOMEM
 
   memcpy( value.string->data,            h1->data, h1->size );
@@ -322,7 +322,7 @@ void c_string_add(mrb_mvm *vm, mrb_value v[], int argc)
     return;
   }
 
-  mrb_value value = mrbc_string_add(vm, &v[0], &v[1]);
+  mrb_value value = mrbc_string_add( &v[0], &v[1]);
   SET_RETURN(value);
 }
 
@@ -422,7 +422,7 @@ void c_string_slice(mrb_mvm *vm, mrb_value v[], int argc)
     }
     if( ch < 0 ) goto RETURN_NIL;
 
-    mrb_value value = mrbc_string_new(vm, NULL, 1);
+    mrb_value value = mrbc_string_new(NULL, 1);
     if( !value.string ) goto RETURN_NIL;		// ENOMEM
 
     value.string->data[0] = ch;
@@ -444,7 +444,7 @@ void c_string_slice(mrb_mvm *vm, mrb_value v[], int argc)
     // min( v2->i, (len-idx) )
     if( rlen < 0 ) goto RETURN_NIL;
 
-    mrb_value value = mrbc_string_new(vm, v->string->data + idx, rlen);
+    mrb_value value = mrbc_string_new(v->string->data + idx, rlen);
     if( !value.string ) goto RETURN_NIL;		// ENOMEM
 
     SET_RETURN(value);
@@ -526,7 +526,7 @@ void c_string_insert(mrb_mvm *vm, mrb_value v[], int argc)
 */
 void c_string_chomp(mrb_mvm *vm, mrb_value v[], int argc)
 {
-  mrb_value ret = mrbc_string_dup(vm, &v[0]);
+  mrb_value ret = mrbc_string_dup(&v[0]);
 
   mrbc_string_chomp(&ret);
 
@@ -550,7 +550,7 @@ void c_string_chomp_self(mrb_mvm *vm, mrb_value v[], int argc)
 */
 void c_string_dup(mrb_mvm *vm, mrb_value v[], int argc)
 {
-  mrb_value ret = mrbc_string_dup(vm, &v[0]);
+  mrb_value ret = mrbc_string_dup( &v[0]);
 
   SET_RETURN(ret);
 }
@@ -698,7 +698,7 @@ void c_object_sprintf(mrb_mvm *vm, mrb_value v[], int argc)
   buflen = mrbc_printf_len( &pf );
   mrbc_realloc(vm, pf.buf, buflen+1);	// shrink suitable size.
 
-  mrb_value value = mrbc_string_new_alloc( vm, pf.buf, buflen );
+  mrb_value value = mrbc_string_new_alloc( pf.buf, buflen );
 
   SET_RETURN(value);
 }
@@ -709,7 +709,7 @@ void c_object_sprintf(mrb_mvm *vm, mrb_value v[], int argc)
 */
 void c_string_lstrip(mrb_mvm *vm, mrb_value v[], int argc)
 {
-  mrb_value ret = mrbc_string_dup(vm, &v[0]);
+  mrb_value ret = mrbc_string_dup(&v[0]);
 
   mrbc_string_strip(&ret, 0x01);	// 1: left side only
 
@@ -733,7 +733,7 @@ void c_string_lstrip_self(mrb_mvm *vm, mrb_value v[], int argc)
 */
 void c_string_rstrip(mrb_mvm *vm, mrb_value v[], int argc)
 {
-  mrb_value ret = mrbc_string_dup(vm, &v[0]);
+  mrb_value ret = mrbc_string_dup(&v[0]);
 
   mrbc_string_strip(&ret, 0x02);	// 2: right side only
 
@@ -757,7 +757,7 @@ void c_string_rstrip_self(mrb_mvm *vm, mrb_value v[], int argc)
 */
 void c_string_strip(mrb_mvm *vm, mrb_value v[], int argc)
 {
-  mrb_value ret = mrbc_string_dup(vm, &v[0]);
+  mrb_value ret = mrbc_string_dup(&v[0]);
 
   mrbc_string_strip(&ret, 0x03);	// 3: left and right
 

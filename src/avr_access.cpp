@@ -6,13 +6,14 @@
 #include "value.h"
 #include "micro_vm.h"
 #include "opcode.h"
+#include "class.h"
 #include "console.h"
 #include "symbol.h"
 #include "debug.h"
 
 //external functions
 #include "c_object.h"
-#include "c_string.h"
+#include "c_fixnum.h"
 #include "c_string.h"
 #include "ext_arduino.h"
 
@@ -104,6 +105,11 @@ mrb_sym search_index_static(const char *str){
   return INVALID_SYMBOL;
 }
 
+void copy_symbol_str(char* buff, mrb_sym sym_id){
+  short addr = pgm_read_word_near(&mmruby_code_symbol_table[sym_id]);
+  strcpy_pgm2ram(buff, addr);
+}
+
 short find_func_no_by_sym_id(const uint8_t* addr,mrb_sym target_sym_id){
   int i=0;
   uint8_t v=0;
@@ -153,8 +159,11 @@ mrb_proc *find_static_procs(mrb_sym class_sym_id, mrb_sym sym_id){
   case MRBC_SSYM_Range:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_Range , sym_id);
     break;
+  case MRBC_SSYM_Arduino:
+    addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_Arduino , sym_id);
+    break;
   default:
-    addr=-1;
+    addr=0;
     break;
   }
 

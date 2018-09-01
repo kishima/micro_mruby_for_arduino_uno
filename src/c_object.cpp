@@ -167,6 +167,226 @@ void c_puts(mrb_mvm *vm, mrb_value v[], int argc)
 }
 
 
+void c_object_not(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  SET_FALSE_RETURN();
+}
+
+// Object !=
+void c_object_neq(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  int result = mrbc_compare(v, v+1);
+
+  if( result ) {
+    SET_TRUE_RETURN();
+  } else {
+    SET_FALSE_RETURN();
+  }
+}
+
+
+//================================================================
+/*! (operator) <=>
+ */
+void c_object_compare(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  int result = mrbc_compare( &v[0], &v[1] );
+
+  SET_INT_RETURN(result);
+}
+
+
+// Object#class
+void c_object_class(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  mrb_class *cls = find_class_by_object( v );
+  mrb_value value = mrbc_string_new_cstr(symid_to_str(cls->sym_id) );
+  SET_RETURN(value);
+}
+
+// Object.new
+void c_object_new(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  //TODO
+  #if 0
+  mrb_value new_obj = mrbc_instance_new(vm, v->cls, 0);
+
+  char syms[]="______initialize";
+  mrb_sym sym_id = str_to_symid(&syms[6]);
+  mrb_proc *m = find_method(vm, v[0], sym_id);
+  if( m==0 ){
+    SET_RETURN(new_obj);
+    return;
+  }
+  uint32_to_bin( 1,(uint8_t*)&syms[0]);
+  uint16_to_bin(10,(uint8_t*)&syms[4]);
+
+  uint32_t code[2] = {
+    MKOPCODE(OP_SEND) | MKARG_A(0) | MKARG_B(0) | MKARG_C(argc),
+    MKOPCODE(OP_ABORT)
+    };
+   mrb_irep irep = {
+    0,     // nlocals
+    0,     // nregs
+    0,     // rlen
+    2,     // ilen
+    0,     // plen
+    (uint8_t *)code,   // iseq
+    NULL,  // pools
+    (uint8_t *)syms,  // ptr_to_sym
+    NULL,  // reps
+  };
+
+  mrbc_release(&v[0]);
+  v[0] = new_obj;
+  mrbc_dup(&new_obj);
+
+  mrb_irep *org_pc_irep = vm->pc_irep;
+  uint16_t  org_pc = vm->pc;
+  mrb_value* org_regs = vm->current_regs;
+  vm->pc = 0;
+  vm->pc_irep = &irep;
+  vm->current_regs = v;
+
+  mrbc_vm_run(vm);
+
+  vm->pc = org_pc;
+  vm->pc_irep = org_pc_irep;
+  vm->current_regs = org_regs;
+
+  SET_RETURN(new_obj);
+  #endif
+}
+
+//================================================================
+/*! (method) instance variable getter
+ */
+void c_object_getiv(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  //TODO
+  #if 0
+  const char *name = mrbc_get_callee_name(vm);
+  mrb_sym sym_id = str_to_symid( name );
+  mrb_value ret = mrbc_instance_getiv(&v[0], sym_id);
+
+  SET_RETURN(ret);
+  #endif
+}
+
+
+//================================================================
+/*! (method) instance variable setter
+ */
+void c_object_setiv(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  //TODO
+  #if 0
+  const char *name = mrbc_get_callee_name(vm);
+
+  char *namebuf = mrbc_alloc(vm, strlen(name));
+  if( !namebuf ) return;
+  strcpy(namebuf, name);
+  namebuf[strlen(name)-1] = '\0';	// delete '='
+  mrb_sym sym_id = str_to_symid(namebuf);
+
+  mrbc_instance_setiv(&v[0], sym_id, &v[1]);
+  mrbc_raw_free(namebuf);
+  #endif
+}
+
+
+
+//================================================================
+/*! (class method) access method 'attr_reader'
+ */
+void c_object_attr_reader(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  int i;
+  for( i = 1; i <= argc; i++ ) {
+    if( v[i].tt != MRB_TT_SYMBOL ) continue;	// TypeError raise?
+
+    // define reader method
+    const char *name = mrbc_symbol_cstr(&v[i]);
+    mrbc_define_method(v[0].cls, name, c_object_getiv);
+  }
+}
+
+
+//================================================================
+/*! (class method) access method 'attr_accessor'
+ */
+void c_object_attr_accessor(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  int i;
+  for( i = 1; i <= argc; i++ ) {
+    if( v[i].tt != MRB_TT_SYMBOL ) continue;	// TypeError raise?
+
+    // define reader method
+    const char *name = mrbc_symbol_cstr(&v[i]);
+    mrbc_define_method(v[0].cls, name, c_object_getiv);
+
+    // make string "....=" and define writer method.
+    char *namebuf = (char*)mrbc_alloc(vm, strlen(name)+2);
+    if( !namebuf ) return;
+    strcpy(namebuf, name);
+    strcat(namebuf, "=");
+    mrbc_symbol_new(vm, namebuf);
+    mrbc_define_method(v[0].cls, namebuf, c_object_setiv);
+    mrbc_raw_free(namebuf);
+  }
+}
+
+//================================================================
+/*! (method) to_s
+ */
+void c_object_to_s(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  // (NOTE) address part assumes 32bit. but enough for this.
+
+  char buf[32];
+  mrb_printf pf;
+
+  mrbc_printf_init( &pf, buf, sizeof(buf), "#<%s:%08x>" );
+  while( mrbc_printf_main( &pf ) > 0 ) {
+    switch(pf.fmt.type) {
+    case 's':
+      mrbc_printf_str( &pf, symid_to_str(v->instance->cls->sym_id), ' ' );
+      break;
+    case 'x':
+      mrbc_printf_int( &pf, (uintptr_t)v->instance, 16 );
+      break;
+    }
+  }
+  mrbc_printf_end( &pf );
+
+  SET_RETURN( mrbc_string_new_cstr( buf ) );
+}
+
+#ifdef MRBC_DEBUG
+static void c_object_instance_methods(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  // TODO: check argument.
+
+  // temporary code for operation check.
+  console_printf( "[" );
+  int flag_first = 1;
+
+  mrb_class *cls = find_class_by_object( vm, v );
+  mrb_proc *proc = cls->procs;
+  while( proc ) {
+    console_printf( "%s:%s", (flag_first ? "" : ", "),
+		    symid_to_str(proc->sym_id) );
+    flag_first = 0;
+    proc = proc->next;
+  }
+
+  console_printf( "]" );
+
+  SET_NIL_RETURN();
+}
+#endif
+
+
 void mrbc_init_class_object(){
   // Class
   mrbc_class_object = mrbc_define_class("Object", 0);

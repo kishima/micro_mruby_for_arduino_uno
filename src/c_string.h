@@ -33,13 +33,13 @@ typedef struct RString {
 
 struct VM;
 
-mrb_value mrbc_string_new(struct VM *vm, const void *src, int len);
-mrb_value mrbc_string_new_cstr(struct VM *vm, const char *src);
-mrb_value mrbc_string_new_alloc(struct VM *vm, void *buf, int len);
+mrb_value mrbc_string_new(const void *src, int len);
+mrb_value mrbc_string_new_cstr(const char *src);
+mrb_value mrbc_string_new_alloc(void *buf, int len);
 void mrbc_string_delete(mrb_value *str);
 void mrbc_string_clear_vm_id(mrb_value *str);
-mrb_value mrbc_string_dup(struct VM *vm, mrb_value *s1);
-mrb_value mrbc_string_add(struct VM *vm, mrb_value *s1, mrb_value *s2);
+mrb_value mrbc_string_dup(mrb_value *s1);
+mrb_value mrbc_string_add(mrb_value *s1, mrb_value *s2);
 int mrbc_string_append(mrb_value *s1, mrb_value *s2);
 int mrbc_string_index(mrb_value *src, mrb_value *pattern, int offset);
 int mrbc_string_strip(mrb_value *src, int mode);

@@ -49,15 +49,16 @@ static uint8_t sym_to_siglevel(mrb_sym sym_in){
 
 void class_arduino_pin_mode(mrb_mvm *vm, mrb_value *v, int argc )
 {
-	int pin = 0;
+    DEBUG_FPRINT("PIN MODE"); 
+ 	int pin = 0;
 	if(GET_TT_ARG(1) == MRB_TT_FIXNUM){
 		pin = GET_INT_ARG(1);
 	}else{
 		SET_FALSE_RETURN();
 		return;
 	}
-	//DEBUG_PRINT("pin=");
-	//DEBUG_PRINTLN(pin);
+	DEBUG_FPRINT("pin=");
+	DEBUG_PRINTLN(pin);
 	
 	mrb_sym sym_in = 0;
 	if(GET_TT_ARG(2) == MRB_TT_SYMBOL){
@@ -69,8 +70,8 @@ void class_arduino_pin_mode(mrb_mvm *vm, mrb_value *v, int argc )
 		return;
 	}
 	uint8_t mode = sym_to_pinmode( sym_in );
-	//DEBUG_PRINT("mode=");
-	//DEBUG_PRINTLN(mode);
+	DEBUG_FPRINT("mode=");
+	DEBUG_PRINTLN(mode);
 	
 	pinMode(pin,mode);
 	SET_TRUE_RETURN();

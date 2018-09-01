@@ -81,6 +81,46 @@ void mrbc_pop_callinfo(mrb_mvm *vm)
 //--------------------------------
 #define SHOW_OPCODE
 #ifdef SHOW_OPCODE
+inline void show_register(mrb_value v){
+  switch(v.tt){
+    case MRB_TT_HANDLE: DEBUG_PRINT("HANDLE"); break;
+    case MRB_TT_EMPTY: DEBUG_PRINT("EMPTY"); break;
+    case MRB_TT_NIL: DEBUG_PRINT("NIL"); break;
+    case MRB_TT_FALSE: DEBUG_PRINT("FALSE"); break;
+    case MRB_TT_TRUE: DEBUG_PRINT("TRUE"); break;
+    case MRB_TT_FIXNUM:
+      DEBUG_PRINT("FIXNUM"); 
+      cprintf(":%d",v.i);
+      break;
+    case MRB_TT_FLOAT: DEBUG_PRINT("FLOAT"); break;
+    case MRB_TT_SYMBOL: 
+      DEBUG_PRINT("SYMBOL"); 
+      cprintf(":%d",v.i);
+      break;
+    case MRB_TT_CLASS: 
+      DEBUG_PRINT("CLASS"); 
+      cprintf(":%d",v.cls->sym_id);
+      break;
+    case MRB_TT_OBJECT: DEBUG_PRINT("OBJECT"); break;
+    case MRB_TT_PROC: DEBUG_PRINT("PROC"); break;
+    case MRB_TT_ARRAY: DEBUG_PRINT("ARRAY"); break;
+    case MRB_TT_STRING:
+      DEBUG_PRINT("STRING"); 
+      cprintf(":%s",v.str);
+      break;
+    case MRB_TT_RANGE: DEBUG_PRINT("RANGE"); break;
+    case MRB_TT_HASH: DEBUG_PRINT("HASH"); break;
+    default:DEBUG_PRINT("?"); break;
+  }
+  DEBUG_PRINT("\n");
+}
+void show_registers(mrb_value* v){
+  int i ;
+  for(i=0;i<8;i++){
+    cprintf("  REG[%d]:",i);
+    show_register(v[i]);
+  }
+}
 void show_opcode_name(mrb_mvm *vm,uint32_t opcode){
   switch( opcode ) {
   case OP_NOP:        DEBUG_FPRINTLN("[OP_NOP]"); break;
@@ -136,6 +176,7 @@ void show_opcode_name(mrb_mvm *vm,uint32_t opcode){
     DEBUG_FPRINTLN("[UNKNOWN]");
     break;
   }
+  show_registers(vm->current_regs);
 }
 #endif
 
@@ -412,6 +453,7 @@ inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
     break;
   }
 
+  DEBUG_FPRINTLN("find medhod");delay(500);
   mrb_sym sym_id = get_irep_symbol_id(vm->pc_irep,rb);
   mrb_proc *m = find_method(recv, sym_id);
   
@@ -422,6 +464,7 @@ inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
   
   if(IS_PGM(m)){
     mrb_func_t func = find_c_funcs(m);
+    cprintf("pgm %d %p\n",m,func);delay(500);
     func(vm, regs + ra, rc);
     int release_reg = ra+rc+1;
     while( release_reg <= bidx ) {
@@ -744,7 +787,7 @@ inline static int op_string( mrb_mvm *vm, uint32_t code, mrb_value *regs )
   get_irep_pool(str,&obj_size,vm->pc_irep,rb);
   //cprintf("Len=%u Str=%s\n",obj_size,str);
   
-  mrb_value value = mrbc_string_new(vm, str, obj_size);
+  mrb_value value = mrbc_string_new(str, obj_size);
   if( value.string == NULL ) return -1;
   
   mrbc_release(&regs[ra]);
@@ -769,7 +812,7 @@ inline static int op_strcat( mrb_mvm *vm, uint32_t code, mrb_value *regs )
     m->func(vm, regs+rb, 0);
   }
 
-  mrb_value v = mrbc_string_add(vm, &regs[ra], &regs[rb]);
+  mrb_value v = mrbc_string_add(&regs[ra], &regs[rb]);
   mrbc_release(&regs[ra]);
   regs[ra] = v;
   return 0;
