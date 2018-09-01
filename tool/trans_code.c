@@ -48,10 +48,30 @@ void init_symbol_tbl(){
   }
 }
 
+static char* check_offset(const char* str){
+  //skip variable prefix
+  int offset = 0;
+  int c=0;
+  while(1){
+    char ch = *(str+c);
+    if('\0' == ch ) break;
+    if(ch=='@' || ch=='$' || ch==':' ){
+      //
+    }else{
+      offset = c;
+      break;
+    }
+    c++;
+  }
+  return str+offset;
+}
+
 mrb_sym str_to_symid(const char* str){
-  const mrb_sym sym_id = search_index(str);
+  const char* str_offset = check_offset(str);
+  printf("to_symid %s\n",str_offset);
+  const mrb_sym sym_id = search_index(str_offset);
   if( sym_id < MAX_SYMBOL-1 ) return sym_id;
-  return add_index( str );
+  return add_index( str_offset );
 }
 
 void dump_byte(FILE* f, uint8_t b){

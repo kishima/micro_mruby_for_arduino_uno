@@ -43,6 +43,7 @@ uint32_t read_bytecode(mrb_irep_id irep_id, uint8_t pc){
 }
 
 void get_irep_pool(uint8_t* buff, uint16_t* obj_size, mrb_irep_id irep_id, uint8_t no){
+  uint16_t size=0;
   short irep_addr = pgm_read_word_near(&mmruby_code_irep_table[irep_id]);
   uint8_t code_len = pgm_read_byte_near( irep_addr + MIREP_OFFSET_ILEN ) * CODE_LEN;
   uint8_t plen = pgm_read_byte_near( irep_addr + MIREP_OFFSET_PLEN );
@@ -58,12 +59,13 @@ void get_irep_pool(uint8_t* buff, uint16_t* obj_size, mrb_irep_id irep_id, uint8
     tt = pgm_read_byte_near( irep_addr + MIREP_HEADER_SIZE + code_len + p);
     p++;
     uint16_t bin = pgm_read_word_near( irep_addr + MIREP_HEADER_SIZE + code_len + p);
-    *obj_size = bin_to_uint16( &bin );
+    size = bin_to_uint16( &bin );
     p += 2;
     obj_p = p;
-    p += *obj_size;
+    p += size;
   }
-  memcpy_pgm2ram(buff, irep_addr + MIREP_HEADER_SIZE + code_len + obj_p,*obj_size);
+  if(obj_size!=NULL) *obj_size = size;
+  memcpy_pgm2ram(buff, irep_addr + MIREP_HEADER_SIZE + code_len + obj_p, size);
   return;
 }
 
