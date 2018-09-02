@@ -128,6 +128,7 @@ mrb_func_t find_c_funcs(mrb_proc* proc){
 
 mrb_proc *find_static_procs(mrb_sym class_sym_id, mrb_sym sym_id){
   short addr=0;
+  //cprintf(" class %d %d\n",class_sym_id,sym_id);
   switch(class_sym_id){
   case MRBC_SSYM_Object:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_Object , sym_id);

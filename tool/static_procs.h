@@ -41,6 +41,7 @@ static const char* const static_procs[] = {
   "String","+","c_string_add",
   "String","===","c_string_eql",
   "String","size","c_string_size",
+  "Arduino","delay","class_arduino_delay",
   "Arduino","pin_mode","class_arduino_pin_mode",
   "Arduino","digital_write","class_arduino_digital_write",
   "Arduino","digital_read","class_arduino_digital_read",

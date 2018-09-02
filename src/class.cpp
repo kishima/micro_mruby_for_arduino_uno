@@ -7,6 +7,7 @@
 #include "alloc.h"
 #include "c_object.h"
 #include "c_string.h"
+#include "c_fixnum.h"
 #include "ext.h"
 #include "global.h"
 #include "symbol.h"
@@ -62,15 +63,17 @@ mrb_class *find_class_by_object(mrb_object *obj)
 mrb_proc *find_method(mrb_value recv, mrb_sym sym_id)
 {
   mrb_class *cls = find_class_by_object(&recv);
+  //cprintf("cls=%p\n",cls);
+
   while( cls != 0 ) {
     //For basic class
     //search static procs from FROM.
     mrb_proc* proc = find_static_procs(cls->sym_id,sym_id);
     if(0!=proc) return proc;
-
     //dynaic procs
     proc = cls->procs;
     while( proc != 0 ) {
+      //cprintf(" ? %d %d\n",proc->sym_id,sym_id);
       if( proc->sym_id == sym_id ) {
         return proc;
       }
@@ -125,6 +128,7 @@ void mrbc_init_class(void)
 {
   mrbc_init_class_object();
   mrbc_init_class_string();
+  mrbc_init_class_fixnum();
   mrbc_init_class_arduino();
 
   //TODO

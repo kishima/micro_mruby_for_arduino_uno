@@ -79,7 +79,7 @@ void mrbc_pop_callinfo(mrb_mvm *vm)
 //--------------------------------
 //  OPCODE
 //--------------------------------
-#define SHOW_OPCODE
+//#define SHOW_OPCODE
 #ifdef SHOW_OPCODE
 inline void show_register(mrb_value v){
   switch(v.tt){
@@ -453,7 +453,7 @@ inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
     break;
   }
 
-  DEBUG_FPRINTLN("find medhod");delay(500);
+  //DEBUG_FPRINTLN("find medhod");delay(500);
   mrb_sym sym_id = get_irep_symbol_id(vm->pc_irep,rb);
   mrb_proc *m = find_method(recv, sym_id);
   
@@ -464,7 +464,7 @@ inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
   
   if(IS_PGM(m)){
     mrb_func_t func = find_c_funcs(m);
-    cprintf("pgm %d %p\n",m,func);delay(500);
+    //cprintf("pgm %d %p\n",m,func);delay(500);
     func(vm, regs + ra, rc);
     int release_reg = ra+rc+1;
     while( release_reg <= bidx ) {
@@ -1047,7 +1047,9 @@ void run_vm(void){
         cprintf("UNKNOWN >> %02X\n",opcode);
       break;
     }
-    hal_delay(1000);
+    #ifdef SHOW_OPCODE
+    hal_delay(500);
+    #endif
   } while( !vm->flag_preemption );
   DEBUG_FPRINT("<VM END>\n");
   

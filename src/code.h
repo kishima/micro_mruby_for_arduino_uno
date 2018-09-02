@@ -1,33 +1,32 @@
 /* Irep table */
 const unsigned char mmruby_code_irep_000[] PROGMEM= {
-0x00,0x1D,0x14,0x07,0x01,0x80,0x00,0x06,0x02,0x00,0x00,0x3D,0x01,0x80,0x00,0xA0,
+0x00,0x1C,0x0B,0x09,0x01,0x80,0x00,0x06,0x02,0x00,0x00,0x3D,0x01,0x80,0x00,0xA0,
 0x00,0xC0,0x06,0x03,0x01,0x80,0x00,0x91,0x02,0x00,0x40,0x01,0x02,0x80,0x01,0x84,
-0x01,0x80,0x81,0x20,0x01,0x3F,0xFF,0x83,0x00,0x40,0x07,0x97,0x01,0x80,0x80,0x01,
-0x01,0x81,0x00,0x20,0x01,0x00,0xC0,0x01,0x01,0x80,0x00,0x06,0x02,0x00,0x00,0xBD,
-0x02,0x80,0x80,0x01,0x02,0x01,0x40,0x3E,0x01,0x80,0x00,0xA0,0x01,0x80,0x00,0x91,
-0x02,0x00,0x40,0x01,0x02,0x80,0x80,0x01,0x01,0x81,0x41,0x20,0x01,0x80,0x00,0x91,
-0x02,0x40,0xF9,0x83,0x01,0x81,0x80,0xA0,0x01,0x80,0x00,0x07,0x01,0xBF,0xF7,0x98,
-0x01,0x80,0x00,0x05,0x00,0x00,0x00,0x4A,0x00,0x00,0x08,0x4C,0x45,0x44,0x20,0x54,
-0x65,0x73,0x74,0x00,0x00,0x03,0x73,0x74,0x3D,0x00,0x00,0x00,0x15,0x0C,0x16,0x17,
-0x18,0x19,0x1A,
+0x01,0x80,0x81,0x20,0x01,0x00,0x02,0x04,0x00,0x40,0x07,0x17,0x01,0x80,0x80,0x01,
+0x02,0x00,0x02,0x04,0x01,0x81,0x40,0xB2,0x01,0xC0,0x01,0x19,0x01,0x00,0x03,0x04,
+0x00,0x40,0x00,0x97,0x01,0x00,0x02,0x04,0x01,0x80,0x00,0x91,0x02,0x00,0x40,0x01,
+0x02,0x80,0x80,0x01,0x01,0x81,0xC1,0x20,0x01,0x80,0x00,0x91,0x02,0x40,0xF9,0x83,
+0x01,0x82,0x00,0xA0,0x01,0x80,0x00,0x07,0x01,0xBF,0xF8,0x18,0x01,0x80,0x00,0x05,
+0x00,0x00,0x00,0x4A,0x00,0x00,0x08,0x4C,0x45,0x44,0x20,0x54,0x65,0x73,0x74,0x15,
+0x0C,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,
 };
 const unsigned char* const mmruby_code_irep_table[] PROGMEM = {
   mmruby_code_irep_000,
 };
 
 /* Proc table */
-const unsigned char mmruby_code_proc_table_size PROGMEM = 29;
+const unsigned char mmruby_code_proc_table_size PROGMEM = 30;
 
 
 const uint8_t mmruby_code_proc_table_Object[] PROGMEM = {
   21,1,
-  24,2,
-  27,3,
-  28,4,
-  29,5,
-  30,6,
-  31,7,
-  32,8,
+  29,2,
+  30,3,
+  31,4,
+  32,5,
+  33,6,
+  34,7,
+  35,8,
   0
 };
 
@@ -53,27 +52,27 @@ const uint8_t mmruby_code_proc_table_Array[] PROGMEM = {
 
 const uint8_t mmruby_code_proc_table_Fixnum[] PROGMEM = {
   16,9,
-  33,10,
-  34,11,
-  35,12,
-  36,13,
-  37,14,
-  38,15,
-  39,16,
+  36,10,
+  37,11,
+  38,12,
+  39,13,
+  40,14,
+  41,15,
+  42,16,
   15,17,
   20,18,
-  40,19,
-  41,20,
-  42,21,
-  43,22,
-  29,23,
+  43,19,
+  44,20,
+  45,21,
+  46,22,
+  32,23,
   0
 };
 
 const uint8_t mmruby_code_proc_table_String[] PROGMEM = {
   13,24,
   14,25,
-  44,26,
+  47,26,
   0
 };
 
@@ -86,9 +85,10 @@ const uint8_t mmruby_code_proc_table_Range[] PROGMEM = {
 };
 
 const uint8_t mmruby_code_proc_table_Arduino[] PROGMEM = {
-  22,27,
-  25,28,
-  45,29,
+  28,27,
+  22,28,
+  27,29,
+  48,30,
   0
 };
 
@@ -121,9 +121,10 @@ inline mrb_func_t find_c_funcs_by_no(short no){
     case 24: func = c_string_add; break;
     case 25: func = c_string_eql; break;
     case 26: func = c_string_size; break;
-    case 27: func = class_arduino_pin_mode; break;
-    case 28: func = class_arduino_digital_write; break;
-    case 29: func = class_arduino_digital_read; break;
+    case 27: func = class_arduino_delay; break;
+    case 28: func = class_arduino_pin_mode; break;
+    case 29: func = class_arduino_digital_write; break;
+    case 30: func = class_arduino_digital_read; break;
     default: break;
   }
   return func;
@@ -131,7 +132,7 @@ inline mrb_func_t find_c_funcs_by_no(short no){
 
 
 /* Symbol table */
-const unsigned char mmruby_code_symbol_table_size PROGMEM = 46;
+const unsigned char mmruby_code_symbol_table_size PROGMEM = 49;
 const char mmruby_code_symbol_ref00[] PROGMEM ="";
 const char mmruby_code_symbol_ref01[] PROGMEM ="Object";
 const char mmruby_code_symbol_ref02[] PROGMEM ="String";
@@ -156,28 +157,31 @@ const char mmruby_code_symbol_ref14[] PROGMEM =">>";
 const char mmruby_code_symbol_ref15[] PROGMEM ="puts";
 const char mmruby_code_symbol_ref16[] PROGMEM ="pin_mode";
 const char mmruby_code_symbol_ref17[] PROGMEM ="OUTPUT";
-const char mmruby_code_symbol_ref18[] PROGMEM ="!";
-const char mmruby_code_symbol_ref19[] PROGMEM ="digital_write";
-const char mmruby_code_symbol_ref1a[] PROGMEM ="delay";
-const char mmruby_code_symbol_ref1b[] PROGMEM ="!=";
-const char mmruby_code_symbol_ref1c[] PROGMEM ="<=>";
-const char mmruby_code_symbol_ref1d[] PROGMEM ="to_s";
-const char mmruby_code_symbol_ref1e[] PROGMEM ="class";
-const char mmruby_code_symbol_ref1f[] PROGMEM ="attr_reader";
-const char mmruby_code_symbol_ref20[] PROGMEM ="attr_accessor";
-const char mmruby_code_symbol_ref21[] PROGMEM ="-@";
-const char mmruby_code_symbol_ref22[] PROGMEM ="**";
-const char mmruby_code_symbol_ref23[] PROGMEM ="%";
-const char mmruby_code_symbol_ref24[] PROGMEM ="&";
-const char mmruby_code_symbol_ref25[] PROGMEM ="|";
-const char mmruby_code_symbol_ref26[] PROGMEM ="^";
-const char mmruby_code_symbol_ref27[] PROGMEM ="~";
-const char mmruby_code_symbol_ref28[] PROGMEM ="abs";
-const char mmruby_code_symbol_ref29[] PROGMEM ="times";
-const char mmruby_code_symbol_ref2a[] PROGMEM ="chr";
-const char mmruby_code_symbol_ref2b[] PROGMEM ="to_i";
-const char mmruby_code_symbol_ref2c[] PROGMEM ="size";
-const char mmruby_code_symbol_ref2d[] PROGMEM ="digital_read";
+const char mmruby_code_symbol_ref18[] PROGMEM ="LOW";
+const char mmruby_code_symbol_ref19[] PROGMEM ="==";
+const char mmruby_code_symbol_ref1a[] PROGMEM ="HIGH";
+const char mmruby_code_symbol_ref1b[] PROGMEM ="digital_write";
+const char mmruby_code_symbol_ref1c[] PROGMEM ="delay";
+const char mmruby_code_symbol_ref1d[] PROGMEM ="!";
+const char mmruby_code_symbol_ref1e[] PROGMEM ="!=";
+const char mmruby_code_symbol_ref1f[] PROGMEM ="<=>";
+const char mmruby_code_symbol_ref20[] PROGMEM ="to_s";
+const char mmruby_code_symbol_ref21[] PROGMEM ="class";
+const char mmruby_code_symbol_ref22[] PROGMEM ="attr_reader";
+const char mmruby_code_symbol_ref23[] PROGMEM ="attr_accessor";
+const char mmruby_code_symbol_ref24[] PROGMEM ="-@";
+const char mmruby_code_symbol_ref25[] PROGMEM ="**";
+const char mmruby_code_symbol_ref26[] PROGMEM ="%";
+const char mmruby_code_symbol_ref27[] PROGMEM ="&";
+const char mmruby_code_symbol_ref28[] PROGMEM ="|";
+const char mmruby_code_symbol_ref29[] PROGMEM ="^";
+const char mmruby_code_symbol_ref2a[] PROGMEM ="~";
+const char mmruby_code_symbol_ref2b[] PROGMEM ="abs";
+const char mmruby_code_symbol_ref2c[] PROGMEM ="times";
+const char mmruby_code_symbol_ref2d[] PROGMEM ="chr";
+const char mmruby_code_symbol_ref2e[] PROGMEM ="to_i";
+const char mmruby_code_symbol_ref2f[] PROGMEM ="size";
+const char mmruby_code_symbol_ref30[] PROGMEM ="digital_read";
 
 const char* const mmruby_code_symbol_table[] PROGMEM = {
   mmruby_code_symbol_ref00,
@@ -226,6 +230,9 @@ const char* const mmruby_code_symbol_table[] PROGMEM = {
   mmruby_code_symbol_ref2b,
   mmruby_code_symbol_ref2c,
   mmruby_code_symbol_ref2d,
+  mmruby_code_symbol_ref2e,
+  mmruby_code_symbol_ref2f,
+  mmruby_code_symbol_ref30,
 };
 
 /* Symbol IDs */
