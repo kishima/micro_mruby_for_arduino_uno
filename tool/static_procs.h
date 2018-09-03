@@ -23,6 +23,7 @@ static const char* const static_procs[] = {
   "Object","class","c_object_class",
   "Object","attr_reader","c_object_attr_reader",
   "Object","attr_accessor","c_object_attr_accessor",
+
   "Fixnum","[]","c_fixnum_bitref",
   "Fixnum","-@","c_fixnum_negative",
   "Fixnum","**","c_fixnum_power",
@@ -38,9 +39,20 @@ static const char* const static_procs[] = {
   "Fixnum","chr","c_fixnum_chr",
   "Fixnum","to_i","c_ineffect",
   "Fixnum","to_s","c_fixnum_to_s",
-  "String","+","c_string_add",
-  "String","===","c_string_eql",
-  "String","size","c_string_size",
+
+  "Proc","call","c_proc_call",
+  "Proc","to_s","c_proc_to_s",
+  "Nil","to_s","c_nil_to_s",
+  "False","to_s","c_false_to_s",
+  "True","to_s","c_true_to_s",
+
+  "Symbol","to_s","c_true_to_s",
+
+  "String","all_symbols","c_all_symbols",
+  "String","to_s","c_to_s",
+  "String","id2name","c_to_s",
+  "String","to_sym","c_ineffect",
+
   "Arduino","delay","class_arduino_delay",
   "Arduino","pin_mode","class_arduino_pin_mode",
   "Arduino","digital_write","class_arduino_digital_write",

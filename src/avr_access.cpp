@@ -15,6 +15,7 @@
 #include "c_object.h"
 #include "c_fixnum.h"
 #include "c_string.h"
+#include "c_common.h"
 #include "ext_arduino.h"
 
 //dynaic code generation

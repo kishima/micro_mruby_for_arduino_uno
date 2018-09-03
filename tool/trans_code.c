@@ -48,7 +48,7 @@ void init_symbol_tbl(){
   }
 }
 
-static char* check_offset(const char* str){
+static const char* check_offset(const char* str){
   //skip variable prefix
   int offset = 0;
   int c=0;

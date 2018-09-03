@@ -15,7 +15,7 @@ const unsigned char* const mmruby_code_irep_table[] PROGMEM = {
 };
 
 /* Proc table */
-const unsigned char mmruby_code_proc_table_size PROGMEM = 30;
+const unsigned char mmruby_code_proc_table_size PROGMEM = 37;
 
 
 const uint8_t mmruby_code_proc_table_Object[] PROGMEM = {
@@ -31,18 +31,23 @@ const uint8_t mmruby_code_proc_table_Object[] PROGMEM = {
 };
 
 const uint8_t mmruby_code_proc_table_Proc[] PROGMEM = {
+  36,24,
+  32,25,
   0
 };
 
 const uint8_t mmruby_code_proc_table_False[] PROGMEM = {
+  32,27,
   0
 };
 
 const uint8_t mmruby_code_proc_table_True[] PROGMEM = {
+  32,28,
   0
 };
 
 const uint8_t mmruby_code_proc_table_Nil[] PROGMEM = {
+  32,26,
   0
 };
 
@@ -52,31 +57,33 @@ const uint8_t mmruby_code_proc_table_Array[] PROGMEM = {
 
 const uint8_t mmruby_code_proc_table_Fixnum[] PROGMEM = {
   16,9,
-  36,10,
-  37,11,
-  38,12,
-  39,13,
-  40,14,
-  41,15,
-  42,16,
+  37,10,
+  38,11,
+  39,12,
+  40,13,
+  41,14,
+  42,15,
+  43,16,
   15,17,
   20,18,
-  43,19,
-  44,20,
-  45,21,
-  46,22,
+  44,19,
+  45,20,
+  46,21,
+  47,22,
   32,23,
   0
 };
 
 const uint8_t mmruby_code_proc_table_String[] PROGMEM = {
-  13,24,
-  14,25,
-  47,26,
+  48,30,
+  32,31,
+  49,32,
+  50,33,
   0
 };
 
 const uint8_t mmruby_code_proc_table_Symbol[] PROGMEM = {
+  32,29,
   0
 };
 
@@ -85,10 +92,10 @@ const uint8_t mmruby_code_proc_table_Range[] PROGMEM = {
 };
 
 const uint8_t mmruby_code_proc_table_Arduino[] PROGMEM = {
-  28,27,
-  22,28,
-  27,29,
-  48,30,
+  28,34,
+  22,35,
+  27,36,
+  51,37,
   0
 };
 
@@ -118,13 +125,20 @@ inline mrb_func_t find_c_funcs_by_no(short no){
     case 21: func = c_fixnum_chr; break;
     case 22: func = c_ineffect; break;
     case 23: func = c_fixnum_to_s; break;
-    case 24: func = c_string_add; break;
-    case 25: func = c_string_eql; break;
-    case 26: func = c_string_size; break;
-    case 27: func = class_arduino_delay; break;
-    case 28: func = class_arduino_pin_mode; break;
-    case 29: func = class_arduino_digital_write; break;
-    case 30: func = class_arduino_digital_read; break;
+    case 24: func = c_proc_call; break;
+    case 25: func = c_proc_to_s; break;
+    case 26: func = c_nil_to_s; break;
+    case 27: func = c_false_to_s; break;
+    case 28: func = c_true_to_s; break;
+    case 29: func = c_true_to_s; break;
+    case 30: func = c_all_symbols; break;
+    case 31: func = c_to_s; break;
+    case 32: func = c_to_s; break;
+    case 33: func = c_ineffect; break;
+    case 34: func = class_arduino_delay; break;
+    case 35: func = class_arduino_pin_mode; break;
+    case 36: func = class_arduino_digital_write; break;
+    case 37: func = class_arduino_digital_read; break;
     default: break;
   }
   return func;
@@ -132,7 +146,7 @@ inline mrb_func_t find_c_funcs_by_no(short no){
 
 
 /* Symbol table */
-const unsigned char mmruby_code_symbol_table_size PROGMEM = 49;
+const unsigned char mmruby_code_symbol_table_size PROGMEM = 52;
 const char mmruby_code_symbol_ref00[] PROGMEM ="";
 const char mmruby_code_symbol_ref01[] PROGMEM ="Object";
 const char mmruby_code_symbol_ref02[] PROGMEM ="String";
@@ -169,19 +183,22 @@ const char mmruby_code_symbol_ref20[] PROGMEM ="to_s";
 const char mmruby_code_symbol_ref21[] PROGMEM ="class";
 const char mmruby_code_symbol_ref22[] PROGMEM ="attr_reader";
 const char mmruby_code_symbol_ref23[] PROGMEM ="attr_accessor";
-const char mmruby_code_symbol_ref24[] PROGMEM ="-@";
-const char mmruby_code_symbol_ref25[] PROGMEM ="**";
-const char mmruby_code_symbol_ref26[] PROGMEM ="%";
-const char mmruby_code_symbol_ref27[] PROGMEM ="&";
-const char mmruby_code_symbol_ref28[] PROGMEM ="|";
-const char mmruby_code_symbol_ref29[] PROGMEM ="^";
-const char mmruby_code_symbol_ref2a[] PROGMEM ="~";
-const char mmruby_code_symbol_ref2b[] PROGMEM ="abs";
-const char mmruby_code_symbol_ref2c[] PROGMEM ="times";
-const char mmruby_code_symbol_ref2d[] PROGMEM ="chr";
-const char mmruby_code_symbol_ref2e[] PROGMEM ="to_i";
-const char mmruby_code_symbol_ref2f[] PROGMEM ="size";
-const char mmruby_code_symbol_ref30[] PROGMEM ="digital_read";
+const char mmruby_code_symbol_ref24[] PROGMEM ="call";
+const char mmruby_code_symbol_ref25[] PROGMEM ="-@";
+const char mmruby_code_symbol_ref26[] PROGMEM ="**";
+const char mmruby_code_symbol_ref27[] PROGMEM ="%";
+const char mmruby_code_symbol_ref28[] PROGMEM ="&";
+const char mmruby_code_symbol_ref29[] PROGMEM ="|";
+const char mmruby_code_symbol_ref2a[] PROGMEM ="^";
+const char mmruby_code_symbol_ref2b[] PROGMEM ="~";
+const char mmruby_code_symbol_ref2c[] PROGMEM ="abs";
+const char mmruby_code_symbol_ref2d[] PROGMEM ="times";
+const char mmruby_code_symbol_ref2e[] PROGMEM ="chr";
+const char mmruby_code_symbol_ref2f[] PROGMEM ="to_i";
+const char mmruby_code_symbol_ref30[] PROGMEM ="all_symbols";
+const char mmruby_code_symbol_ref31[] PROGMEM ="id2name";
+const char mmruby_code_symbol_ref32[] PROGMEM ="to_sym";
+const char mmruby_code_symbol_ref33[] PROGMEM ="digital_read";
 
 const char* const mmruby_code_symbol_table[] PROGMEM = {
   mmruby_code_symbol_ref00,
@@ -233,6 +250,9 @@ const char* const mmruby_code_symbol_table[] PROGMEM = {
   mmruby_code_symbol_ref2e,
   mmruby_code_symbol_ref2f,
   mmruby_code_symbol_ref30,
+  mmruby_code_symbol_ref31,
+  mmruby_code_symbol_ref32,
+  mmruby_code_symbol_ref33,
 };
 
 /* Symbol IDs */

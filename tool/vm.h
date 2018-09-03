@@ -68,7 +68,7 @@ typedef struct IREP {
   struct IREP **reps;		//!< array of child IREP's pointer.
 
   //for output
-  uint8_t  *pool_head;
+  const uint8_t  *pool_head;
   uint16_t pool_total_len;
   uint16_t slen;
   

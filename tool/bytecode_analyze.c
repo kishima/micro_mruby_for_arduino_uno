@@ -4,6 +4,7 @@
 #include <string.h>
 #include <assert.h>
 #include "./vm.h"
+#include "../src/vm_config.h"
 #include "../src/micro_vm.h"
 
 

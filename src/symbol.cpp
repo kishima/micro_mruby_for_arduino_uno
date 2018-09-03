@@ -15,6 +15,7 @@
 #include <stdint.h>
 #include <string.h>
 #include "avr_access.h"
+#include "class.h"
 #include "symbol.h"
 #include "alloc.h"
 #include "console.h"
@@ -109,5 +110,46 @@ const char * symid_to_str(mrb_sym sym_id)
      return global_sym_name_buff;
   }
   return symbol_table[sym_id-static_sym_tbl_size];
+}
+
+/* Methods in Symbol class */
+void c_all_symbols(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  //TODO
+#if 0
+  mrb_value ret = mrbc_array_new(vm, sym_index_pos);
+
+  int i;
+  for( i = 0; i < sym_index_pos; i++ ) {
+    mrb_value sym1 = {.tt = MRB_TT_SYMBOL};
+    sym1.i = i;
+    mrbc_array_push(&ret, &sym1);
+  }
+  SET_RETURN(ret);
+#endif
+}
+
+void c_to_s(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  v[0] = mrbc_string_new_cstr( symid_to_str(v[0].i));
+}
+
+void c_equal3(mrb_mvm *vm, mrb_value v[], int argc)
+{
+  if( mrbc_compare(&v[0], &v[1]) == 0 ) {
+    SET_TRUE_RETURN();
+  } else {
+    SET_FALSE_RETURN();
+  }
+}
+
+void mrbc_init_class_symbol(void){
+  mrbc_class_symbol = mrbc_define_class("Symbol", 0);
+  //methods
+  //all_symbols
+  //to_s
+  //id2name
+  //to_sym
+  //===
 }
 

@@ -5,6 +5,7 @@
 #include "micro_vm.h"
 #include "class.h"
 #include "alloc.h"
+#include "c_common.h"
 #include "c_object.h"
 #include "c_string.h"
 #include "c_fixnum.h"
@@ -126,20 +127,22 @@ void mrbc_define_method(mrb_class *cls, const char *name, mrb_func_t cfunc)
 
 void mrbc_init_class(void)
 {
+  //basic
   mrbc_init_class_object();
   mrbc_init_class_string();
   mrbc_init_class_fixnum();
+  mrbc_init_class_nil();
+  mrbc_init_class_proc();
+  mrbc_init_class_false();
+  mrbc_init_class_true();
+
+  mrbc_init_class_symbol();
+
+  //extension
   mrbc_init_class_arduino();
 
-  //TODO
 #if 0
-  mrbc_init_class_nil(0);
-  mrbc_init_class_proc(0);
-  mrbc_init_class_false(0);
-  mrbc_init_class_true(0);
-
-  mrbc_init_class_fixnum(0);
-  mrbc_init_class_symbol(0);
+  //TODO
   mrbc_init_class_array(0);
   mrbc_init_class_range(0);
   //mrbc_init_class_hash(0);

@@ -23,9 +23,14 @@ struct VM;
 
 void init_symbol_table(void);
 mrb_value mrbc_symbol_new(struct VM *vm, const char *str);
+mrb_value mrbc_string_new_cstr(const char *src);
 mrb_sym str_to_symid(const char *str);
 const char *symid_to_str(mrb_sym sym_id);
-void mrbc_init_class_symbol(struct VM *vm);
+void mrbc_init_class_symbol(void);
+
+void c_all_symbols(mrb_mvm *vm, mrb_value v[], int argc);
+void c_to_s(mrb_mvm *vm, mrb_value v[], int argc);
+void c_equal3(mrb_mvm *vm, mrb_value v[], int argc);
 
 static inline const char * mrbc_symbol_cstr(const mrb_value *v)
 {
