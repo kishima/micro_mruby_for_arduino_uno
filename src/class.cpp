@@ -91,7 +91,7 @@ mrb_class * mrbc_define_class(const char *name, mrb_class *super)
   mrb_class *cls;
   mrb_sym sym_id;
   if((short)name < 0xFF){ //direct sym_id 
-    sym_id = (mrb_sym)name;
+    sym_id = (mrb_sym)((short)name);
   }else{
     sym_id = str_to_symid(name);
   }

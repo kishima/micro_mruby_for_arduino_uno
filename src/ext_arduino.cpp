@@ -114,5 +114,5 @@ void class_arduino_digital_read(mrb_mvm *vm, mrb_value *v, int argc )
 
 void mrbc_init_class_arduino(void)
 {
-  mrbc_class_arduino = mrbc_define_class(MRBC_SSYM_Arduino, 0);
+  mrbc_class_arduino = mrbc_define_class((char*)MRBC_SSYM_Arduino, 0);
 }

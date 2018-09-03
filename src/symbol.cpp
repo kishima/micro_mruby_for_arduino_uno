@@ -145,7 +145,7 @@ void c_equal3(mrb_mvm *vm, mrb_value v[], int argc)
 }
 
 void mrbc_init_class_symbol(void){
-  mrbc_class_symbol = mrbc_define_class(MRBC_SSYM_Symbol, 0);
+  mrbc_class_symbol = mrbc_define_class((char*)MRBC_SSYM_Symbol, 0);
   //methods
   //all_symbols
   //to_s

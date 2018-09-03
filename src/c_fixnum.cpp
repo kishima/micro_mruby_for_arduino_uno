@@ -258,5 +258,5 @@ void c_fixnum_to_s(mrb_mvm *vm, mrb_value v[], int argc)
 
 void mrbc_init_class_fixnum()
 {
-    mrbc_class_fixnum = mrbc_define_class(MRBC_SSYM_Fixnum, mrbc_class_object);
+    mrbc_class_fixnum = mrbc_define_class((char*)MRBC_SSYM_Fixnum, mrbc_class_object);
 }

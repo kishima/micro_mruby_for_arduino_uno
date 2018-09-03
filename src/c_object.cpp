@@ -390,7 +390,7 @@ static void c_object_instance_methods(mrb_mvm *vm, mrb_value v[], int argc)
 
 void mrbc_init_class_object(){
   // Class
-  mrbc_class_object = mrbc_define_class(MRBC_SSYM_Object, 0);
+  mrbc_class_object = mrbc_define_class((char*)MRBC_SSYM_Object, 0);
   // Methods
   // These are defined statically
 #if 0
