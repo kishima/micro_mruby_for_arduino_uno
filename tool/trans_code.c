@@ -248,6 +248,7 @@ void analyze_irep(FILE* f,mrb_irep* irep){
 void output_symbol_tbl(FILE* f){
   
   fprintf(f,"\n/* Symbol table */\n");
+  fprintf(f,"#include \"%s\"\n\n","symbol_ids.h");
   fprintf(f,"const unsigned char %ssymbol_table_size PROGMEM = %d;\n",CODE_PREFIX,sym_tbl_cnt);
   
   int i;
@@ -264,13 +265,21 @@ void output_symbol_tbl(FILE* f){
   }
   fprintf(f,"};\n");
   fprintf(f,"\n");
-  fprintf(f,"/* Symbol IDs */\n");
+ 
+}
+
+void output_symbol_id_header(FILE* f){
   //symbol ids for basic classes
+  fprintf(f,"#ifndef MRBC_SRC_SYMBOL_ID_H_\n");
+  fprintf(f,"#define MRBC_SRC_SYMBOL_ID_H_\n");
+  fprintf(f,"\n");
+  int i;
   for(i=0;i<sizeof(static_symbols)/sizeof(char*)/2;i++){
     char* sname = strcmp(static_symbols[i*2+1],"") ? static_symbols[i*2+1] : static_symbols[i*2];
     fprintf(f,"#define MRBC_SSYM_%s (%d) // %s\n",sname,i+1,static_symbols[i*2]);
   }
-  
+  fprintf(f,"\n");
+  fprintf(f,"#endif\n");
 }
 
 int class_name_to_tt(const char* class){
@@ -431,16 +440,18 @@ void output_proc_tbl(FILE* f){
 #endif
 }
 
-#define OUTPUT_FNAME "../src/code.h"
+#define OUTPUT_FNAME1 "../src/code.h"
+#define OUTPUT_FNAME2 "../src/symbol_ids.h"
 void trans_code_mrb(mrb_vm* vm){
+
   init_symbol_tbl();
-  //open file
+
   FILE* f = stdout;
-  if ((f = fopen(OUTPUT_FNAME, "w")) == NULL) {
+  if ((f = fopen(OUTPUT_FNAME1, "w")) == NULL) {
     printf("connot open code.h\n");
     exit(0);
   }
-  printf("** Open %s **\n",OUTPUT_FNAME);
+  printf("** Open %s **\n",OUTPUT_FNAME1);
   //output Irep table
   analyze_irep(f,vm->irep);
   //output Proc table
@@ -448,9 +459,21 @@ void trans_code_mrb(mrb_vm* vm){
   //output Symbol table
   output_symbol_tbl(f);
 
-  //close
   fclose(f);
-  printf("** Close %s **\n",OUTPUT_FNAME);
+  printf("** Close %s **\n",OUTPUT_FNAME1);
+
+  //--
+  if ((f = fopen(OUTPUT_FNAME2, "w")) == NULL) {
+    printf("connot open code.h\n");
+    exit(0);
+  }
+  printf("** Open %s **\n",OUTPUT_FNAME2);
+  //output Symbol ID header
+  output_symbol_id_header(f);
+
+  fclose(f);
+  printf("** Close %s **\n",OUTPUT_FNAME2);
+
 }
 
 

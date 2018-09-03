@@ -19,7 +19,7 @@
 #include "value.h"
 #include "micro_vm.h"
 #include "alloc.h"
-//#include "static.h"
+#include "symbol_ids.h"
 #include "class.h"
 #include "symbol.h"
 #include "c_string.h"
@@ -793,7 +793,7 @@ void c_string_to_sym(mrb_mvm *vm, mrb_value v[], int argc)
 */
 void mrbc_init_class_string()
 {
-  mrbc_class_string = mrbc_define_class("String", mrbc_class_object);
+  mrbc_class_string = mrbc_define_class(MRBC_SSYM_String, mrbc_class_object);
 
 #if 0
   mrbc_define_method(mrbc_class_string, "+",	c_string_add);

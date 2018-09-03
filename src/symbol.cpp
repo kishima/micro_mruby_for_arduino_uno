@@ -20,6 +20,7 @@
 #include "alloc.h"
 #include "console.h"
 #include "debug.h"
+#include "symbol_ids.h"
 
 static char** symbol_table = NULL;
 static uint8_t sym_tbl_cnt  = 0;
@@ -144,7 +145,7 @@ void c_equal3(mrb_mvm *vm, mrb_value v[], int argc)
 }
 
 void mrbc_init_class_symbol(void){
-  mrbc_class_symbol = mrbc_define_class("Symbol", 0);
+  mrbc_class_symbol = mrbc_define_class(MRBC_SSYM_Symbol, 0);
   //methods
   //all_symbols
   //to_s

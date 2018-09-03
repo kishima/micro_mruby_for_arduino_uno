@@ -89,7 +89,12 @@ mrb_class * mrbc_define_class(const char *name, mrb_class *super)
 {
   //DEBUG_FPRINTLN("define class");
   mrb_class *cls;
-  mrb_sym sym_id = str_to_symid(name);
+  mrb_sym sym_id;
+  if((short)name < 0xFF){ //direct sym_id 
+    sym_id = (mrb_sym)name;
+  }else{
+    sym_id = str_to_symid(name);
+  }
   mrb_object obj = const_object_get(sym_id);
 
   // create a new class?
@@ -147,5 +152,7 @@ void mrbc_init_class(void)
   mrbc_init_class_range(0);
   //mrbc_init_class_hash(0);
 #endif
+
+  
 }
 

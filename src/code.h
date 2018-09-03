@@ -7,8 +7,8 @@ const unsigned char mmruby_code_irep_000[] PROGMEM= {
 0x00,0x40,0x00,0x97,0x01,0x00,0x02,0x04,0x01,0x80,0x00,0x91,0x02,0x00,0x40,0x01,
 0x02,0x80,0x80,0x01,0x01,0x81,0xC1,0x20,0x01,0x80,0x00,0x91,0x02,0x40,0xF9,0x83,
 0x01,0x82,0x00,0xA0,0x01,0x80,0x00,0x07,0x01,0xBF,0xF8,0x18,0x01,0x80,0x00,0x05,
-0x00,0x00,0x00,0x4A,0x00,0x00,0x08,0x4C,0x45,0x44,0x20,0x54,0x65,0x73,0x74,0x15,
-0x0C,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,
+0x00,0x00,0x00,0x4A,0x00,0x00,0x08,0x4C,0x45,0x44,0x20,0x54,0x65,0x73,0x74,0x1D,
+0x0C,0x1E,0x11,0x14,0x1F,0x13,0x20,0x21,
 };
 const unsigned char* const mmruby_code_irep_table[] PROGMEM = {
   mmruby_code_irep_000,
@@ -19,35 +19,35 @@ const unsigned char mmruby_code_proc_table_size PROGMEM = 37;
 
 
 const uint8_t mmruby_code_proc_table_Object[] PROGMEM = {
-  21,1,
-  29,2,
-  30,3,
-  31,4,
-  32,5,
-  33,6,
-  34,7,
-  35,8,
+  29,1,
+  34,2,
+  35,3,
+  36,4,
+  15,5,
+  37,6,
+  38,7,
+  39,8,
   0
 };
 
 const uint8_t mmruby_code_proc_table_Proc[] PROGMEM = {
-  36,24,
-  32,25,
+  40,24,
+  15,25,
   0
 };
 
 const uint8_t mmruby_code_proc_table_False[] PROGMEM = {
-  32,27,
+  15,27,
   0
 };
 
 const uint8_t mmruby_code_proc_table_True[] PROGMEM = {
-  32,28,
+  15,28,
   0
 };
 
 const uint8_t mmruby_code_proc_table_Nil[] PROGMEM = {
-  32,26,
+  15,26,
   0
 };
 
@@ -56,34 +56,34 @@ const uint8_t mmruby_code_proc_table_Array[] PROGMEM = {
 };
 
 const uint8_t mmruby_code_proc_table_Fixnum[] PROGMEM = {
-  16,9,
-  37,10,
-  38,11,
-  39,12,
-  40,13,
-  41,14,
-  42,15,
-  43,16,
-  15,17,
-  20,18,
-  44,19,
-  45,20,
-  46,21,
-  47,22,
-  32,23,
+  24,9,
+  41,10,
+  42,11,
+  43,12,
+  44,13,
+  45,14,
+  46,15,
+  47,16,
+  23,17,
+  28,18,
+  48,19,
+  49,20,
+  50,21,
+  51,22,
+  15,23,
   0
 };
 
 const uint8_t mmruby_code_proc_table_String[] PROGMEM = {
-  48,30,
-  32,31,
-  49,32,
-  50,33,
+  52,30,
+  15,31,
+  53,32,
+  54,33,
   0
 };
 
 const uint8_t mmruby_code_proc_table_Symbol[] PROGMEM = {
-  32,29,
+  15,29,
   0
 };
 
@@ -92,10 +92,10 @@ const uint8_t mmruby_code_proc_table_Range[] PROGMEM = {
 };
 
 const uint8_t mmruby_code_proc_table_Arduino[] PROGMEM = {
-  28,34,
-  22,35,
-  27,36,
-  51,37,
+  33,34,
+  30,35,
+  32,36,
+  55,37,
   0
 };
 
@@ -146,7 +146,9 @@ inline mrb_func_t find_c_funcs_by_no(short no){
 
 
 /* Symbol table */
-const unsigned char mmruby_code_symbol_table_size PROGMEM = 52;
+#include "symbol_ids.h"
+
+const unsigned char mmruby_code_symbol_table_size PROGMEM = 56;
 const char mmruby_code_symbol_ref00[] PROGMEM ="";
 const char mmruby_code_symbol_ref01[] PROGMEM ="Object";
 const char mmruby_code_symbol_ref02[] PROGMEM ="String";
@@ -160,45 +162,49 @@ const char mmruby_code_symbol_ref09[] PROGMEM ="Array";
 const char mmruby_code_symbol_ref0a[] PROGMEM ="Range";
 const char mmruby_code_symbol_ref0b[] PROGMEM ="Hash";
 const char mmruby_code_symbol_ref0c[] PROGMEM ="Arduino";
-const char mmruby_code_symbol_ref0d[] PROGMEM ="+";
-const char mmruby_code_symbol_ref0e[] PROGMEM ="===";
-const char mmruby_code_symbol_ref0f[] PROGMEM ="<<";
-const char mmruby_code_symbol_ref10[] PROGMEM ="[]";
-const char mmruby_code_symbol_ref11[] PROGMEM ="[]=";
-const char mmruby_code_symbol_ref12[] PROGMEM ="()";
-const char mmruby_code_symbol_ref13[] PROGMEM ="-";
-const char mmruby_code_symbol_ref14[] PROGMEM =">>";
-const char mmruby_code_symbol_ref15[] PROGMEM ="puts";
-const char mmruby_code_symbol_ref16[] PROGMEM ="pin_mode";
-const char mmruby_code_symbol_ref17[] PROGMEM ="OUTPUT";
-const char mmruby_code_symbol_ref18[] PROGMEM ="LOW";
-const char mmruby_code_symbol_ref19[] PROGMEM ="==";
-const char mmruby_code_symbol_ref1a[] PROGMEM ="HIGH";
-const char mmruby_code_symbol_ref1b[] PROGMEM ="digital_write";
-const char mmruby_code_symbol_ref1c[] PROGMEM ="delay";
-const char mmruby_code_symbol_ref1d[] PROGMEM ="!";
-const char mmruby_code_symbol_ref1e[] PROGMEM ="!=";
-const char mmruby_code_symbol_ref1f[] PROGMEM ="<=>";
-const char mmruby_code_symbol_ref20[] PROGMEM ="to_s";
-const char mmruby_code_symbol_ref21[] PROGMEM ="class";
-const char mmruby_code_symbol_ref22[] PROGMEM ="attr_reader";
-const char mmruby_code_symbol_ref23[] PROGMEM ="attr_accessor";
-const char mmruby_code_symbol_ref24[] PROGMEM ="call";
-const char mmruby_code_symbol_ref25[] PROGMEM ="-@";
-const char mmruby_code_symbol_ref26[] PROGMEM ="**";
-const char mmruby_code_symbol_ref27[] PROGMEM ="%";
-const char mmruby_code_symbol_ref28[] PROGMEM ="&";
-const char mmruby_code_symbol_ref29[] PROGMEM ="|";
-const char mmruby_code_symbol_ref2a[] PROGMEM ="^";
-const char mmruby_code_symbol_ref2b[] PROGMEM ="~";
-const char mmruby_code_symbol_ref2c[] PROGMEM ="abs";
-const char mmruby_code_symbol_ref2d[] PROGMEM ="times";
-const char mmruby_code_symbol_ref2e[] PROGMEM ="chr";
-const char mmruby_code_symbol_ref2f[] PROGMEM ="to_i";
-const char mmruby_code_symbol_ref30[] PROGMEM ="all_symbols";
-const char mmruby_code_symbol_ref31[] PROGMEM ="id2name";
-const char mmruby_code_symbol_ref32[] PROGMEM ="to_sym";
-const char mmruby_code_symbol_ref33[] PROGMEM ="digital_read";
+const char mmruby_code_symbol_ref0d[] PROGMEM ="true";
+const char mmruby_code_symbol_ref0e[] PROGMEM ="false";
+const char mmruby_code_symbol_ref0f[] PROGMEM ="to_s";
+const char mmruby_code_symbol_ref10[] PROGMEM ="INPUT";
+const char mmruby_code_symbol_ref11[] PROGMEM ="OUTPUT";
+const char mmruby_code_symbol_ref12[] PROGMEM ="INPUT_PULLUP";
+const char mmruby_code_symbol_ref13[] PROGMEM ="HIGH";
+const char mmruby_code_symbol_ref14[] PROGMEM ="LOW";
+const char mmruby_code_symbol_ref15[] PROGMEM ="+";
+const char mmruby_code_symbol_ref16[] PROGMEM ="===";
+const char mmruby_code_symbol_ref17[] PROGMEM ="<<";
+const char mmruby_code_symbol_ref18[] PROGMEM ="[]";
+const char mmruby_code_symbol_ref19[] PROGMEM ="[]=";
+const char mmruby_code_symbol_ref1a[] PROGMEM ="()";
+const char mmruby_code_symbol_ref1b[] PROGMEM ="-";
+const char mmruby_code_symbol_ref1c[] PROGMEM =">>";
+const char mmruby_code_symbol_ref1d[] PROGMEM ="puts";
+const char mmruby_code_symbol_ref1e[] PROGMEM ="pin_mode";
+const char mmruby_code_symbol_ref1f[] PROGMEM ="==";
+const char mmruby_code_symbol_ref20[] PROGMEM ="digital_write";
+const char mmruby_code_symbol_ref21[] PROGMEM ="delay";
+const char mmruby_code_symbol_ref22[] PROGMEM ="!";
+const char mmruby_code_symbol_ref23[] PROGMEM ="!=";
+const char mmruby_code_symbol_ref24[] PROGMEM ="<=>";
+const char mmruby_code_symbol_ref25[] PROGMEM ="class";
+const char mmruby_code_symbol_ref26[] PROGMEM ="attr_reader";
+const char mmruby_code_symbol_ref27[] PROGMEM ="attr_accessor";
+const char mmruby_code_symbol_ref28[] PROGMEM ="call";
+const char mmruby_code_symbol_ref29[] PROGMEM ="-@";
+const char mmruby_code_symbol_ref2a[] PROGMEM ="**";
+const char mmruby_code_symbol_ref2b[] PROGMEM ="%";
+const char mmruby_code_symbol_ref2c[] PROGMEM ="&";
+const char mmruby_code_symbol_ref2d[] PROGMEM ="|";
+const char mmruby_code_symbol_ref2e[] PROGMEM ="^";
+const char mmruby_code_symbol_ref2f[] PROGMEM ="~";
+const char mmruby_code_symbol_ref30[] PROGMEM ="abs";
+const char mmruby_code_symbol_ref31[] PROGMEM ="times";
+const char mmruby_code_symbol_ref32[] PROGMEM ="chr";
+const char mmruby_code_symbol_ref33[] PROGMEM ="to_i";
+const char mmruby_code_symbol_ref34[] PROGMEM ="all_symbols";
+const char mmruby_code_symbol_ref35[] PROGMEM ="id2name";
+const char mmruby_code_symbol_ref36[] PROGMEM ="to_sym";
+const char mmruby_code_symbol_ref37[] PROGMEM ="digital_read";
 
 const char* const mmruby_code_symbol_table[] PROGMEM = {
   mmruby_code_symbol_ref00,
@@ -253,26 +259,9 @@ const char* const mmruby_code_symbol_table[] PROGMEM = {
   mmruby_code_symbol_ref31,
   mmruby_code_symbol_ref32,
   mmruby_code_symbol_ref33,
+  mmruby_code_symbol_ref34,
+  mmruby_code_symbol_ref35,
+  mmruby_code_symbol_ref36,
+  mmruby_code_symbol_ref37,
 };
 
-/* Symbol IDs */
-#define MRBC_SSYM_Object (1) // Object
-#define MRBC_SSYM_String (2) // String
-#define MRBC_SSYM_Nil (3) // Nil
-#define MRBC_SSYM_Proc (4) // Proc
-#define MRBC_SSYM_False (5) // False
-#define MRBC_SSYM_True (6) // True
-#define MRBC_SSYM_Fixnum (7) // Fixnum
-#define MRBC_SSYM_Symbol (8) // Symbol
-#define MRBC_SSYM_Array (9) // Array
-#define MRBC_SSYM_Range (10) // Range
-#define MRBC_SSYM_Hash (11) // Hash
-#define MRBC_SSYM_Arduino (12) // Arduino
-#define MRBC_SSYM_ESC_01 (13) // +
-#define MRBC_SSYM_ESC_02 (14) // ===
-#define MRBC_SSYM_ESC_03 (15) // <<
-#define MRBC_SSYM_ESC_04 (16) // []
-#define MRBC_SSYM_ESC_05 (17) // []=
-#define MRBC_SSYM_ESC_LAMBDA (18) // ()
-#define MRBC_SSYM_ESC_06 (19) // -
-#define MRBC_SSYM_ESC_07 (20) // >>

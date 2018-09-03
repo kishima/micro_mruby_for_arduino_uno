@@ -12,7 +12,15 @@ static char* static_symbols[] = {
    "Range","",
    "Hash","",
    "Arduino","",
- //method
+ //methods and others
+   "true","",
+   "false","",
+   "to_s","",
+   "INPUT","",
+   "OUTPUT","",
+   "INPUT_PULLUP","",
+   "HIGH","",
+   "LOW","",
    "+","ESC_01",
    "===","ESC_02",
    "<<","ESC_03",

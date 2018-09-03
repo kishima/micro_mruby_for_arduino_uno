@@ -11,6 +11,7 @@
 #include "console.h"
 #include "debug.h"
 #include "avr_access.h"
+#include "symbol_ids.h"
 
 #include "ext_arduino.h"
 
@@ -27,11 +28,11 @@ void class_arduino_delay(mrb_mvm *vm, mrb_value *v, int argc )
 static uint8_t sym_to_pinmode(mrb_sym sym_in){
 	uint8_t mode = INPUT;
 
-	if(sym_in == str_to_symid("INPUT")){
+	if(sym_in == MRBC_SSYM_INPUT){
 		mode = INPUT;
-	}else if(sym_in == str_to_symid("OUTPUT")){
+	}else if(sym_in == MRBC_SSYM_OUTPUT){
 		mode = OUTPUT;
-	}else if(sym_in == str_to_symid("INPUT_PULLUP")){
+	}else if(sym_in == MRBC_SSYM_INPUT_PULLUP){
 		mode = INPUT_PULLUP;
 	}
 	return mode;
@@ -40,7 +41,7 @@ static uint8_t sym_to_pinmode(mrb_sym sym_in){
 static uint8_t sym_to_siglevel(mrb_sym sym_in){
 	uint8_t sig = LOW;
 
-	if(sym_in == str_to_symid("HIGH")){
+	if(sym_in == MRBC_SSYM_HIGH){
 		sig = HIGH;
 	}else{
 		sig = LOW;
@@ -113,5 +114,5 @@ void class_arduino_digital_read(mrb_mvm *vm, mrb_value *v, int argc )
 
 void mrbc_init_class_arduino(void)
 {
-  mrbc_class_arduino = mrbc_define_class("Arduino", 0);
+  mrbc_class_arduino = mrbc_define_class(MRBC_SSYM_Arduino, 0);
 }

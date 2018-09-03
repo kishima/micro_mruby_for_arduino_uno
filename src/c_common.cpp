@@ -11,6 +11,7 @@
 #include "console.h"
 #include "debug.h"
 #include "avr_access.h"
+#include "symbol_ids.h"
 
 /* Proc class */
 void c_proc_call(mrb_mvm *vm, mrb_value v[], int argc)
@@ -60,19 +61,19 @@ void c_true_to_s(mrb_mvm *vm, mrb_value v[], int argc)
 
 
 void mrbc_init_class_proc(void){
-  mrbc_class_proc = mrbc_define_class("Proc", 0);
+  mrbc_class_proc = mrbc_define_class(MRBC_SSYM_Proc, 0);
 }
 
 void mrbc_init_class_nil(void){
-  mrbc_class_nil = mrbc_define_class("Nil", 0);
+  mrbc_class_nil = mrbc_define_class(MRBC_SSYM_Nil, 0);
 }
 
 void mrbc_init_class_false(void){
-  mrbc_class_false = mrbc_define_class("False", 0);
+  mrbc_class_false = mrbc_define_class(MRBC_SSYM_False, 0);
 }
 
 void mrbc_init_class_true(void){
-  mrbc_class_true = mrbc_define_class("True", 0);
+  mrbc_class_true = mrbc_define_class(MRBC_SSYM_True, 0);
   //methods
   // - to_s
 }
