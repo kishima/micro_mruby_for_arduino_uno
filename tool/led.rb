@@ -8,7 +8,6 @@ while(true) do
     else
         st=:LOW
     end
-    #puts "st=#{st}"
     Arduino.digital_write(pin,st)
     Arduino.delay(500)
 end

@@ -12,6 +12,9 @@
 static uint8_t  irep_output_buff[MAX_IREP][MAX_OUTPUT_BUFF];
 static uint16_t irep_buff_length_list[MAX_IREP];
 
+//Output file name
+#define OUTPUT_FNAME1 "../src/code.h"
+#define OUTPUT_FNAME2 "../src/symbol_ids.h"
 
 //Symbol table(symbol)
 #define MAX_SYMBOL (256)
@@ -68,7 +71,7 @@ static const char* check_offset(const char* str){
 
 mrb_sym str_to_symid(const char* str){
   const char* str_offset = check_offset(str);
-  printf("to_symid %s\n",str_offset);
+  //printf("to_symid %s\n",str_offset);
   const mrb_sym sym_id = search_index(str_offset);
   if( sym_id < MAX_SYMBOL-1 ) return sym_id;
   return add_index( str_offset );
@@ -111,14 +114,14 @@ uint16_t write_mirep_struct(uint8_t* buff, mrb_mirep* mirep){
 
 uint16_t write_mirep_code(uint8_t* buff, mrb_mirep* mirep,mrb_irep* irep){
   int i;
-  printf("code=\n");
+  //printf("code=\n");
   for(i=0;i<mirep->ilen * CODE_LEN;i++){
     buff[i] = irep->code[i];
     
-    if(i % CODE_LEN == 0 && i>0) printf("\n");
-    printf("%02x",buff[i]);
+    //if(i % CODE_LEN == 0 && i>0) printf("\n");
+    //printf("%02x",buff[i]);
   }
-  printf("\n");
+  //printf("\n");
   return mirep->ilen * CODE_LEN;
 }
 
@@ -202,7 +205,7 @@ uint8_t analyze_irep_r(uint8_t* irep_count, mrb_irep* irep){
   for(i=0;i<slen;i++){
     int s = bin_to_uint16(sym_p); sym_p += 2; //symbol length without NULL char
     mrb_sym sym_id = str_to_symid(sym_p);
-    printf("refer symbol(%s) id = %d\n",sym_p,sym_id);
+    //printf("refer symbol(%s) id = %d\n",sym_p,sym_id);
     sym_p += s + 1;
     
     //output symbol_id
@@ -440,10 +443,10 @@ void output_proc_tbl(FILE* f){
 #endif
 }
 
-#define OUTPUT_FNAME1 "../src/code.h"
-#define OUTPUT_FNAME2 "../src/symbol_ids.h"
 void trans_code_mrb(mrb_vm* vm){
-
+  printf("\n");
+  printf("###### Trans mrb to C code ######\n");
+  printf("\n");
   init_symbol_tbl();
 
   FILE* f = stdout;
@@ -462,7 +465,6 @@ void trans_code_mrb(mrb_vm* vm){
   fclose(f);
   printf("** Close %s **\n",OUTPUT_FNAME1);
 
-  //--
   if ((f = fopen(OUTPUT_FNAME2, "w")) == NULL) {
     printf("connot open code.h\n");
     exit(0);
