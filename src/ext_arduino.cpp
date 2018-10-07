@@ -19,7 +19,7 @@ mrb_class *mrbc_class_arduino;
 
 void class_arduino_delay(mrb_mvm *vm, mrb_value *v, int argc )
 { 
-	DEBUG_FPRINTLN(">delay");
+	//DEBUG_FPRINTLN(">delay");
 	int d=GET_INT_ARG(1);
 	delay(d);
 	SET_TRUE_RETURN();
