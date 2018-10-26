@@ -19,8 +19,10 @@ Copy micro_mruby_for_arduino_uno to the Arduino library folder like other librar
 
 This project needs a transcoder tool. This transcodes a mrb file to C header file for mruby/c.
 
+```
 $ cd tool
 $ make
+```
 
 You will get the TransCoder.
 
@@ -28,11 +30,15 @@ You will get the TransCoder.
 
 Please compile your target mruby code. I confirmed it with mruby ver1.3. Latest master version is not supported since the bytecode format is updated.
 
+```
 $ mrbc code.rb
+```
 
 ## Transcode
 
+```
 $ Transcode code.mrb
+```
 
 It will make to files in /src. They are "code.h" and "symbol_ids.h".
 
@@ -50,4 +56,4 @@ void setup()
 void loop(){}
 ```
 
-Then comple and run it on Arduino Uno.
+Then compile and run it on Arduino Uno.
