@@ -10,6 +10,7 @@ static const char* const basic_class_names[] = {
   "Symbol",
   "Range",
   "Arduino",
+  "RGB_LCD",
 };
 
 static const char* const static_procs[] = {
@@ -52,11 +53,18 @@ static const char* const static_procs[] = {
   "String","to_s","c_to_s",
   "String","id2name","c_to_s",
   "String","to_sym","c_ineffect",
-
+  
   "Arduino","delay","class_arduino_delay",
   "Arduino","pin_mode","class_arduino_pin_mode",
   "Arduino","digital_write","class_arduino_digital_write",
   "Arduino","digital_read","class_arduino_digital_read",
+
+  "RGB_LCD","initialize","class_rbg_lcd_initialize",
+  "RGB_LCD","clear","class_rbg_lcd_clear",
+  "RGB_LCD","set_cursor","class_rbg_lcd_set_cursor",
+  "RGB_LCD","write","class_rbg_lcd_write",
+  "RGB_LCD","set_rgb","class_rbg_lcd_set_rgb",
+
   "","","",//don't delete this line
 };
 

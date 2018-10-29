@@ -455,6 +455,7 @@ inline static int op_send( mrb_mvm *vm, uint32_t code, mrb_value *regs )
 
   //DEBUG_FPRINTLN("find medhod");delay(500);
   mrb_sym sym_id = get_irep_symbol_id(vm->pc_irep,rb);
+  //cprintf("find sym:%d ra=%d\n", sym_id, ra);
   mrb_proc *m = find_method(recv, sym_id);
   
   if( m == 0 ) {

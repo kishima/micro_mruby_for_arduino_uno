@@ -12,6 +12,7 @@ static char* static_symbols[] = {
    "Range","",
    "Hash","",
    "Arduino","",
+   "RGB_LCD","",
  //methods and others
    "true","",
    "false","",

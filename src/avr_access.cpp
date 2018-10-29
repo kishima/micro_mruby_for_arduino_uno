@@ -16,7 +16,7 @@
 #include "c_fixnum.h"
 #include "c_string.h"
 #include "c_common.h"
-#include "ext_arduino.h"
+#include "ext.h"
 
 //dynaic code generation
 #include "code.h"
@@ -163,6 +163,9 @@ mrb_proc *find_static_procs(mrb_sym class_sym_id, mrb_sym sym_id){
     break;
   case MRBC_SSYM_Arduino:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_Arduino , sym_id);
+    break;
+  case MRBC_SSYM_RGB_LCD:
+    addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_RGB_LCD , sym_id);
     break;
   default:
     addr=0;

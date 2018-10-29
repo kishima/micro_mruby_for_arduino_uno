@@ -146,6 +146,10 @@ void mrbc_init_class(void)
   //extension
   mrbc_init_class_arduino();
 
+#ifdef USE_RGB_LCD
+  define_rgb_lcd_class();
+#endif
+  
 #if 0
   //TODO
   mrbc_init_class_array(0);
