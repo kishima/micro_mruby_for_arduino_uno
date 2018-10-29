@@ -1,3 +1,5 @@
+#include "../src/ext_conf.h"
+
 static const char* const basic_class_names[] = {
   "Object",
   "Proc",
@@ -10,7 +12,9 @@ static const char* const basic_class_names[] = {
   "Symbol",
   "Range",
   "Arduino",
+#ifdef USE_RGB_LCD
   "RGB_LCD",
+#endif
 };
 
 static const char* const static_procs[] = {
@@ -59,12 +63,14 @@ static const char* const static_procs[] = {
   "Arduino","digital_write","class_arduino_digital_write",
   "Arduino","digital_read","class_arduino_digital_read",
 
+#ifdef USE_RGB_LCD
   "RGB_LCD","initialize","class_rbg_lcd_initialize",
   "RGB_LCD","clear","class_rbg_lcd_clear",
   "RGB_LCD","set_cursor","class_rbg_lcd_set_cursor",
   "RGB_LCD","write","class_rbg_lcd_write",
   "RGB_LCD","set_rgb","class_rbg_lcd_set_rgb",
-
+#endif
+  
   "","","",//don't delete this line
 };
 

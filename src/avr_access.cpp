@@ -164,9 +164,11 @@ mrb_proc *find_static_procs(mrb_sym class_sym_id, mrb_sym sym_id){
   case MRBC_SSYM_Arduino:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_Arduino , sym_id);
     break;
+#ifdef USE_RGB_LCD
   case MRBC_SSYM_RGB_LCD:
     addr = (short)find_func_no_by_sym_id( mmruby_code_proc_table_RGB_LCD , sym_id);
     break;
+#endif
   default:
     addr=0;
     break;

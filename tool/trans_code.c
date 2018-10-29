@@ -3,9 +3,9 @@
 #include <stdint.h>
 #include <string.h>
 #include "./vm.h"
-#include "../src/micro_vm.h"
 #include "./static_symbols.h"
 #include "./static_procs.h"
+#include "../src/micro_vm.h"
 
 #define MAX_IREP 256
 #define MAX_OUTPUT_BUFF (1024*32)
